@@ -34,4 +34,5 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
 Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     
     Route::get('/admindashboard',[AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/Admin/Upload',[AdminController::class, 'upload'])->name('admin.upload');
 });
