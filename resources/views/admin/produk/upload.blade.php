@@ -3,14 +3,48 @@
         <h1 class="fw-bold fs-3 mt-2 mb-3">Tambah Produk</h1>
         <div class="container pb-5 mb-3">
             <h1 class="fw-bold fs-5 p-3">Foto Produk</h1>
-            <form action="" method="POST" enctype="multipart/form-data" class="row d-flex">
+            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="row d-flex">
                 @csrf
                 <div class="container mx-auto p-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Upload hingga 4 foto</label>
                     <div id="image-upload-container" class="grid grid-cols-8 gap-4">
+                        <!-- Foto 1 -->
                         <div class="image-upload-wrapper flex flex-col items-center p-2">
                             <label for="image-upload-1" class="image-upload-label relative">
-                                <input type="file" class="image-upload-input hidden" id="image-upload-1"
+                                <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload-1"
+                                    accept="image/*" />
+                                <div
+                                    class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
+                                    <i class='bx bx-plus text-gray-400 text-2xl'></i>
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Foto 2 -->
+                        <div class="image-upload-wrapper flex flex-col items-center p-2">
+                            <label for="image-upload-2" class="image-upload-label relative">
+                                <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload-2"
+                                    accept="image/*" />
+                                <div
+                                    class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
+                                    <i class='bx bx-plus text-gray-400 text-2xl'></i>
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Foto 3 -->
+                        <div class="image-upload-wrapper flex flex-col items-center p-2">
+                            <label for="image-upload-3" class="image-upload-label relative">
+                                <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload-3"
+                                    accept="image/*" />
+                                <div
+                                    class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
+                                    <i class='bx bx-plus text-gray-400 text-2xl'></i>
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Foto 4 -->
+                        <div class="image-upload-wrapper flex flex-col items-center p-2">
+                            <label for="image-upload-4" class="image-upload-label relative">
+                                <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload-4"
                                     accept="image/*" />
                                 <div
                                     class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
@@ -19,63 +53,7 @@
                             </label>
                         </div>
                     </div>
-
-                    <button id="add-image-btn"
-                        class="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded disabled:opacity-50">
-                        Add Image
-                    </button>
                 </div>
-
-                <script>
-                    const maxUploads = 4;
-                    let uploadCount = 1;
-
-                    const container = document.getElementById("image-upload-container");
-                    const addImageBtn = document.getElementById("add-image-btn");
-
-                    addImageBtn.addEventListener("click", function () {
-                        if (uploadCount < maxUploads) {
-                            uploadCount++;
-                            const newUpload = `
-                    <div class="image-upload-wrapper flex flex-col items-center p-2">
-                        <label for="image-upload-${uploadCount}" class="image-upload-label relative">
-                            <input type="file" class="image-upload-input hidden" id="image-upload-${uploadCount}" accept="image/*" />
-                            <div class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
-                                <i class='bx bx-plus text-gray-400 text-2xl'></i>
-                            </div>
-                        </label>
-                    </div>
-                `;
-                            container.insertAdjacentHTML("beforeend", newUpload);
-                            addInputPreviewFunctionality(uploadCount);
-                        }
-
-                        if (uploadCount === maxUploads) {
-                            addImageBtn.setAttribute("disabled", "true");
-                        }
-                    });
-
-                    function addInputPreviewFunctionality(index) {
-                        const input = document.getElementById(`image-upload-${index}`);
-
-                        input.addEventListener("change", function (event) {
-                            const file = event.target.files[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = function (e) {
-                                    const imgPreview = `
-                            <img src="${e.target.result}" alt="Preview" class="w-24 h-24 object-cover rounded" />
-                        `;
-                                    input.nextElementSibling.innerHTML = imgPreview;
-                                };
-                                reader.readAsDataURL(file);
-                            }
-                        });
-                    }
-
-                    // Initialize first input
-                    addInputPreviewFunctionality(1);
-                </script>
 
                 <h1 class="fw-bold fs-5 p-3">informasi Produk</h1>
                 <div class="form row m-2">
