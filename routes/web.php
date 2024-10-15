@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,8 +36,10 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     
     Route::get('/admindashboard',[AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/Admin/Upload',[AdminController::class, 'upload'])->name('admin.upload');
+    Route::get('/Admin/Produk',[AdminController::class, 'produk'])->name('admin.produk');
 });
 
-use App\Http\Controllers\ProductController;
 
+Route::resource('products', ProductController::class);
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+Route::get('/Admin/Produk',[AdminController::class, 'produk'])->name('admin.produk');

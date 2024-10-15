@@ -278,7 +278,6 @@ section {
   }
   .header__search {
     width: 300px;
-    padding: .55rem .75rem;
   }
   .header__toggle {
     display: none;

@@ -125,7 +125,7 @@
 
                                 <div class="nav__dropdown-collapse">
                                     <div class="nav__dropdown-content">
-                                        <a href="{{ route('dashboard') }}" class="nav__dropdown-item">Produk kamu</a>
+                                        <a href="{{ route('admin.produk') }}" class="nav__dropdown-item">Produk kamu</a>
                                         <a href="{{ route('admin.upload') }}" class="nav__dropdown-item">Tambah- Produk</a>
                                     </div>
                                 </div>
