@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Product;
@@ -7,6 +6,13 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function index()
+    {
+        // Show only the products that belong to the authenticated user
+        $products = Product::where('user_id', auth()->id())->get();
+        return view('your-view-file', compact('products'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -25,21 +31,19 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->description = $request->description;
         $product->category = implode(',', $request->category);
-        $product->user_id = auth()->id();
+        $product->user_id = auth()->id();  // Only the logged-in user's ID is stored here
         $product->save();
 
-        // Menyimpan info nutrisi ke folder public/nutrition_info
+        // Storing nutrition info and photos
         if ($request->hasFile('nutrition_info')) {
             $product->nutrition_info = $request->file('nutrition_info')->store('nutrition_info', 'public');
         }
 
-        // Menyimpan foto produk ke folder public/products
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $index => $file) {
                 $filename = time() . '-' . $file->getClientOriginalName();
                 $path = $file->storeAs('products', $filename, 'public');
 
-                // Menyimpan path foto ke kolom yang sesuai
                 if ($index == 0) {
                     $product->image_1 = $path;
                 } elseif ($index == 1) {
@@ -50,14 +54,29 @@ class ProductController extends Controller
                     $product->image_4 = $path;
                 }
             }
-            $product->save();
         }
 
+        $product->save();
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan.');
+    }
+
+    public function show(Product $product)
+    {
+        // Ensure only the owner can view the product
+        if ($product->user_id != auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('your-view-file', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
+        // Ensure only the owner can update the product
+        if ($product->user_id != auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'stock' => 'required|integer',
@@ -98,13 +117,17 @@ class ProductController extends Controller
         }
 
         $product->save();
-
-        return redirect()->route('admin.produk.Produk')->with('success', 'Produk berhasil diperbarui');
+        return redirect()->route('admin.produk')->with('success', 'Produk berhasil diperbarui');
     }
 
     public function destroy(Product $product)
     {
+        // Ensure only the owner can delete the product
+        if ($product->user_id != auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $product->delete();
-        return redirect()->route('admin.produk.Produk')->with('success', 'Produk berhasil dihapus');
+        return redirect()->route('admin.produk')->with('success', 'Produk berhasil dihapus');
     }
 }

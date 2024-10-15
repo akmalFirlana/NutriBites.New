@@ -10,6 +10,9 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="stylesheet" href="{{ asset('css/penjual.css') }}">
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -19,7 +22,7 @@
 
     </head>
 
-    <body class="font-sans antialiased">  
+    <body class="font-sans antialiased">
         <header class="header">
             <div class="header__container w-100">
                 <div class="position-absolute end-0 me-5 d-flex">
@@ -126,7 +129,8 @@
                                 <div class="nav__dropdown-collapse">
                                     <div class="nav__dropdown-content">
                                         <a href="{{ route('admin.produk') }}" class="nav__dropdown-item">Produk kamu</a>
-                                        <a href="{{ route('admin.upload') }}" class="nav__dropdown-item">Tambah- Produk</a>
+                                        <a href="{{ route('admin.upload') }}" class="nav__dropdown-item">Tambah-
+                                            Produk</a>
                                     </div>
                                 </div>
 
