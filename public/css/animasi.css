@@ -1,0 +1,114 @@
+@keyframes rollIn {
+    0% {
+        transform: translateX(50vw) rotate(0deg);
+        opacity: 0;
+        scale: 0.4;
+    }
+    100% {
+        transform: translateX(0) rotate(360deg);
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+@keyframes rotateInfinite {
+    0% {
+        transform: rotate(60deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes card-slider {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(0);
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        scale: 0;
+    }
+    80% {
+        opacity: 1;
+        scale: 1.5;
+    }
+    100% {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        transform: translateX(30%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInBottom {
+    0% {
+        transform: translateY(30%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-bottom {
+    animation: slideInBottom 1s ease-out;
+}
+
+.slide-in-right {
+    animation: slideInRight 1s ease-out;
+}
+
+.slide-in-left {
+    animation: slideInLeft 1s ease-out;
+}
+
+.slide-in-left2 {
+    animation: slideInLeft 2s ease-in-out;
+}
+
+.rolling {
+    animation: rollIn 2s ease-out forwards;
+}
+
+.rolling.done {
+    animation: rsotateInfinite 30s linear infinite;
+}
+
+.card-ani {
+    animation: card-slider linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+
+.appear {
+    animation: appear 1s ease-in-out;
+}

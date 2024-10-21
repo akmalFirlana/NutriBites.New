@@ -1,0 +1,224 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
+
+:root {
+    --white: #fff;
+    --black: #222;
+    --green: #6cbe02;
+    --grey1: #f0f0f0;
+    --grey2: #e9d7d3;
+}
+
+
+
+li {
+    list-style: none;
+}
+
+.container {
+    max-width: 114rem;
+    margin: 0 auto;
+    padding: 0 3rem;
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+}
+
+.kanan {
+    border-right: #18bfab solid 1px;
+}
+
+.mh {
+    max-height: 40px;
+}
+
+
+/* =====================================card================================================================= */
+
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Warna latar belakang transparan */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Memusatkan tombol secara vertikal */
+    align-items: center;
+    /* Memusatkan tombol secara horizontal */
+    gap: 10px;
+    /* Jarak antar tombol */
+    opacity: 0;
+    /* Mulai dengan opsi tidak terlihat */
+    transition: opacity 0.3s;
+    /* Animasi untuk transisi */
+}
+
+.card:hover .card-options {
+    opacity: 1;
+    /* Tampilkan opsi saat hover */
+}
+
+.option-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    /* Warna latar belakang tombol */
+    color: white;
+    /* Warna teks tombol */
+    border: none;
+    /* Menghapus border default */
+    border-radius: 5px;
+    /* Sudut melengkung */
+    cursor: pointer;
+    /* Menunjukkan bahwa tombol dapat diklik */
+}
+
+.option-btn:hover {
+    background-color: #0056b3;
+    /* Warna saat hover */
+}
+
+/* Card wrapper */
+.product-card {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* Hover buttons */
+.hover-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.product-card:hover .hover-options {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.action-btn {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #333;
+}
+
+/* =====================================card================================================================= */
+/* =====================================Navbar================================================================= */
+
+.form-s button {
+    border: none;
+    background: none;
+    color: #8b8ba7;
+}
+
+.form-s {
+    --timing: 0.3s;
+    --width-of-input: 400px;
+    --height-of-input: 40px;
+    --border-height: 2px;
+    --input-bg: #f0f0f0;
+    --border-color: #2f2ee9;
+    --border-radius: 30px;
+    --after-border-radius: 1px;
+    position: relative;
+    width: var(--width-of-input);
+    height: var(--height-of-input);
+    display: flex;
+    align-items: center;
+    padding-inline: 0.8em;
+    border-radius: var(--border-radius);
+    transition: border-radius 0.5s ease;
+    background: var(--input-bg, #dcdcdc);
+}
+
+.input {
+    font-size: 1rem;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    padding-inline: 0.6em;
+    padding-block: 0.9em;
+    border: none;
+}
+
+.form-s:before {
+    content: "";
+    position: absolute;
+    background: var(--border-color);
+    transform: scaleX(0);
+    transform-origin: center;
+    width: 100%;
+    height: var(--border-height);
+    left: 0;
+    bottom: 0;
+    border-radius: 1px;
+    transition: transform var(--timing) ease;
+}
+
+.form-s:focus-within {
+    border-radius: var(--after-border-radius);
+}
+
+input:focus {
+    outline: none;
+}
+
+.form-s:focus-within:before {
+    transform: scale(1);
+}
+.reset {
+    border: none;
+    background: none;
+    opacity: 0;
+    visibility: hidden;
+}
+input:not(:placeholder-shown) ~ .reset {
+    opacity: 1;
+    visibility: visible;
+}
+.form-s svg {
+    width: 17px;
+    margin-bottom: 3px;
+}
+
+

@@ -1,41 +1,39 @@
 <x-app-layout>
-    <div class="" style="margin-left: 7rem;">
-        <h1 class="header-text col-md-7 fw-bold mt-4 slide-in-left" style="font-size: 4.8rem;  padding: 6rem 7rem 0 0;">
-            Camilan Sehat,
-            Rasa
-            Nikmat: Pilihan Tepat Untuk Hidup Yang Lebih Baik</h1>
-        <p class="col-md-6 text-gray-400 slide-in-left2" style="padding: 0.8rem 7rem 2rem 0; font-size: 1.5rem;">
-            Temukan Snack dan makanan dengan kualitas terbaik untuk dirimu dan keluargamu hanya di NutriBites</p>
-        <button class="btn slide-in-right" style="border-radius: 25px; background-color: #01AB31; color:
-         white; padding: 1rem 3rem; font-size: 1.5rem; font-weight: 500"
-            onclick="window.location.href='/daftar'">Bergabung</button>
-        <div class="support row mt-5 slide-in-right">
-            <div class="col-md-1 kanan">
-                <h1 class="fw-bold fs-1">200+</h1>
-                <h1 class="fs-6" style="color: grey">Brand Makanan</h1>
-            </div>
-            <div class="col-md-1 me-2 kanan">
-                <h1 class="fw-bold fs-1">5.000+</h1>
-                <h1 class="fs-6" style="color: grey">Produk Makanan</h1>
-            </div>
-            <div class="col-md-1 ms-2">
-                <h1 class="fw-bold fs-1">10+</h1>
-                <h1 class="fs-6" style="color: grey">Metode Pembayaran</h1>
-            </div>
-        </div>
+    <div class="con h-screen" style="margin-left: 6rem; overflow: hidden; position: relative;">
         <img src="{{ asset('image/Vector.svg') }}" alt="Logo" class="appear"
-            style="position: absolute; bottom: 190; right: 500;">
+            style="position: absolute; bottom: 190px; right: 500px;">
         <img src="{{ asset('image/Vector.svg') }}" alt="Logo" class="appear"
-            style="height: 80; position: absolute; bottom: 380; right: 90;">
+            style="height: 80px; position: absolute; bottom: 380px; right: 90px;">
         <img src="{{ asset('image/Vector.svg') }}" alt="Logo" class="appear"
-            style="height: 40; position: absolute; bottom: 100; right: 700;">
+            style="height: 40px; position: absolute; bottom: 100px; right: 700px;">
         <img src="{{ asset('image/Vector.svg') }}" alt="Logo" class="appear"
-            style="height: 50; position: absolute; bottom: 350; right: 390;">
+            style="height: 50px; position: absolute; bottom: 350px; right: 390px;">
         <img src="{{ asset('image/hero.png') }}" alt="Logo" class="an1 slide-in-right"
             style="height: 590px; position: absolute; bottom: -160px; right: -100px;">
 
+        <h1 class="header-text roboto col-md-7 fw-bold slide-in-left"
+            style="font-size: 2.4rem!important; padding: 3.5rem 7rem 0 0;">
+            Camilan Sehat, Rasa Nikmat: Pilihan Tepat Untuk Hidup Yang Lebih Baik</h1>
+        <p class="col-md-6 text-gray-400 slide-in-left2" style="padding: 0.8rem 7rem 1rem 0; font-size: 0.9rem;">
+            Temukan Snack dan makanan dengan kualitas terbaik untuk dirimu dan keluargamu hanya di NutriBites</p>
+        <button class="btn slide-in-right" style=" background-color: #01AB31; color:
+        white; font-size: 0.9rem; font-weight: 500" onclick="window.location.href='/daftar'">Bergabung</button>
+        <div class="support row mt-5 slide-in-right">
+            <div class="col-md-1 kanan">
+                <h1 class="fw-bold fs-4">200+</h1>
+                <h1 class="text-sm" style="color: grey">Brand Makanan</h1>
+            </div>
+            <div class="col-md-1 me-2 kanan">
+                <h1 class="fw-bold fs-4">5.000+</h1>
+                <h1 class="text-sm" style="color: grey">Produk Makanan</h1>
+            </div>
+            <div class="col-md-1 ms-2 pe-0">
+                <h1 class="fw-bold fs-4">10+</h1>
+                <h6 class="text-sm" style="color: grey">Metode Pembayaran</h6>
+            </div>
+        </div>
     </div>
-    </section>
+
 
     <section class="mt-5">
         <h1 class="text-center fw-bold" style="font-size: 4rem; margin-top: 6rem">Rekomendasi Produk</h1>
@@ -43,167 +41,54 @@
             yang
             dipilih khusus untuk Anda!</p>
         <div class="row justify-content-between" style="margin: 0 7rem">
-            <div class="col-sm-3 procard tw-rounded-3xl">
-                <div class="card shadow position-relative" style="border-radius: 12px">
-                    <!-- Peringkat Gizi dengan Tooltip -->
-                    <div class="nutrition-badge position-absolute top-0 end-0 mt-2 me-2" data-bs-toggle="popover"
-                        data-bs-trigger="hover" data-bs-html="true">
-                        <span class="badge text-dark"
-                            style="background-image: url('{{ asset('image/list.png') }}'); background-size: cover; background-position: center; padding: 10px; display: inline-block; cursor: pointer;"
-                            data-bs-toggle="modal" data-bs-target="#nutritionModal">A+</span>
-                    </div>
+            <div class="row">
+                @foreach($products as $product)
+                    <div class="col-sm-3 procard rounded-3xl">
+                        <div class="product-card shadow position-relative">
+                            <!-- Konten Card -->
+                            <div class="img-wrapper">
+                                <img src="{{ asset('storage/' . $product->image_1) }}" alt="{{ $product->name }}"
+                                    class="product-img">
 
-                    <!-- Konten Card -->
-                    <img src="{{ asset('image/dummi2.webp') }}" alt="black watch" class="tw-rounded-t-2xl">
-                    <div onclick="location.href='{{ route('dashboard') }}';"
-                        class="card-footer border-top border-gray-300 p-4">
-                        <a href="#" class="h5">Kripik Nangka</a>
-                        <h3 class="h6 fw-light text-gray mt-2">Kripik yang terbuat dari buah nangka pilihan</h3>
-                        <div class="d-flex mt-3">
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star-half' style='color:#d0e12b'></i>
-                            <span class="badge bg-success ms-2">4.7</span>
-                        </div>
-                        <div class="d-flex mt-3">
-                            <span class=" mb-0 text-gray me-2 fs-5">Rp 20.000</span>
-                            <span class="text-decoration-line-through fs-6" style="color:gray">Rp 25.000</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                <!-- Hover Action Wrapper -->
+                                <div class="hover-options">
+                                    <button class="action-btn" onclick="addToCart('{{ $product->id }}')">Add to
+                                        cart</button>
+                                    <button class="action-btn"
+                                        onclick="addToWishlist('{{ $product->id }}')">Wishlist</button>
+                                </div>
+                            </div>
 
-            <div class="col-sm-3 procard tw-rounded-3xl">
-                <div class="card shadow position-relative" style="border-radius: 12px">
-                    <!-- Peringkat Gizi dengan Tooltip -->
-                    <div class="nutrition-badge position-absolute top-0 end-0 mt-2 me-2" data-bs-toggle="popover"
-                        data-bs-trigger="hover" data-bs-html="true">
-                        <span class="badge text-dark"
-                            style="background-image: url('{{ asset('image/list.png') }}'); background-size: cover; background-position: center; padding: 10px; display: inline-block; cursor: pointer;"
-                            data-bs-toggle="modal" data-bs-target="#nutritionModal">A+</span>
-                    </div>
+                            <div class="card-footer border-top border-gray-300 p-4">
+                                <a href="#" class="h5">{{ $product->name }}</a>
+                                <h3 class="h6 fw-light text-gray mt-2">{{ $product->description }}</h3>
 
-                    <!-- Konten Card -->
-                    <img src="{{ asset('image/dummi2.webp') }}" alt="black watch" class="tw-rounded-t-2xl">
-                    <div onclick="location.href='{{ route('dashboard') }}';"
-                        class="card-footer border-top border-gray-300 p-4">
-                        <a href="#" class="h5">Kripik Nangka</a>
-                        <h3 class="h6 fw-light text-gray mt-2">Kripik yang terbuat dari buah nangka pilihan</h3>
-                        <div class="d-flex mt-3">
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star-half' style='color:#d0e12b'></i>
-                            <span class="badge bg-success ms-2">4.7</span>
-                        </div>
-                        <div class="d-flex mt-3">
-                            <span class=" mb-0 text-gray me-2 fs-5">Rp 20.000</span>
-                            <span class="text-decoration-line-through fs-6" style="color:gray">Rp 25.000</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                <div class="d-flex mt-3">
+                                    <i class='bx bxs-star' style='color:#d0e12b'></i>
+                                    <i class='bx bxs-star' style='color:#d0e12b'></i>
+                                    <i class='bx bxs-star' style='color:#d0e12b'></i>
+                                    <i class='bx bxs-star' style='color:#d0e12b'></i>
+                                    <i class='bx bxs-star-half' style='color:#d0e12b'></i>
+                                    <span class="badge bg-success ms-2">{{ $product->rating }}</span>
+                                </div>
 
-            <div class="col-sm-3 procard tw-rounded-3xl">
-                <div class="card shadow position-relative" style="border-radius: 12px">
-                    <!-- Peringkat Gizi dengan Tooltip -->
-                    <div class="nutrition-badge position-absolute top-0 end-0 mt-2 me-2" data-bs-toggle="popover"
-                        data-bs-trigger="hover" data-bs-html="true">
-                        <span class="badge text-dark"
-                            style="background-image: url('{{ asset('image/list.png') }}'); background-size: cover; background-position: center; padding: 10px; display: inline-block; cursor: pointer;"
-                            data-bs-toggle="modal" data-bs-target="#nutritionModal">A+</span>
-                    </div>
-
-                    <!-- Konten Card -->
-                    <img src="{{ asset('image/dummi2.webp') }}" alt="black watch" class="tw-rounded-t-2xl">
-                    <div onclick="location.href='{{ route('dashboard') }}';"
-                        class="card-footer border-top border-gray-300 p-4">
-                        <a href="#" class="h5">Kripik Nangka</a>
-                        <h3 class="h6 fw-light text-gray mt-2">Kripik yang terbuat dari buah nangka pilihan</h3>
-                        <div class="d-flex mt-3">
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star-half' style='color:#d0e12b'></i>
-                            <span class="badge bg-success ms-2">4.7</span>
-                        </div>
-                        <div class="d-flex mt-3">
-                            <span class=" mb-0 text-gray me-2 fs-5">Rp 20.000</span>
-                            <span class="text-decoration-line-through fs-6" style="color:gray">Rp 25.000</span>
+                                <div class="d-flex mt-3">
+                                    <span class="mb-0 text-gray me-2 fs-5">Rp
+                                        {{ number_format($product->price, 0, ',', '.') }}</span>
+                                    <span class="text-decoration-line-through fs-6" style="color:gray">Rp
+                                        {{ number_format($product->old_price, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-3 procard tw-rounded-3xl">
-                <div class="card shadow position-relative" style="border-radius: 12px">
-                    <!-- Peringkat Gizi dengan Tooltip -->
-                    <div class="nutrition-badge position-absolute top-0 end-0 mt-2 me-2" data-bs-toggle="popover"
-                        data-bs-trigger="hover" data-bs-html="true">
-                        <span class="badge text-dark"
-                            style="background-image: url('{{ asset('image/list.png') }}'); background-size: cover; background-position: center; padding: 10px; display: inline-block; cursor: pointer;"
-                            data-bs-toggle="modal" data-bs-target="#nutritionModal">A+</span>
-                    </div>
-
-                    <!-- Konten Card -->
-                    <img src="{{ asset('image/dummi2.webp') }}" alt="black watch" class="tw-rounded-t-2xl">
-                    <div onclick="location.href='{{ route('dashboard') }}';"
-                        class="card-footer border-top border-gray-300 p-4">
-                        <a href="#" class="h5">Kripik Nangka</a>
-                        <h3 class="h6 fw-light text-gray mt-2">Kripik yang terbuat dari buah nangka pilihan</h3>
-                        <div class="d-flex mt-3">
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star-half' style='color:#d0e12b'></i>
-                            <span class="badge bg-success ms-2">4.7</span>
-                        </div>
-                        <div class="d-flex mt-3">
-                            <span class=" mb-0 text-gray me-2 fs-5">Rp 20.000</span>
-                            <span class="text-decoration-line-through fs-6" style="color:gray">Rp 25.000</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 procard tw-rounded-3xl">
-                <div class="card shadow position-relative" style="border-radius: 12px">
-                    <!-- Peringkat Gizi dengan Tooltip -->
-                    <div class="nutrition-badge position-absolute top-0 end-0 mt-2 me-2" data-bs-toggle="popover"
-                        data-bs-trigger="hover" data-bs-html="true">
-                        <span class="badge text-dark"
-                            style="background-image: url('{{ asset('image/list.png') }}'); background-size: cover; background-position: center; padding: 10px; display: inline-block; cursor: pointer;"
-                            data-bs-toggle="modal" data-bs-target="#nutritionModal">A+</span>
-                    </div>
-
-                    <!-- Konten Card -->
-                    <img src="{{ asset('image/dummi2.webp') }}" alt="black watch" class="tw-rounded-t-2xl">
-                    <div onclick="location.href='{{ route('dashboard') }}';"
-                        class="card-footer border-top border-gray-300 p-4">
-                        <a href="#" class="h5">Kripik Nangka</a>
-                        <h3 class="h6 fw-light text-gray mt-2">Kripik yang terbuat dari buah nangka pilihan</h3>
-                        <div class="d-flex mt-3">
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star' style='color:#d0e12b'></i>
-                            <i class='bx bxs-star-half' style='color:#d0e12b'></i>
-                            <span class="badge bg-success ms-2">4.7</span>
-                        </div>
-                        <div class="d-flex mt-3">
-                            <span class=" mb-0 text-gray me-2 fs-5">Rp 20.000</span>
-                            <span class="text-decoration-line-through fs-6" style="color:gray">Rp 25.000</span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
         <div class="text-center m-5">
             <button class="btn btn-white">Muat Lebih</button>
         </div>
+
+
     </section>
     <hr class="mx-auto" style="border-color: #141113; width: 90%; height: 2px">
     <section class="mt-1 mb-5">
@@ -472,4 +357,16 @@
             </div>
         </div>
     </div>
+    <script>
+        function addToCart(productId) {
+            // Logika untuk menambahkan produk ke keranjang
+            console.log('Menambahkan produk ke keranjang:', productId);
+        }
+
+        function addToWishlist(productId) {
+            // Logika untuk menambahkan produk ke wishlist
+            console.log('Menambahkan produk ke wishlist:', productId);
+        }
+
+    </script>
 </x-app-layout>

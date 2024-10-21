@@ -1,4 +1,3 @@
-/* Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
 
 :root {
@@ -7,6 +6,98 @@
     --green: #6cbe02;
     --grey1: #f0f0f0;
     --grey2: #e9d7d3;
+}
+
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+footer {
+    z-index: 9;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    font-size: 1.6rem;
+    background-color: var(--white);
+    color: var(--black);
+    font-weight: 400;
+    font-style: normal;
+}
+
+a {
+    font-size: small;
+    text-decoration: none;
+    color: var(--black);
+    font-family: "Roboto", sans-serif;
+}
+
+li {
+    list-style: none;
+}
+
+.container {
+    max-width: 114rem;
+    margin: 0 auto;
+    padding: 0 3rem;
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+}
+
+.kanan {
+    border-right: #18bfab solid 1px;
+}
+
+.mh {
+    max-height: 40px;
+}
+
+.navigation {
+    height: max-content;
+    max-height: 75px;
+    line-height: 6rem;
+    position: fixed; /* Make the navbar stick to the top */
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Ensures it stays above other content */
+    background-color: var(--white); /* You may want to set a background color */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow for better visibility */
+}
+
+.nav-center {
+    justify-content: space-between;
+}
+
+.nav-list .icons {
+    display: none;
+}
+
+.nav-center .nav-item:not(:last-child) {
+    margin-right: 0.5rem;
+}
+
+.nav-center .nav-link {
+    font-size: 1.4rem;
+    padding: 1rem;
+}
+
+.nav-center .nav-link:hover {
+    color: var(--green);
+}
+
+.nav-center .hamburger {
+    display: none;
+    font-size: 2.3rem;
+    color: var(--black);
+    cursor: pointer;
 }
 
 button:active,
@@ -70,6 +161,114 @@ button:focus {
     margin-left: 10px;
 }
 
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Warna latar belakang transparan */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Memusatkan tombol secara vertikal */
+    align-items: center;
+    /* Memusatkan tombol secara horizontal */
+    gap: 10px;
+    /* Jarak antar tombol */
+    opacity: 0;
+    /* Mulai dengan opsi tidak terlihat */
+    transition: opacity 0.3s;
+    /* Animasi untuk transisi */
+}
+
+.card:hover .card-options {
+    opacity: 1;
+    /* Tampilkan opsi saat hover */
+}
+
+.option-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    /* Warna latar belakang tombol */
+    color: white;
+    /* Warna teks tombol */
+    border: none;
+    /* Menghapus border default */
+    border-radius: 5px;
+    /* Sudut melengkung */
+    cursor: pointer;
+    /* Menunjukkan bahwa tombol dapat diklik */
+}
+
+.option-btn:hover {
+    background-color: #0056b3;
+    /* Warna saat hover */
+}
+
+/* Card wrapper */
+.product-card {
+    width: 100%;
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* Hover buttons */
+.hover-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.product-card:hover .hover-options {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.action-btn {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #333;
+}
+
+
 
 
 *,
@@ -78,6 +277,7 @@ button:focus {
     margin: 0;
     padding: 0;
     box-sizing: inherit;
+    overflow-x: hidden;
 }
 
 footer {
@@ -568,120 +768,7 @@ fieldset {
 
 /* ==============================================AnimaTion=================================================== */
 
-@keyframes rollIn {
-    0% {
-        transform: translateX(50vw) rotate(0deg);
-        opacity: 0;
-        scale: 0.4;
-    }
-    100% {
-        transform: translateX(0) rotate(360deg);
-        opacity: 1;
-        scale: 1;
-    }
-}
 
-@keyframes rotateInfinite {
-    0% {
-        transform: rotate(60deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes card-slider {
-    from {
-        opacity: 0;
-        transform: translateX(-100px);
-    }
-    to {
-        opacity: 0;
-        transform: translateX(0);
-    }
-}
-
-@keyframes appear {
-    0% {
-        opacity: 0;
-        scale: 0;
-    }
-    80% {
-        opacity: 1;
-        scale: 1.5;
-    }
-    100% {
-        opacity: 1;
-        scale: 1;
-    }
-}
-
-@keyframes slideInLeft {
-    0% {
-        transform: translateX(-50%);
-        opacity: 0;
-    }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideInRight {
-    0% {
-        transform: translateX(30%);
-        opacity: 0;
-    }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideInBottom {
-    0% {
-        transform: translateY(30%);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.slide-in-bottom {
-    animation: slideInBottom 1s ease-out;
-}
-
-.slide-in-right {
-    animation: slideInRight 1s ease-out;
-}
-
-.slide-in-left {
-    animation: slideInLeft 1s ease-out;
-}
-
-.slide-in-left2 {
-    animation: slideInLeft 2s ease-in-out;
-}
-
-.rolling {
-    animation: rollIn 2s ease-out forwards;
-}
-
-.rolling.done {
-    animation: rsotateInfinite 30s linear infinite;
-}
-
-.card-ani {
-    animation: card-slider linear;
-    animation-timeline: view();
-    animation-range: entry 0% cover 40%;
-}
-
-.appear {
-    animation: appear 1s ease-in-out;
-}
 
 /*================================= Preloader ======================================CSS */
 #preloader {

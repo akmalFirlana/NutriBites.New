@@ -130,4 +130,19 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('admin.produk')->with('success', 'Produk berhasil dihapus');
     }
+
+    
+    public function list()
+    {
+        $products = Product::all(); // Mengambil semua produk
+        return view('dashboard', compact('products')); // Pastikan untuk mengembalikan view yang sesuai
+    }
+
+    public function detail($id)
+{
+    $product = Product::findOrFail($id); // Mengambil produk berdasarkan ID
+    return view('product.show', compact('product')); // Mengembalikan view dengan data produk
 }
+
+}
+

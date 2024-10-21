@@ -11,4 +11,9 @@ class UserController extends Controller
     {
         return view('dashboard');
     }
+
+    public function fix()
+    {
+        return view('fix');
+    }
 }

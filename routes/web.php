@@ -18,6 +18,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/fix', function () {
+    return view('fix');
+})->middleware(['auth', 'verified'])->name('fix');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -29,6 +33,8 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth', 'userMiddleware'])->group(function () {
     
     Route::get('dashboard',[UserController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
+    Route::get('/products/{id}', [ProductController::class, 'detail'])->name('product.show');
 });
 
 
