@@ -26,4 +26,16 @@ class AdminController extends Controller
         // Kirim data produk ke view admin.produk
         return view('admin.produk.Produk', compact('products'));
     }
+
+    public function pesanan()
+    {
+        return view('admin.order');
+    }
+
+    public function pesan()
+    {
+        return view('admin.profil.mail');
+    }
+
+    
 }

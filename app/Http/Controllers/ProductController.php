@@ -135,13 +135,13 @@ class ProductController extends Controller
     public function list()
     {
         $products = Product::all(); // Mengambil semua produk
-        return view('dashboard', compact('products')); // Pastikan untuk mengembalikan view yang sesuai
+        return view('dashboard', compact('products'));
     }
 
     public function detail($id)
 {
     $product = Product::findOrFail($id); // Mengambil produk berdasarkan ID
-    return view('product.show', compact('product')); // Mengembalikan view dengan data produk
+    return view('product.show', compact('product')); 
 }
 
 }

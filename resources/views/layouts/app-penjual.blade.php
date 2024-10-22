@@ -17,9 +17,6 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <!-- Scripts -->
-
-
-
     </head>
 
     <body class="font-sans antialiased">
@@ -81,7 +78,7 @@
         <div class="nav" id="navbar">
             <nav class="nav__container">
                 <div>
-                    <a href="{{ route('dashboard') }}" class="nav__link nav__logo">
+                    <a href="{{ route('admin.dashboard') }}" class="nav__link nav__logo">
                         <i class='bx bx-menu nav__icon'></i>
                         <span class="nav__logo-name">Nutri<span style="color: #BAB41E">Bit</span>es</span>
                     </a>
@@ -89,7 +86,7 @@
                     <div class="nav__list">
                         <div class="nav__items">
 
-                            <a href="{{ route('dashboard') }}" class="nav__link">
+                            <a href="{{ route('admin.dashboard') }}" class="nav__link">
                                 <i class='bx bxs-dashboard nav__icon'></i>
                                 <span class="nav__name">Dashboard</span>
                             </a>
@@ -104,13 +101,13 @@
                                 <div class="nav__dropdown-collapse">
                                     <div class="nav__dropdown-content">
                                         <a href="{{ route('dashboard') }}" class="nav__dropdown-item">Keamanan</a>
-                                        <a href="{{ route('dashboard') }}" class="nav__dropdown-item">Pesan</a>
-                                        <a href="{{ route('dashboard') }}" class="nav__dropdown-item">Akun</a>
+                                        <a href="{{ route('admin.pesan') }}" class="nav__dropdown-item">Pesan</a>
+                                        <a href="{{ route('profile.edit') }}" class="nav__dropdown-item">Akun</a>
                                     </div>
                                 </div>
                             </div>
 
-                            <a href="{{ route('dashboard') }}" class="nav__link">
+                            <a href="{{ route('admin.pesanan') }}" class="nav__link">
                                 <i class='bx bx-cart nav__icon'></i>
                                 <span class="nav__name">Pesanan</span>
                             </a>

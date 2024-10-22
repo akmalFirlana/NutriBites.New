@@ -8,8 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'stock', 'price', 'description', 'nutrition_info', 
-        'category', 'image_1', 'image_2', 'image_3', 'image_4'
+        'user_id',
+        'name',
+        'stock',
+        'price',
+        'description',
+        'nutrition_info',
+        'category',
+        'image_1',
+        'image_2',
+        'image_3',
+        'image_4'
     ];
 
     // Relasi dengan user
@@ -17,6 +26,7 @@ class Product extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 }
 
 

@@ -23,7 +23,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen ">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
@@ -40,11 +40,11 @@
             {{ $slot }}
         </main>
     </div>
-    <footer class="text-center text-lg-start pt-5 pb-5" style="background-color: #f0f0f0; z-index: 9999">
+    <footer class="text-center text-lg-start pt-3 pb-3" style="background-color: #f0f0f0; z-index: 9999">
         <div class="container p-4 pb-0">
             <section class="">
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                    <div class="col-lg-3 col-md-5 mb-4 mb-md-0 ms-5">
                         <img class="logo-img" src="{{ asset('image/NutriBites.svg') }}" style="width: 120px;"
                             alt="Logok">
                         <p style="color: #606060; font-size: 14px; max-width: 200px" class="mt-4">
@@ -92,16 +92,16 @@
                         <h5 class="text-uppercase fw-bold">Company</h5>
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="#!" class="">Tentang kami</a>
+                                <a href="#!" class="footer-link text-muted">Tentang kami</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Fitur</a>
+                                <a href="#!" class="footer-link text-muted">Fitur</a>
                             </li>
                             <li>
-                                <a href="#!" class="">E-mail</a>
+                                <a href="#!" class="footer-link text-muted">E-mail</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Dukung kami</a>
+                                <a href="#!" class="footer-link text-muted">Dukung kami</a>
                             </li>
                         </ul>
                     </div>
@@ -110,16 +110,16 @@
                         <h5 class="text-uppercase fw-bold">Bantuan</h5>
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="#!" class="">Cusstomer support</a>
+                                <a href="#!" class="footer-link text-muted">Cusstomer support</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Metode pengiriman</a>
+                                <a href="#!" class="footer-link text-muted">Metode pengiriman</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Syarat & ketentuan</a>
+                                <a href="#!" class="footer-link text-muted">Syarat & ketentuan</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Privacy Policy</a>
+                                <a href="#!" class="footer-link text-muted">Privacy Policy</a>
                             </li>
                         </ul>
                     </div>
@@ -129,16 +129,16 @@
 
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="#!" class="">Akun</a>
+                                <a href="#!" class="footer-link text-muted">Akun</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Atur Pengiriman</a>
+                                <a href="#!" class="footer-link text-muted">Atur Pengiriman</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Pesanan</a>
+                                <a href="#!" class="footer-link text-muted">Pesanan</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Pembayaran</a>
+                                <a href="#!" class="footer-link text-muted">Pembayaran</a>
                             </li>
                         </ul>
                     </div>
@@ -148,16 +148,16 @@
 
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="#!" class="">Sumber Informasi</a>
+                                <a href="#!" class="footer-link text-muted">Sumber Informasi</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Komunitas</a>
+                                <a href="#!" class="footer-link text-muted">Komunitas</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Dukungan</a>
+                                <a href="#!" class="footer-link text-muted">Dukungan</a>
                             </li>
                             <li>
-                                <a href="#!" class="">Free course</a>
+                                <a href="#!" class="footer-link text-muted">Free course</a>
                             </li>
                         </ul>
                     </div>
@@ -168,7 +168,7 @@
         <!-- Grid container -->
         <hr style="margin-top: 22px; max-width: 90%;" class="mx-auto">
         <!-- Copyright -->
-        <div class="ps-5 pt-3 pb-3 col-md-4" style="background-color: rgba(0, 0, 0,); font-size: 1.2rem">
+        <div class="ps-5 pt-3 pb-3 col-md-4" style="background-color: rgba(0, 0, 0,); font-size: 0.8rem">
             NutriBites © 2024, All Rights Reserved
         </div>
     </footer>

@@ -16,4 +16,30 @@ class UserController extends Controller
     {
         return view('fix');
     }
+
+    public function checkout()
+    {
+        return view('checkout');
+    }
+
+    public function favorit()
+    {
+        return view('favorit');
+    }
+
+    public function cart()
+    {
+        return view('cart');
+    }
+
+    public function kategori()
+    {
+        return view('kategori');
+    }
+
+    public function produk()
+    {
+        return view('produk');
+    }
 }
+
