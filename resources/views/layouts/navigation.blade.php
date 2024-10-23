@@ -49,7 +49,7 @@
             
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6 me-3">
-            <a href="{{ route('cart') }}" class="icon me-2 my-auto">
+            <a href="{{ route('cart.view') }}" class="icon me-2 my-auto">
                     <i class="bx bx-cart pt-2 fs-5"></i>
                 </a>
             

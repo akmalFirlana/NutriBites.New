@@ -172,6 +172,42 @@
             NutriBites © 2024, All Rights Reserved
         </div>
     </footer>
+    <script>
+        function addToCart(productId) {
+            $.ajax({
+                url: `/cart/add/${productId}`,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    quantity: 1
+                },
+                success: function (response) {
+                    alert(response.message);
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function removeFromCart(cartId) {
+            $.ajax({
+                url: `/cart/remove/${cartId}`,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    alert(response.message);
+                    location.reload(); // refresh halaman setelah menghapus
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+    </script>
+
 </body>
 
 </html>

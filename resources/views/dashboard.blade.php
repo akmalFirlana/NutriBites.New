@@ -99,7 +99,7 @@
 
     </section>
     <hr class="mx-auto" style="border-color: #141113; width: 90%; height: 2px">
-    <div class="category-container container">
+    <!-- <div class="category-container container"> 
         <h1 class="fw-bold text-center">Cari berdasarkan Kategori</h1>
         <div class="row m-5">
             <div class="col-6 col-md-5">
@@ -128,7 +128,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <div class="modal fade" id="nutritionModal" tabindex="-1" aria-labelledby="nutritionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
