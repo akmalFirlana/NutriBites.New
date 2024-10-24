@@ -6,6 +6,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,7 +37,6 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
     Route::get('/products/{id}', [ProductController::class, 'detail'])->name('product.show');
     Route::get('/checkout', [UserController::class, 'checkout'])->name('checkout');
-    Route::get('/favorit', [UserController::class, 'favorit'])->name('favorit');
     Route::get('/kategori', [UserController::class, 'kategori'])->name('kategori');
     Route::get('/produk', [UserController::class, 'produk'])->name('produk');
 });
@@ -61,4 +61,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
     Route::delete('/cart/remove/{cartId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/add/{productId}', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
+    Route::delete('/wishlist/remove/{wishlistId}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
+    
 });

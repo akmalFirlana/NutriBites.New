@@ -206,6 +206,44 @@
                 }
             });
         }
+
+
+        function addToWishlist(productId) {
+            $.ajax({
+                url: `/wishlist/add/${productId}`,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    quantity: 1
+                },
+                success: function (response) {
+                    alert(response.message);
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function removeFromWishlist(wishlistId) {
+            $.ajax({
+                url: `/wishlist/remove/${wishlistId}`,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    alert(response.message);
+                    location.reload(); // refresh halaman setelah menghapus
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+
+
     </script>
 
 </body>

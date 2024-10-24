@@ -18,7 +18,7 @@
                     <x-nav-link :href="route('kategori')" :active="request()->routeIs('kategori')">
                         {{ __('Kategori') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('favorit')" :active="request()->routeIs('favorit')">
+                    <x-nav-link :href="route('wishlist.index')" :active="request()->routeIs('wishlist.index')">
                         {{ __('Wishlist') }}
                     </x-nav-link>
                     <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
