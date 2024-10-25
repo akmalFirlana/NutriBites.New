@@ -43,6 +43,9 @@ li {
     text-overflow: ellipsis;
 }
 
+body {
+    overflow-x: hidden;
+}
 
 /* =====================================card================================================================= */
 
@@ -301,8 +304,7 @@ fieldset {
     display: inline-flex;
     align-items: center;
     background-color: #f5f5f5;
-    border-radius: 9999px; 
-    padding: 5px 10px;
+    border-radius: 10px; 
   }
 
   .btn-decrement,
@@ -313,23 +315,20 @@ fieldset {
     font-weight: normal;
     color: #000;
     cursor: pointer;
-
   }
 
   .input-number {
-    width: 70px;
+    width: 50px;
     text-align: center;
-    border: none;
     background: transparent;
     font-size: 16px;
     font-weight: bold;
     color: #000;
     outline: none;
-    /* Menghapus tombol spinner di input number */
     -moz-appearance: textfield;
+    border: none;
   }
 
-  /* Menghilangkan spinner di input number pada WebKit browser seperti Chrome */
   .input-number::-webkit-inner-spin-button,
   .input-number::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -337,8 +336,6 @@ fieldset {
   }
 
 
-  
-/* From Uiverse.io by spj2401Dev */   
   .button-group input[type="radio"] {
     display: none;
   }
@@ -390,14 +387,12 @@ fieldset {
 /*============================================three button===========================================*/
 
 
-/* Gaya untuk container tabs */
 .tabs {
   display: flex;
   justify-content: center;
   padding: 0 10px;
 }
 
-/* Gaya untuk setiap tab link */
 .tab-link {
   background-color: transparent;
   border: none;
@@ -409,20 +404,17 @@ fieldset {
   color: black;
 }
 
-/* Gaya untuk tab yang aktif */
 .tab-link.active {
   font-weight: bold;
   border-bottom: 2px solid black;
 }
 
-/* Konten dari setiap tab */
 .tab-content {
   display: none;
   padding: 20px;
   border-top: 2px solid #ccc;
 }
 
-/* Konten pertama ditampilkan secara default */
 .tab-content:first-child {
   display: block;
 }

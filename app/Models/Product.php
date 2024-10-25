@@ -21,7 +21,7 @@ class Product extends Model
         'image_4'
     ];
 
-    // Relasi dengan user
+    
     public function user()
     {
         return $this->belongsTo(User::class);
