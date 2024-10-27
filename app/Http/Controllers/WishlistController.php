@@ -31,10 +31,20 @@ class WishlistController extends Controller
 
     public function removeFromWishlist($wishlistId)
     {
-        Wishlist::where('id', $wishlistId)->where('user_id', auth()->id())->delete();
+        // Mencari item wishlist berdasarkan id dan user yang sedang login
+        $deleted = Wishlist::where('id', $wishlistId)
+            ->where('user_id', auth()->id())
+            ->delete();
 
-        return response()->json(['message' => 'Produk berhasil dihapus dari Wishlist']);
+        if ($deleted) {
+            // Jika berhasil dihapus
+            return response()->json(['message' => 'Produk berhasil dihapus dari Wishlist']);
+        } else {
+            // Jika tidak berhasil menghapus
+            return response()->json(['message' => 'Produk tidak ditemukan atau tidak dapat dihapus'], 404);
+        }
     }
+
 
 }
 

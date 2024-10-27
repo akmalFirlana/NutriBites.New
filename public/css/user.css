@@ -379,7 +379,26 @@ fieldset {
     margin-top: 10px;
  }
 
+/* img */
 
+
+.thumbnail-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.thumbnail-container img {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+.thumbnail-container img.active {
+    border: 2px solid #333;
+}
 
 
 

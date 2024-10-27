@@ -241,7 +241,17 @@
             });
         }
 
+        function changeImage(element) {
+        // Mengubah gambar utama
+        document.getElementById("mainImage").src = element.src;
 
+        // Menghilangkan class "active" dari semua thumbnail
+        const thumbnails = document.querySelectorAll('.thumbnail-container img');
+        thumbnails.forEach(thumbnail => thumbnail.classList.remove('active'));
+
+        // Menambahkan class "active" ke thumbnail yang diklik
+        element.classList.add('active');
+    }
 
     </script>
 
