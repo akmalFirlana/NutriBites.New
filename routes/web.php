@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\AddressController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,10 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'userMiddleware'])->group(function () {
-    Route::get('dashboard',[UserController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
     Route::get('/products/{id}', [ProductController::class, 'detail'])->name('product.show');
     Route::get('/checkout', [UserController::class, 'checkout'])->name('checkout');
@@ -43,19 +44,19 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
 
 
 Route::middleware(['auth', 'adminMiddleware'])->group(function () {
-    
-    Route::get('/admindashboard',[AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('/Admin/Upload',[AdminController::class, 'upload'])->name('admin.upload');
-    Route::get('/Admin/Produk',[AdminController::class, 'produk'])->name('admin.produk');
-    Route::get('/Admin/Pesanan',[AdminController::class, 'pesanan'])->name('admin.pesanan');
-    Route::get('/Admin/Pesan',[AdminController::class, 'pesan'])->name('admin.pesan');
-    
+
+    Route::get('/admindashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/Admin/Upload', [AdminController::class, 'upload'])->name('admin.upload');
+    Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
+    Route::get('/Admin/Pesanan', [AdminController::class, 'pesanan'])->name('admin.pesanan');
+    Route::get('/Admin/Pesan', [AdminController::class, 'pesan'])->name('admin.pesan');
+
 });
 
 
 Route::resource('products', ProductController::class);
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-Route::get('/Admin/Produk',[AdminController::class, 'produk'])->name('admin.produk');
+Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
@@ -67,5 +68,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/add/{productId}', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
     Route::delete('/wishlist/remove/{wishlistId}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
-    
+
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/addresses', [AddressController::class, 'index'])->name('user.addresses.index');
+    Route::get('/addresses/create', [AddressController::class, 'create'])->name('user.addresses.create');
+    Route::post('/addresses', [AddressController::class, 'store'])->name('user.addresses.store');
+    Route::get('/get-cities/{provinceId}', [AddressController::class, 'getCities']);
+    Route::get('/get-districts/{cityId}', [AddressController::class, 'getDistricts']);
+
+});
+
+
+
