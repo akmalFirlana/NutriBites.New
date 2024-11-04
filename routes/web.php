@@ -77,7 +77,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/addresses', [AddressController::class, 'store'])->name('user.addresses.store');
     Route::get('/get-cities/{provinceId}', [AddressController::class, 'getCities']);
     Route::get('/get-districts/{cityId}', [AddressController::class, 'getDistricts']);
-
+    Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
 });
 
 

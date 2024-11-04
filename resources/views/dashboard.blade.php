@@ -61,7 +61,8 @@
                             <div class="card-footer border-top border-gray-300 pt-1" style="padding: 0; margin: 0;">
                                 <img src="{{ asset('image/badge1.png') }}" style="width: 100px; margin: 0; padding: 0;">
                                 <div class="keterangan ps-2 pe-2" style="padding: 0; margin: 0;">
-                                    <a href="#" class="product-name" style="margin: 0; padding: 0;line-height: 0.8;">{{ $product->name }}</a>
+                                    <a href="#" class="product-name"
+                                        style="margin: 0; padding: 0;line-height: 0.8;">{{ $product->name }}</a>
                                     <div class="" style="margin: 0; padding: 0;">
                                         <span class="mb-0 text-gray me-2 fs-6 fw-bold d-block"
                                             style="line-height: 0.8; margin: 0; padding: 0;">Rp
@@ -81,20 +82,19 @@
                                         <i class='bx bxs-star' style='color:#d0e12b; margin: 0; padding: 0;'></i>
                                         <span class="badge bg-success ms-2"
                                             style="margin: 0; padding: 0;">{{ $product->rating }}</span> |
-                                        <span class="badge bg-success ms-2"
-                                            ">{{ $product->sold }} Terjual</span>
+                                        <span class="badge bg-success ms-2" ">{{ $product->sold }} Terjual</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
-                    </div>
                 @endforeach
             </div>
         </div>
-        <div class="text-center m-5">
-            <button class="btn btn-white">Muat Lebih</button>
-        </div>
+        <div class=" text-center m-5">
+                                        <button class="btn btn-white">Muat Lebih</button>
+                                </div>
 
 
     </section>
@@ -189,6 +189,8 @@
             </div>
         </div>
     </div>
+    <x-address-component />
+
     <script>
         function addToCart(productId) {
             // Logika untuk menambahkan produk ke keranjang
