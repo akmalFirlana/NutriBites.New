@@ -134,9 +134,9 @@
 
                             </div>
 
-                            <a href="{{ route('dashboard') }}" class="nav__link">
+                            <a href="{{ route('gudang') }}" class="nav__link">
                                 <i class='bx bxs-truck nav__icon'></i>
-                                <span class="nav__name">Pengiriman</span>
+                                <span class="nav__name">Gudang</span>
                             </a>
 
                             <a href="#" class="nav__link">

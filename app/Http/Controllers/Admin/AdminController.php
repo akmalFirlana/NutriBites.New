@@ -37,5 +37,10 @@ class AdminController extends Controller
         return view('admin.profil.mail');
     }
 
+    public function gudang()
+    {
+        return view('admin.gudang');
+    }
+
     
 }

@@ -22,6 +22,18 @@ class AddressController extends Controller
         ]);
     }
 
+    public function admin()
+    {
+        $addresses = UserAddress::where('user_id', Auth::id())->with('alamat')->get();
+        $provinces = Alamat::select('prov_id', 'prov_name')->distinct()->get();
+
+        return view('admin.gudang', [
+            'addresses' => $addresses,
+            'provinces' => $provinces,
+            'showList' => true,
+        ]);
+    }
+
     // Show form for adding a new address
     public function create()
     {
@@ -63,7 +75,7 @@ class AddressController extends Controller
                 'is_primary' => false, // Set default value
             ]);
 
-            return redirect()->route('user.addresses.index')->with('success', 'Alamat berhasil ditambahkan.');
+            return redirect()->back()->with('success', 'Alamat berhasil ditambahkan.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menambahkan alamat: ' . $e->getMessage());
         }
