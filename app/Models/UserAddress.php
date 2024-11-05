@@ -12,10 +12,18 @@ class UserAddress extends Model
     protected $table = 'user_addresses';
 
     protected $fillable = [
-        'user_id', 'label', 'recipient_name', 'phone_number', 
-        'full_address', 'postal_code', 'province_id', 'city_id', 'district_id', 'is_primary'
+        'user_id',
+        'label',
+        'recipient_name',
+        'phone_number',
+        'full_address',
+        'postal_code',
+        'province_id',
+        'city_id',
+        'district_id',
+        'is_primary'
     ];
-    
+
 
     // Relationship with User
     public function user()
@@ -28,5 +36,21 @@ class UserAddress extends Model
     {
         return $this->belongsTo(Alamat::class, 'postal_id', 'postal_id');
     }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Alamat::class, 'province_id', 'prov_id');
+    }
+
+    public function kota()
+    {
+        return $this->belongsTo(Alamat::class, 'city_id', 'city_id');
+    }
+
+    public function kecamatan()
+    {
+        return $this->belongsTo(Alamat::class, 'district_id', 'dis_id');
+    }
+
 }
 

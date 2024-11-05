@@ -27,7 +27,7 @@
                 </div>
 
                 
-                <form class="form-s mx-4 mt-3">
+                <form class="form-s mx-4 mt-3 border-2">
                     <button>
                         <svg width="17" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" role="img"
                             aria-labelledby="search">

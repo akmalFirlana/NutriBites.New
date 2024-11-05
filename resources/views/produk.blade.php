@@ -39,8 +39,10 @@
                         </div>
                         <hr class="bawah">
                         <div class="deskripsi py-2">
-                            <h4 class="fw-bold fs-5">Deskripsi</h4>
-                            <p>Lorem ipsum dolor sit ametdgdgdfgdhrdrh consectetur adipisicing elit.
+                            <h4 class="fw-bold fs-5 pb-2">Deskripsi</h4>
+                            <p class=""><span class="text-gray-400 ">Berat :</span> 500 gram</p>
+                            <p class=""><span class="text-gray-400 ">Daya Tahan :</span> 50 Hari</p>
+                            <p class="pt-2">Lorem ipsum dolor sit ametdgdgdfgdhrdrh consectetur adipisicing elit.
                                 Lorem ipsum dolor sit amet cordggrgnsectetur adipisicing elit.
                                 Lorem ipsum dolor sit amet cordgdrgrdgdrnsectetur adipisicing elit.
                             </p>
@@ -73,7 +75,7 @@
                         </div> -->
                         <div class="toko-container row mx-2 pt-2">
                             <div class="img col-md-2">
-                                <img src="{{ asset('image/dummi.jpg') }}" alt="" class="icon-toko" style="width: 60px;">
+                                <img src="{{ asset('image/dummi.jpg') }}" alt="" class="icon-toko rounded-full" style="width: 60px;">
                             </div>
                             <div class="link-toko col-md-9">
                                 <p class="fs-5 nama-toko pt-1 fw-bold "
@@ -86,6 +88,18 @@
                                     style="line-height: 0.2; font-weight: semibold; margin: 0 5px">Online <span
                                         class="fw-bold">1 Jam lalu</span></p>
                                 <div class="btn fw-bold mx-3 border-success w-72 mt-3">Ikuti Toko</div>
+                            </div>
+                        </div>
+                        <hr class="bawah">
+                        <div class="Pengiriman-container row mx-2 pt-2">
+                            
+                            <div class="link-toko col-md-9">
+                                <p class="fs-5 nama-toko pt-1 fw-bold "
+                                    style="display: inline-flex; align-items: center; margin: 0; padding: 0; line-height: 0.8;">
+                                    Pengiriman
+                                </p>
+                                <p class="status text-muted"
+                                    style=" font-weight: semibold; margin: 0 5px"><i class='bx bx-map bx-sm'></i> Dikirim Dari <span class="fw-bold">Surabaya</span></p>
                             </div>
                         </div>
                     </div>
