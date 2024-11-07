@@ -34,6 +34,18 @@ class AddressController extends Controller
         ]);
     }
 
+    public function upload()
+    {
+        $addresses = UserAddress::where('user_id', Auth::id())->with('alamat')->get();
+        $provinces = Alamat::select('prov_id', 'prov_name')->distinct()->get();
+
+        return view('admin.produk.upload', [
+            'addresses' => $addresses,
+            'provinces' => $provinces,
+            'showList' => true,
+        ]);
+    }
+
     // Show form for adding a new address
     public function create()
     {

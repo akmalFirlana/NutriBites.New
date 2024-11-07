@@ -14,6 +14,9 @@ class Product extends Model
         'price',
         'description',
         'nutrition_info',
+        'shelf_life',
+        'weight',
+        'shipping_address_id',
         'category',
         'image_1',
         'image_2',
@@ -21,7 +24,7 @@ class Product extends Model
         'image_4'
     ];
 
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);

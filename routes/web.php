@@ -46,7 +46,7 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
 Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::get('/gudang', [AddressController::class, 'admin'])->name('gudang');
     Route::get('/adminDB', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('/Admin/Upload', [AdminController::class, 'upload'])->name('admin.upload');
+    Route::get('/Admin/Upload', [AddressController::class, 'upload'])->name('admin.upload');
     Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
     Route::get('/Admin/Pesanan', [AdminController::class, 'pesanan'])->name('admin.pesanan');
     Route::get('/Admin/Pesan', [AdminController::class, 'pesan'])->name('admin.pesan');
@@ -78,7 +78,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-cities/{provinceId}', [AddressController::class, 'getCities']);
     Route::get('/get-districts/{cityId}', [AddressController::class, 'getDistricts']);
     Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
-    
 });
 
 

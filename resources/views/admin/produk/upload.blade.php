@@ -1,5 +1,6 @@
 <x-app-penjual>
     <section>
+        <x-address-component />
         <h1 class="fw-bold fs-3 mt-2 mb-3">Tambah Produk</h1>
         <div class="container pb-5 mb-3">
             <h1 class="fw-bold fs-5 p-3">Foto Produk</h1>
@@ -105,6 +106,26 @@
                                     </label>
                                 </li>
                             </ul>
+                            <div class="mb-3">
+                                <label for="product_shelf_life" class="form-label">Daya Tahan Produk (hari)</label>
+                                <input type="number" class="form-control" id="product_shelf_life"
+                                    name="product_shelf_life" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="product_weight" class="form-label">Berat Produk (gram)</label>
+                                <input type="number" class="form-control" id="product_weight" name="product_weight"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="shipping_address" class="form-label">Lokasi Produk Dikirim</label>
+                                <select id="shipping_address" name="shipping_address" class="form-select" required>
+                                    <option value="">Pilih Alamat Pengiriman</option>
+                                    @foreach($addresses as $address)
+                                        <option value="{{ $address->id }}">{{ $address->full_address }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                     </div>
 

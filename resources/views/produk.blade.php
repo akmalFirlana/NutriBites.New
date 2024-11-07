@@ -10,78 +10,51 @@
                     <div class="img-container col-md-4">
                         <div class="main-container" style="position: sticky; top: 135px">
                             <div class="main_img">
-                                <img id="mainImage" src="{{ asset('image/nangka.jpeg') }}" alt="Main Image">
+                                <img id="mainImage" src="{{ asset('storage/' . $product->image) }}" alt="Main Image">
                             </div>
                             <div class="thumbnail-container">
-                                <img src="{{ asset('image/nangka.jpeg') }}" onclick="changeImage(this)"
+                                <img src="{{ asset('storage/' . $product->image) }}" onclick="changeImage(this)"
                                     alt="Thumbnail 1" class="active">
-                                <img src="{{ asset('image/bawang_merah_2.jpeg') }}" onclick="changeImage(this)"
-                                    alt="Thumbnail 2">
-                                <img src="{{ asset('image/bawang_merah_3.jpeg') }}" onclick="changeImage(this)"
-                                    alt="Thumbnail 3">
+                                <!-- Tambahkan thumbnail lain jika diperlukan -->
                             </div>
                         </div>
-
                     </div>
                     <div class="col-md-8 hero-desk tw-mt-20">
-                        <h1 class="title-text text-3xl fw-bold">Kacang Pede</h1>
+                        <h1 class="title-text text-3xl fw-bold">{{ $product->name }}</h1>
                         <div class="d-flex mt-1 fs-6">
-                            <span class="badge bg-success ms-2 me-2">Terjual 4 rb.</span> |
+                            <span class="badge bg-success ms-2 me-2">Terjual {{ $product->sold }}.</span> |
                             <i class='bx bxs-star ms-2' style='color:#d0e12b'></i>
-                            <span class="font-semibold text-gray-700">4.7 (126 Rating)</span>
+                            <span class="font-semibold text-gray-700">{{ $product->rating }} (126 Rating)</span>
                         </div>
 
                         <div class="harga mt-4 mb-4">
-                            <h1 class="price me-3 mt-3 fs-2 font-extrabold">Rp 40.000</h1>
-                            <h1 class="discount fw-bold text-sm text-gray-400 text-decoration-line-through"><span
-                                    class="badge bg-success mt-1">20%</span><span class="text-gray-400 fw-bold ms-2">Rp
-                                    50.000 </span></h1>
+                            <h1 class="price me-3 mt-3 fs-2 font-extrabold">Rp
+                                {{ number_format($product->price, 0, ',', '.') }}
+                            </h1>
+                            <h1 class="discount fw-bold text-sm text-gray-400 text-decoration-line-through">
+                                <span class="badge bg-success mt-1">20%</span><span
+                                    class="text-gray-400 fw-bold ms-2">Rp
+                                    {{ number_format($product->price * 1.25, 0, ',', '.') }} </span>
+                            </h1>
                         </div>
                         <hr class="bawah">
                         <div class="deskripsi py-2">
                             <h4 class="fw-bold fs-5 pb-2">Deskripsi</h4>
                             <p class=""><span class="text-gray-400 ">Berat :</span> 500 gram</p>
                             <p class=""><span class="text-gray-400 ">Daya Tahan :</span> 50 Hari</p>
-                            <p class="pt-2">Lorem ipsum dolor sit ametdgdgdfgdhrdrh consectetur adipisicing elit.
-                                Lorem ipsum dolor sit amet cordggrgnsectetur adipisicing elit.
-                                Lorem ipsum dolor sit amet cordgdrgrdgdrnsectetur adipisicing elit.
-                            </p>
+                            <p class="pt-2">{{ $product->description }}</p>
                         </div>
                         <hr class="bawah">
-                        <!-- <p>Varian:</p>
-                        <div class="d-flex">
-                            <div class="button-group">
-                                <input type="radio" id="svelt" name="frameworks" checked="" />
-                                <label for="svelt">Manis</label>
-                            </div>
-
-                            <div class="button-group">
-                                <input type="radio" id="react" name="frameworks" />
-                                <label for="react">Original</label>
-                            </div>
-
-                            <div class="button-group">
-                                <input type="radio" id="vue" name="frameworks" />
-                                <label for="vue">Pedas</label>
-                            </div>
-                            <div class="button-group">
-                                <input type="radio" id="vua" name="frameworks" />
-                                <label for="vua">Asam</label>
-                            </div>
-                            <div class="button-group">
-                                <input type="radio" id="vui" name="frameworks" />
-                                <label for="vui">coklat</label>
-                            </div>
-                        </div> -->
                         <div class="toko-container row mx-2 pt-2">
                             <div class="img col-md-2">
-                                <img src="{{ asset('image/dummi.jpg') }}" alt="" class="icon-toko rounded-full" style="width: 60px;">
+                                <img src="{{ asset('image/dummi.jpg') }}" alt="" class="icon-toko rounded-full"
+                                    style="width: 60px;">
                             </div>
                             <div class="link-toko col-md-9">
-                                <p class="fs-5 nama-toko pt-1 fw-bold "
+                                <p class="fs-5 nama-toko pt-1 fw-bold"
                                     style="display: inline-flex; align-items: center; margin: 0; padding: 0; line-height: 0.8;">
                                     <img src="{{ asset('image/icon_toko.png') }}"
-                                        style="width: 20px; display: inline-flex; margin: 0  5px;">
+                                        style="width: 20px; display: inline-flex; margin: 0 5px;">
                                     Nama Toko
                                 </p>
                                 <p class="status text-muted"
@@ -92,19 +65,19 @@
                         </div>
                         <hr class="bawah">
                         <div class="Pengiriman-container row mx-2 pt-2">
-                            
                             <div class="link-toko col-md-9">
-                                <p class="fs-5 nama-toko pt-1 fw-bold "
+                                <p class="fs-5 nama-toko pt-1 fw-bold"
                                     style="display: inline-flex; align-items: center; margin: 0; padding: 0; line-height: 0.8;">
                                     Pengiriman
                                 </p>
-                                <p class="status text-muted"
-                                    style=" font-weight: semibold; margin: 0 5px"><i class='bx bx-map bx-sm'></i> Dikirim Dari <span class="fw-bold">Surabaya</span></p>
+                                <p class="status text-muted" style=" font-weight: semibold; margin: 0 5px"><i
+                                        class='bx bx-map bx-sm'></i> Dikirim Dari <span class="fw-bold">Surabaya</span>
+                                </p>
                             </div>
                         </div>
                     </div>
-
                 </div>
+
 
                 <div class="contain  mx-5">
                     <div class="tabs d-flex justify-content-around">
@@ -425,7 +398,8 @@
 
                     <div class="action justify-content-between d-flex mt-3">
                         <button class="btn border border-success fw-bold"
-                            style="width: 48%; padding: 6px!important;">Beli Langsung</button>
+                            style="width: 48%; padding: 6px!important;">Beli
+                            Langsung</button>
                         <button class="btn btn-success fw-bold" style="width: 48%; padding: 6px!important;">+
                             Keranjang</button>
                     </div>

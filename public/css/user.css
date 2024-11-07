@@ -325,7 +325,6 @@ fieldset {
     font-weight: bold;
     color: #000;
     outline: none;
-    -moz-appearance: textfield;
     border: none;
   }
 
