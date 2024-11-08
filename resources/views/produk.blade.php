@@ -6,104 +6,95 @@
     <div class="row pt-3 px-5">
         <div class="main col-md-8">
             <div class="section tw-pt-10 pb-5">
-                <div class="header row mt-3 mb-5 mx-5">
+                <div class="header row mt-3 mb-5 ms-5 ps-5">
                     <div class="img-container col-md-4">
-                        <div class="main-container" style="position: sticky; top: 135px">
+                        <div class="main-container pb-2" style="position: sticky; top: 135px">
                             <div class="main_img">
-                                <img id="mainImage" src="{{ asset('image/nangka.jpeg') }}" alt="Main Image">
+                                @php
+                                    $images = json_decode($product->images, true); // Mengubah JSON menjadi array
+                                 @endphp
+
+                                @if(!empty($images) && isset($images[0]))
+                                    <img src="{{ asset('storage/' . $images[0]) }}" alt="Product"
+                                        class="product-img mx-auto">
+                                @else
+                                    <span>No Image</span>
+                                @endif
                             </div>
                             <div class="thumbnail-container">
-                                <img src="{{ asset('image/nangka.jpeg') }}" onclick="changeImage(this)"
+                                <img src="{{ asset('storage/' . $product->image) }}" onclick="changeImage(this)"
                                     alt="Thumbnail 1" class="active">
-                                <img src="{{ asset('image/bawang_merah_2.jpeg') }}" onclick="changeImage(this)"
-                                    alt="Thumbnail 2">
-                                <img src="{{ asset('image/bawang_merah_3.jpeg') }}" onclick="changeImage(this)"
-                                    alt="Thumbnail 3">
                             </div>
                         </div>
 
                     </div>
                     <div class="col-md-8 hero-desk tw-mt-20">
-                        <h1 class="title-text text-3xl fw-bold">Kacang Pede</h1>
+                        <h1 class="title-text text-2xl font-black">{{ $product->name }}</h1>
                         <div class="d-flex mt-1 fs-6">
-                            <span class="badge bg-success ms-2 me-2">Terjual 4 rb.</span> |
+                            <span class="badge bg-success ms-2 me-2">Terjual {{ $product->sold }}.</span> |
                             <i class='bx bxs-star ms-2' style='color:#d0e12b'></i>
-                            <span class="font-semibold text-gray-700">4.7 (126 Rating)</span>
+                            <span class="font-semibold text-gray-700">{{ $product->rating }} (126 Rating)</span>
                         </div>
 
                         <div class="harga mt-4 mb-4">
-                            <h1 class="price me-3 mt-3 fs-2 font-extrabold">Rp 40.000</h1>
-                            <h1 class="discount fw-bold text-sm text-gray-400 text-decoration-line-through"><span
-                                    class="badge bg-success mt-1">20%</span><span class="text-gray-400 fw-bold ms-2">Rp
-                                    50.000 </span></h1>
+                            <h1 class="price me-3 mt-3 fs-2 font-black">Rp
+                                {{ number_format($product->price, 0, ',', '.') }}
+                            </h1>
+                            <h1 class="discount fw-bold text-sm text-gray-400 text-decoration-line-through">
+                                <span class="badge bg-success mt-1">20%</span><span
+                                    class="text-gray-400 fw-bold ms-2">Rp
+                                    {{ number_format($product->price * 1.25, 0, ',', '.') }} </span>
+                            </h1>
                         </div>
                         <hr class="bawah">
                         <div class="deskripsi py-2">
                             <h4 class="fw-bold fs-5 pb-2">Deskripsi</h4>
-                            <p class=""><span class="text-gray-400 ">Berat :</span> 500 gram</p>
-                            <p class=""><span class="text-gray-400 ">Daya Tahan :</span> 50 Hari</p>
-                            <p class="pt-2">Lorem ipsum dolor sit ametdgdgdfgdhrdrh consectetur adipisicing elit.
-                                Lorem ipsum dolor sit amet cordggrgnsectetur adipisicing elit.
-                                Lorem ipsum dolor sit amet cordgdrgrdgdrnsectetur adipisicing elit.
+                            <p class=""><span class="text-gray-400 ">Berat :</span> {{ $product->weight }} gram</p>
+                            <p class=""><span class="text-gray-400 ">Daya Tahan :</span> {{ $product->shelf_life }} Hari
                             </p>
+                            <p class="pt-2">{{ $product->description }}</p>
                         </div>
                         <hr class="bawah">
-                        <!-- <p>Varian:</p>
-                        <div class="d-flex">
-                            <div class="button-group">
-                                <input type="radio" id="svelt" name="frameworks" checked="" />
-                                <label for="svelt">Manis</label>
-                            </div>
-
-                            <div class="button-group">
-                                <input type="radio" id="react" name="frameworks" />
-                                <label for="react">Original</label>
-                            </div>
-
-                            <div class="button-group">
-                                <input type="radio" id="vue" name="frameworks" />
-                                <label for="vue">Pedas</label>
-                            </div>
-                            <div class="button-group">
-                                <input type="radio" id="vua" name="frameworks" />
-                                <label for="vua">Asam</label>
-                            </div>
-                            <div class="button-group">
-                                <input type="radio" id="vui" name="frameworks" />
-                                <label for="vui">coklat</label>
-                            </div>
-                        </div> -->
                         <div class="toko-container row mx-2 pt-2">
                             <div class="img col-md-2">
-                                <img src="{{ asset('image/dummi.jpg') }}" alt="" class="icon-toko rounded-full" style="width: 60px;">
+                                <img src="{{ asset('image/dummi.jpg') }}" alt="" class="icon-toko rounded-full"
+                                    style="width: 60px;">
                             </div>
                             <div class="link-toko col-md-9">
-                                <p class="fs-5 nama-toko pt-1 fw-bold "
+                                <p class="fs-5 nama-toko pt-1 fw-bold"
                                     style="display: inline-flex; align-items: center; margin: 0; padding: 0; line-height: 0.8;">
                                     <img src="{{ asset('image/icon_toko.png') }}"
-                                        style="width: 20px; display: inline-flex; margin: 0  5px;">
-                                    Nama Toko
+                                        style="width: 20px; display: inline-flex; margin: 0 5px;">
+                                    {{ $product->user->name }}
                                 </p>
                                 <p class="status text-muted"
                                     style="line-height: 0.2; font-weight: semibold; margin: 0 5px">Online <span
                                         class="fw-bold">1 Jam lalu</span></p>
-                                <div class="btn fw-bold mx-3 border-success w-72 mt-3">Ikuti Toko</div>
+                                <div class="btn fw-bold mx-3 border-success w-72 my-3">Ikuti Toko</div>
                             </div>
                         </div>
-                        <hr class="bawah">
-                        <div class="Pengiriman-container row mx-2 pt-2">
-                            
+
+                        <div class="Pengiriman-container row mx-2 py-2">
                             <div class="link-toko col-md-9">
-                                <p class="fs-5 nama-toko pt-1 fw-bold "
+                                <p class="fs-5 nama-toko pt-1 fw-bold"
                                     style="display: inline-flex; align-items: center; margin: 0; padding: 0; line-height: 0.8;">
                                     Pengiriman
                                 </p>
-                                <p class="status text-muted"
-                                    style=" font-weight: semibold; margin: 0 5px"><i class='bx bx-map bx-sm'></i> Dikirim Dari <span class="fw-bold">Surabaya</span></p>
+                                <p class="status text-muted" style=" font-weight: semibold; margin: 0 5px"><i
+                                        class='bx bx-map bx-sm'></i> Dikirim Dari <span
+                                        class="fw-bold">{{ $product->user->address }}</span>
+                                </p>
                             </div>
                         </div>
-                    </div>
 
+                        <hr class="bawah">
+                        <div class="report d-inline-flex justify-content-between w-100 px-2 py-2">
+                            <p class="text-muted d-flex mb-0">Ada Masalah dengan Produk ini?</p>
+                            <p class="fw-bold d-flex mb-0"><i class='bx bx-error'></i>laporkan!</p>
+                        </div>
+
+                    </div>
+                    <hr class="bawah">
                 </div>
 
                 <div class="contain  mx-5">
@@ -388,7 +379,7 @@
 
             </div>
         </div>
-        <div class="side col-md-4 ">
+        <div class="side col-md-4">
             <div class="wrapper px-5" style="position: sticky; top: 130px">
                 <div class="upper-card rounded mb-3" style="padding: 10px; margin: 0;
                 background: rgb(0,164,47);
@@ -396,13 +387,12 @@
                     <p class="fw-bold text-white ms-2">Beli Jajan</p>
                 </div>
 
-                <div class="lower-card border-1 rounded p-3 ">
+                <div class="lower-card border-1 rounded p-3">
                     <p class="font-extrabold pb-2">Atur Jumlah Dan Catatan </p>
                     <div class="produk d-inline-flex">
-                        <img class="img-fluid" src="{{ asset('image/hero.png') }}" alt=""
+                        <img class="img-fluid" src="{{ asset('storage/' . $product->image_1) }}" alt=""
                             style=" height: 56px; width: 56px;">
-                        <p class="d-flex fs-5 ms-2">Nama Produk</p>
-
+                        <p class="d-flex fs-6 ms-2 truncate max-w-xs">{{ $product->name }}</p>
                     </div>
                     <hr>
                     <div class="checkout d-inline-flex mt-3">
@@ -411,15 +401,16 @@
                             <input type="number" id="number-input" value="1" min="0" class="input-number" />
                             <button type="button" class="btn-increment px-1" onclick="increment()">+</button>
                         </div>
-                        <p class="my-auto ms-3 fw-bold">Stok: sisa</p>
+                        <p class="my-auto ms-3 fw-bold">Stok: {{ $product->stock }}</p>
                     </div>
 
                     <div class="harga d-inline-flex justify-content-between w-100 mt-3">
                         <p class="text-muted my-auto fw-bold">Subtotal</p>
                         <p class=""><span class="fw-bold text-sm text-gray-400 text-decoration-line-through"
                                 style="line-height: 0;">Rp
-                                10.000</span><br>
-                            <span class="fw-bold fs-5" style="line-height: 0;">Rp 20.000</span>
+                                {{ number_format($product->price * 1.25, 0, ',', '.') }}</span><br>
+                            <span class="fw-bold fs-5" style="line-height: 0;">Rp
+                                {{ number_format($product->price, 0, ',', '.') }}</span>
                         </p>
                     </div>
 

@@ -3,62 +3,44 @@
         <x-address-component />
         <h1 class="fw-bold fs-3 mt-2 mb-3">Tambah Produk</h1>
         <div class="container pb-5 mb-3">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <h1 class="fw-bold fs-5 p-3">Foto Produk</h1>
             <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="row d-flex">
                 @csrf
                 <div class="container mx-auto p-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Upload hingga 4 foto</label>
                     <div id="image-upload-container" class="grid grid-cols-8 gap-4">
-                        <!-- Foto 1 -->
-                        <div class="image-upload-wrapper flex flex-col items-center p-2">
-                            <label for="image-upload-1" class="image-upload-label relative">
-                                <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload-1"
-                                    accept="image/*" />
-                                <div
-                                    class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
-                                    <i class='bx bx-plus text-gray-400 text-2xl'></i>
-                                </div>
-                            </label>
-                        </div>
-                        <!-- Foto 2 -->
-                        <div class="image-upload-wrapper flex flex-col items-center p-2">
-                            <label for="image-upload-2" class="image-upload-label relative">
-                                <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload-2"
-                                    accept="image/*" />
-                                <div
-                                    class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
-                                    <i class='bx bx-plus text-gray-400 text-2xl'></i>
-                                </div>
-                            </label>
-                        </div>
-                        <!-- Foto 3 -->
-                        <div class="image-upload-wrapper flex flex-col items-center p-2">
-                            <label for="image-upload-3" class="image-upload-label relative">
-                                <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload-3"
-                                    accept="image/*" />
-                                <div
-                                    class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
-                                    <i class='bx bx-plus text-gray-400 text-2xl'></i>
-                                </div>
-                            </label>
-                        </div>
-                        <!-- Foto 4 -->
-                        <div class="image-upload-wrapper flex flex-col items-center p-2">
-                            <label for="image-upload-4" class="image-upload-label relative">
-                                <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload-4"
-                                    accept="image/*" />
-                                <div
-                                    class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
-                                    <i class='bx bx-plus text-gray-400 text-2xl'></i>
-                                </div>
-                            </label>
-                        </div>
+                        @for ($i = 1; $i <= 4; $i++)
+                            <div class="image-upload-wrapper flex flex-col items-center p-2">
+                                <label for="image-upload-{{ $i }}" class="image-upload-label relative">
+                                    <input type="file" name="photos[]" class="image-upload-input hidden"
+                                        id="image-upload-{{ $i }}" accept="image/*" />
+                                    <div
+                                        class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
+                                        <i class='bx bx-plus text-gray-400 text-2xl'></i>
+                                    </div>
+                                </label>
+                            </div>
+                        @endfor
                     </div>
                 </div>
 
-                <h1 class="fw-bold fs-5 p-3">informasi Produk</h1>
+                <h1 class="fw-bold fs-5 p-3">Informasi Produk</h1>
                 <div class="form row m-2">
-
                     <div class="col-md-6">
                         <label class="fw-bold">Nama Produk:</label>
                         <input type="text" name="name" class="form-control" style="width: 450px;"
@@ -74,8 +56,9 @@
                         <input type="number" name="price" class="form-control" style="width: 450px;"
                             placeholder="Rp 3xxxxx">
                     </div>
+                    <input type="hidden" name="sold" value="0">
                     <div class="col-md-6 mt-3">
-                        <label class="font-bold">Kategori Produk:</label>
+                        <label class="fw-bold">Kategori Produk:</label>
                         <div class="relative mt-2">
                             <button
                                 class="w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md shadow-sm focus:outline-none"
@@ -84,49 +67,41 @@
                             </button>
                             <ul id="dropdownMenu"
                                 class="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto hidden z-10">
-                                <li class="px-4 py-2 hover:bg-gray-100">
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600"
-                                            name="category[]" value="kategori1">
-                                        <span class="ml-2">📦 Kategori 1</span>
-                                    </label>
-                                </li>
-                                <li class="px-4 py-2 hover:bg-gray-100">
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600"
-                                            name="category[]" value="kategori2">
-                                        <span class="ml-2">📦 Kategori 2</span>
-                                    </label>
-                                </li>
-                                <li class="px-4 py-2 hover:bg-gray-100">
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600"
-                                            name="category[]" value="kategori3">
-                                        <span class="ml-2">📦 Kategori 3</span>
-                                    </label>
-                                </li>
+                                @foreach(['kategori1', 'kategori2', 'kategori3'] as $kategori)
+                                    <li class="px-4 py-2 hover:bg-gray-100">
+                                        <label class="inline-flex items-center">
+                                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600"
+                                                name="category[]" value="{{ $kategori }}">
+                                            <span class="ml-2">📦 {{ ucfirst($kategori) }}</span>
+                                        </label>
+                                    </li>
+                                @endforeach
                             </ul>
-                            <div class="mb-3">
-                                <label for="product_shelf_life" class="form-label">Daya Tahan Produk (hari)</label>
-                                <input type="number" class="form-control" id="product_shelf_life"
-                                    name="product_shelf_life" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="product_weight" class="form-label">Berat Produk (gram)</label>
-                                <input type="number" class="form-control" id="product_weight" name="product_weight"
-                                    required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="shipping_address" class="form-label">Lokasi Produk Dikirim</label>
-                                <select id="shipping_address" name="shipping_address" class="form-select" required>
-                                    <option value="">Pilih Alamat Pengiriman</option>
-                                    @foreach($addresses as $address)
-                                        <option value="{{ $address->id }}">{{ $address->full_address }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
                         </div>
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <label class="fw-bold">Daya Tahan Produk (hari):</label>
+                        <input type="number" name="shelf_life" class="form-control"
+                            placeholder="Masukkan daya tahan produk dalam hari">
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <label class="fw-bold">Berat Produk (gram):</label>
+                        <input type="number" name="weight" class="form-control"
+                            placeholder="Masukkan berat produk dalam gram">
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <label class="fw-bold">Lokasi Produk Dikirim:</label>
+                        <select name="shipping_address_id" class="form-select">
+                            <option value="">Pilih Alamat Pengiriman</option>
+                            @foreach($addresses as $address)
+                                <option value="{{ $address->id }}">{{ $address->full_address }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <label class="fw-bold">Izin Edar BPOM:</label>
+                        <input type="text" name="bpom_license" class="form-control"
+                            placeholder="Masukkan nomor izin BPOM">
                     </div>
 
                     <script>
@@ -144,7 +119,6 @@
                         });
                     </script>
 
-
                     <div class="col-md-10 mt-3">
                         <label class="fw-bold">Deskripsi:</label>
                         <textarea name="description" class="form-control" rows="3"
@@ -153,7 +127,7 @@
                     <div class="col-md-5 mt-3">
                         <label class="fw-bold">Informasi Gizi:</label>
                         <div class="grid w-full max-w-xs items-center gap-1.5">
-                            <label class="text-sm text-gray-400 font-medium leading-none">dapat berupa gambar atau file
+                            <label class="text-sm text-gray-400 font-medium leading-none">Dapat berupa gambar atau file
                                 excel</label>
                             <button class="container-btn-file mt-2">
                                 <i class='bx bxs-file-plus me-2'></i> Upload File
@@ -166,9 +140,8 @@
                             <i class='bx bxs-cloud-upload me-2'></i>Upload
                         </button>
                     </div>
+                </div>
             </form>
-
-        </div>
         </div>
     </section>
 </x-app-penjual>

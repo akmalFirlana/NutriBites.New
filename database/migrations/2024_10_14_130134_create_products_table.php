@@ -17,15 +17,16 @@ return new class extends Migration {
             $table->integer('stock');
             $table->decimal('price', 10, 2);
             $table->text('description')->nullable();
-            $table->string('nutrition_info')->nullable(); // Untuk file informasi gizi
+            $table->string('nutrition_info')->nullable(); 
             $table->string('category')->nullable();
-            $table->string('image_1')->nullable();
-            $table->string('image_2')->nullable();
-            $table->string('image_3')->nullable();
-            $table->string('image_4')->nullable();
+            $table->json('images')->nullable(); 
             $table->timestamps();
-
-            // Foreign key constraint
+            $table->integer('shelf_life')->nullable(); // daya tahan produk dalam hari
+            $table->float('weight')->nullable(); // berat produk dalam kilogram
+            $table->unsignedBigInteger('shipping_address_id')->nullable(); // ID alamat tujuan pengiriman
+            $table->string('bpom_license')->nullable(); // izin edar BPOM
+            $table->integer('sold')->default(0); // jumlah terjual
+            $table->float('rating')->nullable(); // rata-rata rating produk
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

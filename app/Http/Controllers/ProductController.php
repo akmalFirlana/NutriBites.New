@@ -20,6 +20,23 @@ class ProductController extends Controller
         $addresses = UserAddress::where('user_id', Auth::id())->get();
         return view('products.create', compact('addresses'));
     }
+    private function storeProductPhotos(Request $request, Product $product)
+    {
+        $imagePaths = [];
+
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $file) {
+                $filename = time() . '-' . $file->getClientOriginalName();
+                $path = $file->storeAs('products', $filename, 'public');
+                $imagePaths[] = $path;  // Menyimpan path gambar ke dalam array
+            }
+        }
+
+        // Menyimpan array gambar ke dalam kolom 'images'
+        if (!empty($imagePaths)) {
+            $product->images = json_encode($imagePaths);
+        }
+    }
 
     public function store(Request $request)
     {
@@ -31,9 +48,12 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'nutrition_info' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,xlsx',
             'photos.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg',
-            'shelf_life' => 'nullable|integer', // Validasi untuk daya tahan produk
-            'weight' => 'nullable|numeric', // Validasi untuk berat produk
-            'shipping_address_id' => 'nullable|exists:user_addresses,id' // Validasi ID alamat
+            'shelf_life' => 'nullable|integer',
+            'weight' => 'nullable|numeric',
+            'shipping_address_id' => 'nullable|exists:user_addresses,id',
+            'bpom_license' => 'nullable|string',
+            'sold' => 'nullable|integer',
+            'rating' => 'nullable|numeric'
         ]);
 
         $product = new Product();
@@ -42,22 +62,28 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->description = $request->description;
         $product->category = implode(',', $request->category);
-        $product->shelf_life = $request->product_shelf_life;
-        $product->weight = $request->product_weight;
-        $product->shipping_address_id = $request->shipping_address;
-        $product->user_id = auth()->id(); // Only the logged-in user's ID is stored here
+        $product->shelf_life = $request->shelf_life;
+        $product->weight = $request->weight;
+        $product->shipping_address_id = $request->shipping_address_id;
+        $product->user_id = auth()->id();
+        $product->bpom_license = $request->bpom_license;
+        $product->sold = $request->input('sold', 0);
+        $product->rating = $request->rating;
 
-        // Storing nutrition info
+        // Simpan info gizi
         if ($request->hasFile('nutrition_info')) {
             $product->nutrition_info = $request->file('nutrition_info')->store('nutrition_info', 'public');
         }
-      
-        // Storing photos
+
+        // Simpan foto produk dalam format JSON
         $this->storeProductPhotos($request, $product);
 
+        // Simpan produk ke database
         $product->save();
+
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan.');
     }
+
 
     public function show(Product $product)
     {
@@ -95,9 +121,9 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'nutrition_info' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,xlsx',
             'photos.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg',
-            'shelf_life' => 'nullable|integer', // Validasi untuk daya tahan produk
-            'weight' => 'nullable|numeric', // Validasi untuk berat produk
-            'shipping_address_id' => 'nullable|exists:user_addresses,id' // Validasi ID alamat
+            'shelf_life' => 'nullable|integer',
+            'weight' => 'nullable|numeric',
+            'shipping_address_id' => 'nullable|exists:user_addresses,id'
         ]);
 
         $product->update([
@@ -140,32 +166,11 @@ class ProductController extends Controller
         return view('dashboard', compact('products'));
     }
 
-    
-
     public function detail($id)
     {
-        $product = Product::findOrFail($id); // Mengambil produk berdasarkan ID
-        return view('product.show', compact('product'));
+        $product = Product::findOrFail($id);
+        return view('produk', compact('product'));
     }
 
-    private function storeProductPhotos(Request $request, Product $product)
-    {
-        if ($request->hasFile('photos')) {
-            foreach ($request->file('photos') as $index => $file) {
-                $filename = time() . '-' . $file->getClientOriginalName();
-                $path = $file->storeAs('products', $filename, 'public');
-
-                // Storing up to 4 images in separate columns
-                if ($index == 0) {
-                    $product->image_1 = $path;
-                } elseif ($index == 1) {
-                    $product->image_2 = $path;
-                } elseif ($index == 2) {
-                    $product->image_3 = $path;
-                } elseif ($index == 3) {
-                    $product->image_4 = $path;
-                }
-            }
-        }
-    }
+    
 }

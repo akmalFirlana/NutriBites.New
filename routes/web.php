@@ -40,6 +40,7 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::get('/checkout', [UserController::class, 'checkout'])->name('checkout');
     Route::get('/kategori', [UserController::class, 'kategori'])->name('kategori');
     Route::get('/produk', [UserController::class, 'produk'])->name('produk');
+    Route::get('/produk/{id}', [ProductController::class, 'detail'])->name('product.detail');
 });
 
 
@@ -57,6 +58,7 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function () {
 Route::resource('products', ProductController::class);
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
