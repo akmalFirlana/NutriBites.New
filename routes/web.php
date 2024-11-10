@@ -38,7 +38,7 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
     Route::get('/products/{id}', [ProductController::class, 'detail'])->name('product.show');
     Route::get('/checkout', [UserController::class, 'checkout'])->name('checkout');
-    Route::get('/kategori', [UserController::class, 'kategori'])->name('kategori');
+    Route::get('/kategori', [ProductController::class, 'kategori'])->name('kategori');
     Route::get('/produk', [UserController::class, 'produk'])->name('produk');
     Route::get('/produk/{id}', [ProductController::class, 'detail'])->name('product.detail');
 });

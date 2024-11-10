@@ -16,8 +16,10 @@
             Camilan Sehat, Rasa Nikmat: Pilihan Tepat Untuk Hidup Yang Lebih Baik</h1>
         <p class="col-md-6 text-gray-400 slide-in-left2" style="padding: 0.8rem 7rem 1rem 0; font-size: 0.9rem;">
             Temukan Snack dan makanan dengan kualitas terbaik untuk dirimu dan keluargamu hanya di NutriBites</p>
-        <button class="btn slide-in-right" style=" background-color: #01AB31; color:
-        white; font-size: 0.9rem; font-weight: 500" onclick="window.location.href='/daftar'">Bergabung</button>
+        <button class="btn slide-in-right"
+            style=" background-color: #01AB31; color:
+        white; font-size: 0.9rem; font-weight: 500"
+            onclick="window.location.href='/daftar'">Bergabung</button>
         <div class="support row mt-5 slide-in-right">
             <div class="col-md-1 kanan">
                 <h1 class="fw-bold fs-4">200+</h1>
@@ -41,75 +43,173 @@
             yang dipilih khusus untuk Anda!</p>
         <div class="row justify-content-around mx-auto">
             <div class="row">
-                @foreach($products as $product)
-                                <div class="col-sm-2 pe-0 mt-3 procard overflow-hidden">
-                                    <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="product-card-link">
-                                        <div class="product-card border position-relative" style="width: 188px;">
-                                            <!-- Konten Card -->
-                                            <div class="img-wrapper">
-                                                @php
-                                                    $images = json_decode($product->images, true); // Mengubah JSON menjadi array
-                                                 @endphp
+                @foreach ($products as $product)
+                    <div class="col-sm-2 pe-0 mt-3 procard overflow-hidden">
 
-                                                @if(!empty($images) && isset($images[0]))
-                                                    <img src="{{ asset('storage/' . $images[0]) }}" alt="Product"
-                                                        class="product-img mx-auto">
-                                                @else
-                                                    <span>No Image</span>
-                                                @endif
-                                               
+                        <div class="product-card border mb-4 position-relative rounded-md shadow-md"
+                            style="width: 188px;">
+                            <!-- Konten Card -->
+                            <div class="img-wrapper">
+                                @php
+                                    $images = json_decode($product->images, true); // Mengubah JSON menjadi array
+                                @endphp
 
-                                                <!-- Hover Action Wrapper -->
-                                                <div class="hover-options">
-                                                    <button class="action-btn" onclick="addToCart('{{ $product->id }}')"><i
-                                                            class='bx bx-cart-add'></i></button>
-                                                    <button class="action-btn" onclick="addToWishlist('{{ $product->id }}')"><i
-                                                            class='bx bx-heart'></i></button>
-                                                </div>
-                                            </div>
+                                @if (!empty($images) && isset($images[0]))
+                                    <img src="{{ asset('storage/' . $images[0]) }}" alt="Product"
+                                        class="product-img mx-auto">
+                                @else
+                                    <span>No Image</span>
+                                @endif
 
-                                            <div class="card-footer border-top border-gray-300 pt-1" style="padding: 0; margin: 0;">
-                                                <img src="{{ asset('image/badge1.png') }}" style="width: 100px; margin: 0; padding: 0;">
-                                                <div class="keterangan ps-2 pe-2" style="padding: 0; margin: 0;">
-                                                    <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="product-name"
-                                                        style="margin: 0; padding: 0;line-height: 0.8;">{{ $product->name }}</a>
-                                                    <div class="" style="margin: 0; padding: 0;">
-                                                        <span class="mb-0 text-gray me-2 fs-6 fw-bold d-block"
-                                                            style="line-height: 0.8; margin: 0; padding: 0;">Rp
-                                                            {{ number_format($product->price, 0, ',', '.') }}</span>
-                                                        <span class="text-decoration-line-through"
-                                                            style="color:gray; line-height: 0; font-size: 0.8rem; margin: 0; padding: 0;">Rp
-                                                            {{ number_format($product->old_price, 0, ',', '.') }}</span>
-                                                    </div>
-                                                    <p class="text-muted"
-                                                        style="display: inline-flex; align-items: center; margin: 0; padding: 0;">
-                                                        <img src="{{ asset('image/icon_toko.png') }}"
-                                                            style="width: 20px; display: inline-flex; margin-right: 5px; margin: 0;">
-                                                        {{ $product->user->name }}
-                                                    </p>
 
-                                                    <div class="d-flex" style="margin: 0; padding: 0;">
-                                                        <i class='bx bxs-star' style='color:#d0e12b; margin: 0; padding: 0;'></i>
-                                                        <span class="badge bg-success ms-2"
-                                                            style="margin: 0; padding: 0;">{{ $product->rating }}</span> |
-                                                        <span class="badge bg-success ms-2" ">{{ $product->sold }} Terjual</span>
+                                <!-- Hover Action Wrapper -->
+                                <div class="hover-options">
+                                    <button class="action-btn" onclick="addToCart('{{ $product->id }}')"><i
+                                            class='bx bx-cart-add'></i></button>
+                                    <button class="action-btn" onclick="addToWishlist('{{ $product->id }}')"><i
+                                            class='bx bx-heart'></i></button>
+                                </div>
+                            </div>
+                            <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="product-card-link">
+                                <div class="pointer-event card-footer border-top border-gray-300 pt-1"
+                                    style="padding: 0; margin: 0;"
+                                    onclick="window.location.href='{{ route('product.detail', ['id' => $product->id]) }}'">
+                                    <img src="{{ asset('image/badge1.png') }}"
+                                        style="width: 100px; margin: 0; padding: 0;">
+                                    <div class="keterangan ps-2 pe-2" style="padding: 0; margin: 0;">
+                                        <a href="{{ route('product.detail', ['id' => $product->id]) }}"
+                                            class="product-name"
+                                            style="margin: 0; padding: 0;line-height: 0.8;">{{ $product->name }}</a>
+                                        <div class="" style="margin: 0; padding: 0;">
+                                            <span class="mb-0 text-gray me-2 fs-6 fw-bold d-block"
+                                                style="line-height: 0.8; margin: 0; padding: 0;">Rp
+                                                {{ number_format($product->price, 0, ',', '.') }}</span>
+                                            <span class="text-decoration-line-through"
+                                                style="color:gray; line-height: 0; font-size: 0.8rem; margin: 0; padding: 0;">Rp
+                                                {{ number_format($product->price * 1.25, 0, ',', '.') }}</span>
+                                        </div>
+                                        <p class="text-muted"
+                                            style="display: inline-flex; align-items: center; margin: 0; padding: 0;">
+                                            <img src="{{ asset('image/icon_toko.png') }}"
+                                                style="width: 20px; display: inline-flex; margin-right: 5px; margin: 0;">
+                                            {{ $product->user->name }}
+                                        </p>
+
+                                        <div class="d-flex" style="margin: 0; padding: 0;">
+                                            <i class='bx bxs-star' style='color:#d0e12b; margin: 0; padding: 0;'></i>
+                                            <span class="badge bg-success ms-2"
+                                                style="margin: 0; padding: 0;">{{ $product->rating }}</span> |
+                                            <span class="badge bg-success ms-2" ">{{ $product->sold }} Terjual</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                @endforeach
-            </div>
-        </div>
-        <div class=" text-center m-5">
-                                            <button class="btn btn-white">Muat Lebih</button>
+                                                    </a>
+                                                </div>
+ @endforeach
+                                        </div>
                                     </div>
 
-
+                                    <div class=" text-center mx-5 my-3">
+                                        <button class="btn btn-white border">Muat Lebih</button>
+                                    </div>
     </section>
-    <hr class="mx-auto" style="border-color: #141113; width: 90%; height: 2px">
-    <!-- <div class="category-container container"> 
+
+    <hr class="mx-auto" style="border-color: #141113; width: 95%; height: 2px">
+
+    <section>
+        <div class="flash-sale mt-5">
+            <div class="flash-header d-inline-flex">
+                <h1 class="fw-bold d-flex ps-3 pe-2" style="font-size: 1.5rem">Flash Sale
+                </h1>
+                <div class="d-flex pt-auto">
+                    <p class="pt-2 pe-2">Berakhir Dalam</p>
+                    <div id="countdown" class="d-flex gap-2">
+                        <div class="time-box" id="hours">00</div>
+                        <div class="separator">:</div>
+                        <div class="time-box" id="minutes">00</div>
+                        <div class="separator">:</div>
+                        <div class="time-box" id="seconds">00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-around mx-auto">
+                <div class="row">
+                    <div class="col-sm-2 mt-3 pt-2 mb-5">
+                        <div
+                            class="shape w-[300px] bg-slate-400 h-100 rounded-2xl d-flex align-items-center">
+                            <img src="{{ asset('image/flashsale.png') }}" class="fs-img"
+                                style="width: 200px; height: 220px; object-fit: cover;">
+                        </div>
+
+                    </div>
+                    @php
+                        $products = \App\Models\Product::inRandomOrder()->take(5)->get();
+                    @endphp
+
+                    @foreach ($products as $product)
+                        <div class="col-sm-2 pe-0 py-5 procard overflow-hidden">
+                            <div class="product-card bg-white border mb-4 position-relative rounded-md shadow-md"
+                                style="width: 188px;">
+                                <!-- Konten Card -->
+                                <div class="img-wrapper">
+                                    @php
+                                        $images = json_decode($product->images, true); // Mengubah JSON menjadi array
+                                    @endphp
+
+                                    @if (!empty($images) && isset($images[0]))
+                                        <img src="{{ asset('storage/' . $images[0]) }}" alt="Product"
+                                            class="product-img mx-auto">
+                                    @else
+                                        <span>No Image</span>
+                                    @endif
+
+                                    <!-- Hover Action Wrapper -->
+                                    <div class="hover-options">
+                                        <button class="action-btn" onclick="addToCart('{{ $product->id }}')"><i
+                                                class='bx bx-cart-add'></i></button>
+                                        <button class="action-btn" onclick="addToWishlist('{{ $product->id }}')"><i
+                                                class='bx bx-heart'></i></button>
+                                    </div>
+                                </div>
+                                <a href="{{ route('product.detail', ['id' => $product->id]) }}"
+                                    class="product-card-link">
+                                    <div class="pointer-event card-footer-flash pb-2 border-top border-gray-300 pt-1"
+                                        style="padding: 0; margin: 0;"
+                                        onclick="window.location.href='{{ route('product.detail', ['id' => $product->id]) }}'">
+                                        <div class="keterangan ps-2 pe-2" style="padding: 0; margin: 0;">
+                                            <a href="{{ route('product.detail', ['id' => $product->id]) }}"
+                                                class="product-name"
+                                                style="margin: 0; padding: 0;line-height: 0.8;">{{ $product->name }}</a>
+                                            <div class="" style="margin: 0; padding: 0;">
+                                                <span class="mb-0 text-gray me-2 fs-6 fw-bold d-block"
+                                                    style="line-height: 0.8; margin: 0; padding: 0;">Rp
+                                                    {{ number_format($product->price, 0, ',', '.') }}</span>
+                                                <span class="text-decoration-line-through"
+                                                    style="color:gray; line-height: 0; font-size: 0.8rem; margin: 0; padding: 0;">Rp
+                                                    {{ number_format($product->price * 1.25, 0, ',', '.') }}</span>
+                                            </div>
+
+                                            <div class="d-flex" style="margin: 0; padding: 0;">
+                                                <i class='bx bxs-star'
+                                                    style='color:#d0e12b; margin: 0; padding: 0;'></i>
+                                                <span class="badge bg-success ms-2"
+                                                    style="margin: 0; padding: 0;">{{ $product->rating }}</span> |
+                                                <span class="badge bg-success ms-2">{{ $product->sold }}
+                                                    Terjual</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- <div class="category-container container">
         <h1 class="fw-bold text-center">Cari berdasarkan Kategori</h1>
         <div class="row m-5">
             <div class="col-6 col-md-5">
@@ -138,8 +238,7 @@
                 </div>
             </div>
         </div>
-    </div>-->
-
+    </div>
     <div class="modal fade" id="nutritionModal" tabindex="-1" aria-labelledby="nutritionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -148,7 +247,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Konten Tabel -->
+                    
                     <table class='table table-bordered text-center'>
                         <thead>
                             <tr>
@@ -198,7 +297,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <x-address-component />
 
     <script>
@@ -212,5 +311,37 @@
             console.log('Menambahkan produk ke wishlist:', productId);
         }
 
+        function startCountdown() {
+            const hoursElem = document.getElementById("hours");
+            const minutesElem = document.getElementById("minutes");
+            const secondsElem = document.getElementById("seconds");
+
+            function updateCountdown() {
+                const now = new Date();
+                const midnight = new Date();
+                midnight.setHours(24, 0, 0, 0); // Set time to 12:00 AM
+
+                // Calculate the time difference in seconds
+                const timeRemaining = (midnight - now) / 1000;
+
+                const hours = Math.floor(timeRemaining / 3600);
+                const minutes = Math.floor((timeRemaining % 3600) / 60);
+                const seconds = Math.floor(timeRemaining % 60);
+
+                hoursElem.innerHTML = String(hours).padStart(2, '0');
+                minutesElem.innerHTML = String(minutes).padStart(2, '0');
+                secondsElem.innerHTML = String(seconds).padStart(2, '0');
+
+                if (timeRemaining <= 0) {
+                    // Optional: Reset countdown or trigger any other action
+                    hoursElem.innerHTML = "00";
+                    minutesElem.innerHTML = "00";
+                    secondsElem.innerHTML = "00";
+                }
+            }
+
+            setInterval(updateCountdown, 1000);
+        }
+        window.onload = startCountdown;
     </script>
 </x-app-layout>

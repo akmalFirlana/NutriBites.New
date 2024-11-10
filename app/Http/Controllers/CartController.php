@@ -21,7 +21,7 @@ class CartController extends Controller
 
     // Menampilkan isi cart
     public function viewCart()
-    {
+    {   
         $cartItems = Cart::with('product')->where('user_id', auth()->id())->get();
         return view('cart', ['cartItems' => $cartItems]);
         

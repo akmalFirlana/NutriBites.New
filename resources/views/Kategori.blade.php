@@ -92,13 +92,78 @@
             <div class="hook">
                 <h1 class="fw-bold fs-3 mb-5 pt-24">Produk</h1>
             </div>
+            <div class="row justify-content-around mx-auto">
+                <div class="row">
+                    @foreach($products as $product)
+                                        <div class="col-sm-3 pe-0 mt-3 procard overflow-hidden">
+                                            <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="product-card-link">
+                                                <div class="product-card border mb-4 position-relative rounded-md shadow-md"
+                                                    style="width: 188px;">
+                                                    <!-- Konten Card -->
+                                                    <div class="img-wrapper">
+                                                        @php
+                                                            $images = json_decode($product->images, true); // Mengubah JSON menjadi array
+                                                         @endphp
 
-            <div class="pro">
-                <div class="row justify-content-between" style="margin: 0 7rem">
+                                                        @if(!empty($images) && isset($images[0]))
+                                                            <img src="{{ asset('storage/' . $images[0]) }}" alt="Product"
+                                                                class="product-img mx-auto">
+                                                        @else
+                                                            <span>No Image</span>
+                                                        @endif
 
-                </div>
+
+                                                        <!-- Hover Action Wrapper -->
+                                                        <div class="hover-options">
+                                                            <button class="action-btn" onclick="addToCart('{{ $product->id }}')"><i
+                                                                    class='bx bx-cart-add'></i></button>
+                                                            <button class="action-btn" onclick="addToWishlist('{{ $product->id }}')"><i
+                                                                    class='bx bx-heart'></i></button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="card-footer border-top border-gray-300 pt-1" style="padding: 0; margin: 0;">
+                                                        <img src="{{ asset('image/badge1.png') }}"
+                                                            style="width: 100px; margin: 0; padding: 0;">
+                                                        <div class="keterangan ps-2 pe-2" style="padding: 0; margin: 0;">
+                                                            <a href="{{ route('product.detail', ['id' => $product->id]) }}"
+                                                                class="product-name"
+                                                                style="margin: 0; padding: 0;line-height: 0.8;">{{ $product->name }}</a>
+                                                            <div class="" style="margin: 0; padding: 0;">
+                                                                <span class="mb-0 text-gray me-2 fs-6 fw-bold d-block"
+                                                                    style="line-height: 0.8; margin: 0; padding: 0;">Rp
+                                                                    {{ number_format($product->price, 0, ',', '.') }}</span>
+                                                                <span class="text-decoration-line-through"
+                                                                    style="color:gray; line-height: 0; font-size: 0.8rem; margin: 0; padding: 0;">Rp
+                                                                    {{ number_format($product->price * 1.25, 0, ',', '.') }}</span>
+                                                            </div>
+                                                            <p class="text-muted"
+                                                                style="display: inline-flex; align-items: center; margin: 0; padding: 0;">
+                                                                <img src="{{ asset('image/icon_toko.png') }}"
+                                                                    style="width: 20px; display: inline-flex; margin-right: 5px; margin: 0;">
+                                                                {{ $product->user->name }}
+                                                            </p>
+
+                                                            <div class="d-flex" style="margin: 0; padding: 0;">
+                                                                <i class='bx bxs-star' style='color:#d0e12b; margin: 0; padding: 0;'></i>
+                                                                <span class="badge bg-success ms-2"
+                                                                    style="margin: 0; padding: 0;">{{ $product->rating }}</span> |
+                                                                <span class="badge bg-success ms-2" ">{{ $product->sold }} Terjual</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                    @endforeach
             </div>
         </div>
+            <div class=" pro">
+                                                <div class="row justify-content-between" style="margin: 0 7rem">
+
+                                                </div>
+                                        </div>
+                                    </div>
     </section>
 
 </x-app-layout>

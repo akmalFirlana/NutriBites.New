@@ -172,5 +172,11 @@ class ProductController extends Controller
         return view('produk', compact('product'));
     }
 
+    public function kategori()
+    {
+        $products = Product::all();
+        return view('kategori', compact('products'));
+    }
+
     
 }

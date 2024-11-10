@@ -2,22 +2,21 @@
     <section>
         <x-address-component />
         <h1 class="fw-bold fs-3 mt-2 mb-3">Tambah Produk</h1>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="container pb-5 mb-3">
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             <h1 class="fw-bold fs-5 p-3">Foto Produk</h1>
             <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="row d-flex">
                 @csrf
@@ -28,8 +27,9 @@
                             <div class="image-upload-wrapper flex flex-col items-center p-2">
                                 <label for="image-upload-{{ $i }}" class="image-upload-label relative">
                                     <input type="file" name="photos[]" class="image-upload-input hidden"
-                                        id="image-upload-{{ $i }}" accept="image/*" />
-                                    <div
+                                        id="image-upload-{{ $i }}" accept="image/*"
+                                        onchange="previewImage(event, {{ $i }})" />
+                                    <div id="preview-{{ $i }}"
                                         class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
                                         <i class='bx bx-plus text-gray-400 text-2xl'></i>
                                     </div>
@@ -38,6 +38,21 @@
                         @endfor
                     </div>
                 </div>
+
+                <script>
+                    function previewImage(event, index) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                const previewContainer = document.getElementById(`preview-${index}`);
+                                previewContainer.innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded" />`;
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    }
+                </script>
+
 
                 <h1 class="fw-bold fs-5 p-3">Informasi Produk</h1>
                 <div class="form row m-2">
@@ -67,7 +82,7 @@
                             </button>
                             <ul id="dropdownMenu"
                                 class="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto hidden z-10">
-                                @foreach(['kategori1', 'kategori2', 'kategori3'] as $kategori)
+                                @foreach(['Minuman', 'Makanan', 'Kesehatan', 'Snack', 'Jus', 'Suplemen', 'Vitamin', 'Herbal','Minuman Serat', 'minuman herbal', 'buah kering'] as $kategori)
                                     <li class="px-4 py-2 hover:bg-gray-100">
                                         <label class="inline-flex items-center">
                                             <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600"

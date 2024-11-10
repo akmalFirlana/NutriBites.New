@@ -1,34 +1,44 @@
 <x-app-layout>
     <div class="link d-block mt-20 tw-pt-5 ms-20">
         <a href="{{ route('dashboard') }}" class="text-muted me-2">Beranda</a> >
-        <a href="{{ route('kategori') }}" class="text-muted ms-2">Kripik Kacang</a>
+        <a href="{{ route('kategori') }}" class="text-muted ms-2">{{ $product->name }}</a>
     </div>
+    <x-address-component/>
     <div class="row pt-3 px-5">
         <div class="main col-md-8">
             <div class="section tw-pt-10 pb-5">
                 <div class="header row mt-3 mb-5 ms-5 ps-5">
-                    <div class="img-container col-md-4">
-                        <div class="main-container pb-2" style="position: sticky; top: 135px">
+                    <div class="img-container col-md-5 ps-4">
+                        <div class="main-container max-w-[240px] pb-2" style="position: sticky; top: 135px">
                             <div class="main_img">
                                 @php
                                     $images = json_decode($product->images, true); // Mengubah JSON menjadi array
-                                 @endphp
+                                @endphp
 
+                                <!-- Tampilkan gambar utama, default ke gambar pertama -->
                                 @if(!empty($images) && isset($images[0]))
-                                    <img src="{{ asset('storage/' . $images[0]) }}" alt="Product"
-                                        class="product-img mx-auto">
+                                    <img id="mainImage" src="{{ asset('storage/' . $images[0]) }}" alt="Product"
+                                        class="main-img mx-auto">
                                 @else
                                     <span>No Image</span>
                                 @endif
                             </div>
-                            <div class="thumbnail-container">
-                                <img src="{{ asset('storage/' . $product->image) }}" onclick="changeImage(this)"
-                                    alt="Thumbnail 1" class="active">
-                            </div>
+
+                            <!-- Container untuk thumbnail, tampilkan jika lebih dari satu gambar tersedia -->
+                            @if(count($images) > 1)
+                                <div class="thumbnail-container mt-2">
+                                    @foreach($images as $index => $image)
+                                        @if($index < 4) <!-- Batasi hingga 4 gambar -->
+                                            <img src="{{ asset('storage/' . $image) }}" onclick="changeImage(this)"
+                                                alt="Thumbnail {{ $index + 1 }}" class="thumbnail @if($index === 0) active @endif">
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
 
                     </div>
-                    <div class="col-md-8 hero-desk tw-mt-20">
+                    <div class="col-md-7 hero-desk tw-mt-20">
                         <h1 class="title-text text-2xl font-black">{{ $product->name }}</h1>
                         <div class="d-flex mt-1 fs-6">
                             <span class="badge bg-success ms-2 me-2">Terjual {{ $product->sold }}.</span> |
@@ -52,7 +62,18 @@
                             <p class=""><span class="text-gray-400 ">Berat :</span> {{ $product->weight }} gram</p>
                             <p class=""><span class="text-gray-400 ">Daya Tahan :</span> {{ $product->shelf_life }} Hari
                             </p>
-                            <p class="pt-2">{{ $product->description }}</p>
+                            <div class="relative">
+                                <!-- Teks Deskripsi Produk -->
+                                <p class="pt-2 clamp-7 overflow-hidden transition-all duration-300 ease-in-out"
+                                    id="description">
+                                    {!! nl2br(e($product->description)) !!}
+                                </p>
+
+                                <!-- Tombol Lihat Selengkapnya -->
+                                <button class="text-gray-500 mt-2 " onclick="toggleDescription()" id="toggleButton">
+                                    Lihat Selengkapnya
+                                </button>
+                            </div>
                         </div>
                         <hr class="bawah">
                         <div class="toko-container row mx-2 pt-2">
@@ -68,12 +89,11 @@
                                     {{ $product->user->name }}
                                 </p>
                                 <p class="status text-muted"
-                                    style="line-height: 0.2; font-weight: semibold; margin: 0 5px">Online <span
-                                        class="fw-bold">1 Jam lalu</span></p>
+                                    style="line-height: 0.2; font-weight: semibold; margin: 0 5px"><span
+                                        class="fw-bold">{{ $product->user->address}}</span></p>
                                 <div class="btn fw-bold mx-3 border-success w-72 my-3">Ikuti Toko</div>
                             </div>
                         </div>
-
                         <div class="Pengiriman-container row mx-2 py-2">
                             <div class="link-toko col-md-9">
                                 <p class="fs-5 nama-toko pt-1 fw-bold"
@@ -86,17 +106,14 @@
                                 </p>
                             </div>
                         </div>
-
                         <hr class="bawah">
                         <div class="report d-inline-flex justify-content-between w-100 px-2 py-2">
                             <p class="text-muted d-flex mb-0">Ada Masalah dengan Produk ini?</p>
                             <p class="fw-bold d-flex mb-0"><i class='bx bx-error'></i>laporkan!</p>
                         </div>
-
                     </div>
                     <hr class="bawah">
                 </div>
-
                 <div class="contain  mx-5">
                     <div class="tabs d-flex justify-content-around">
                         <button class="tab-link active" onclick="openTab(event, 'productDetails')">Detail
@@ -375,8 +392,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
         <div class="side col-md-4">
@@ -390,15 +405,16 @@
                 <div class="lower-card border-1 rounded p-3">
                     <p class="font-extrabold pb-2">Atur Jumlah Dan Catatan </p>
                     <div class="produk d-inline-flex">
-                        <img class="img-fluid" src="{{ asset('storage/' . $product->image_1) }}" alt=""
+                        <img class="img-fluid" src="{{ asset('storage/' . $images[0]) }}" alt=""
                             style=" height: 56px; width: 56px;">
-                        <p class="d-flex fs-6 ms-2 truncate max-w-xs">{{ $product->name }}</p>
+                        <p class="d-flex fs-6 ms-2 truncate w-40">{{ $product->name }}</p>
                     </div>
                     <hr>
                     <div class="checkout d-inline-flex mt-3">
                         <div class="input-number-container">
                             <button type="button" class="btn-decrement px-1" onclick="decrement()">−</button>
-                            <input type="number" id="number-input" value="1" min="0" class="input-number" />
+                            <input type="number" id="number-input" value="1" min="1" max="{{ $product->stock }}"
+                                class="input-number" oninput="updateSubtotal()" />
                             <button type="button" class="btn-increment px-1" onclick="increment()">+</button>
                         </div>
                         <p class="my-auto ms-3 fw-bold">Stok: {{ $product->stock }}</p>
@@ -406,10 +422,11 @@
 
                     <div class="harga d-inline-flex justify-content-between w-100 mt-3">
                         <p class="text-muted my-auto fw-bold">Subtotal</p>
-                        <p class=""><span class="fw-bold text-sm text-gray-400 text-decoration-line-through"
-                                style="line-height: 0;">Rp
+                        <p>
+                            <span class="fw-bold text-sm text-gray-400 text-decoration-line-through"
+                                style="line-height: 0;" id="discount">Rp
                                 {{ number_format($product->price * 1.25, 0, ',', '.') }}</span><br>
-                            <span class="fw-bold fs-5" style="line-height: 0;">Rp
+                            <span id="subtotal" class="fw-bold fs-5" style="line-height: 0;">Rp
                                 {{ number_format($product->price, 0, ',', '.') }}</span>
                         </p>
                     </div>
@@ -429,10 +446,8 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-12">
             <div class="p-5">
-
             </div>
         </div>
     </div>
@@ -449,22 +464,65 @@
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
 
-            // Tampilkan tab yang dipilih, tambahkan class 'active' pada tab-link yang diklik
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
 
+        const productPrice = {{ $product->price }};
+        const productStock = {{ $product->stock }};
+
         function increment() {
             const input = document.getElementById('number-input');
-            input.value = parseInt(input.value) + 1;
+            if (parseInt(input.value) < productStock) {
+                input.value = parseInt(input.value) + 1;
+                updateSubtotal();
+            }
         }
 
         function decrement() {
             const input = document.getElementById('number-input');
-            if (input.value > 1) {
+            if (parseInt(input.value) > 1) {
                 input.value = parseInt(input.value) - 1;
+                updateSubtotal();
             }
         }
 
+        function updateSubtotal() {
+            const input = document.getElementById('number-input');
+            let quantity = parseInt(input.value);
+
+            
+            if (quantity > productStock) {
+                input.value = productStock;
+                quantity = productStock;
+            }
+
+            const subtotal = productPrice * quantity;
+            const discount = productPrice * 1.25 * quantity;
+            document.getElementById('subtotal').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+            document.getElementById('discount').innerText = 'Rp ' + discount.toLocaleString('id-ID');
+        }
+
+        function changeImage(thumbnail) {
+            const mainImage = document.getElementById('mainImage');
+            mainImage.src = thumbnail.src;
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+            thumbnail.classList.add('active');
+        }
+
+        function toggleDescription() {
+            const description = document.getElementById("description");
+            const button = document.getElementById("toggleButton");
+
+            
+            if (description.classList.contains("clamp-7")) {
+                description.classList.remove("clamp-7");
+                button.innerText = "Lihat Lebih Sedikit";
+            } else {
+                description.classList.add("clamp-7");
+                button.innerText = "Lihat Selengkapnya";
+            }
+        }
     </script>
 </x-app-layout>
