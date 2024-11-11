@@ -19,7 +19,7 @@
         <button class="btn slide-in-right"
             style=" background-color: #01AB31; color:
         white; font-size: 0.9rem; font-weight: 500"
-            onclick="window.location.href='/daftar'">Bergabung</button>
+            onclick="window.location.href='#rekomendasi'">Jelajahi</button>
         <div class="support row mt-5 slide-in-right">
             <div class="col-md-1 kanan">
                 <h1 class="fw-bold fs-4">200+</h1>
@@ -35,6 +35,7 @@
             </div>
         </div>
     </div>
+    <div class="" id="rekomendasi"></div>
 
 
     <section class="mt-5">
@@ -43,6 +44,9 @@
             yang dipilih khusus untuk Anda!</p>
         <div class="row justify-content-around mx-auto">
             <div class="row">
+                @php
+                        $products = \App\Models\Product::inRandomOrder()->take(6)->get();
+                @endphp
                 @foreach ($products as $product)
                     <div class="col-sm-2 pe-0 mt-3 procard overflow-hidden">
 
@@ -106,7 +110,7 @@
                                                         </div>
                                                     </a>
                                                 </div>
- @endforeach
+                @endforeach
                                         </div>
                                     </div>
 
@@ -209,108 +213,10 @@
             </div>
         </div>
     </section>
-    <!-- <div class="category-container container">
-        <h1 class="fw-bold text-center">Cari berdasarkan Kategori</h1>
-        <div class="row m-5">
-            <div class="col-6 col-md-5">
-                <div class="category-item">
-                    <img src="{{ asset('image/hero.png') }}" style="height: 100px; width: 150px;" alt="Snack"
-                        class="img-fluid">
-                    <p class="text-center">Makanan</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-7">
-                <div class="category-item">
-                    <img src="https://via.placeholder.com/150x100" alt="Minuman" class="img-fluid">
-                    <p class="text-center">Minuman</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-7">
-                <div class="category-item">
-                    <img src="https://via.placeholder.com/150x100" alt="Makanan" class="img-fluid">
-                    <p class="text-center">Buah & Sayur</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-5">
-                <div class="category-item">
-                    <img src="https://via.placeholder.com/150x100" alt="Suplemen" class="img-fluid">
-                    <p class="text-center">Bahan Makanan</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="nutritionModal" tabindex="-1" aria-labelledby="nutritionModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="nutritionModalLabel">Informasi Peringkat Gizi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    
-                    <table class='table table-bordered text-center'>
-                        <thead>
-                            <tr>
-                                <th>Peringkat</th>
-                                <th>Kandungan Gula & Natrium</th>
-                                <th>Rekomendasi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>A+</td>
-                                <td>
-                                    <strong>Gula:</strong> ≤ 5g/100g<br>
-                                    <strong>Natrium:</strong> ≤ 120mg/100g
-                                </td>
-                                <td>Sangat dianjurkan untuk diet sehat, bebas gula tambahan, dan rendah natrium.</td>
-                            </tr>
-                            <tr>
-                                <td>B</td>
-                                <td>
-                                    <strong>Gula:</strong> 6-10g/100g<br>
-                                    <strong>Natrium:</strong> 121-200mg/100g
-                                </td>
-                                <td>Baik untuk konsumsi harian, dengan kandungan gula dan natrium rendah.</td>
-                            </tr>
-                            <tr>
-                                <td>C</td>
-                                <td>
-                                    <strong>Gula:</strong> 11-15g/100g<br>
-                                    <strong>Natrium:</strong> 201-300mg/100g
-                                </td>
-                                <td>Konsumsi dengan hati-hati, gula dan natrium sedang.</td>
-                            </tr>
-                            <tr>
-                                <td>D</td>
-                                <td>
-                                    <strong>Gula:</strong> > 15g/100g<br>
-                                    <strong>Natrium:</strong> > 300mg/100g
-                                </td>
-                                <td>Konsumsi dalam jumlah terbatas, kadar gula dan natrium tinggi.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
+
     <x-address-component />
 
     <script>
-        function addToCart(productId) {
-            // Logika untuk menambahkan produk ke keranjang
-            console.log('Menambahkan produk ke keranjang:', productId);
-        }
-
-        function addToWishlist(productId) {
-            // Logika untuk menambahkan produk ke wishlist
-            console.log('Menambahkan produk ke wishlist:', productId);
-        }
-
         function startCountdown() {
             const hoursElem = document.getElementById("hours");
             const minutesElem = document.getElementById("minutes");
@@ -319,9 +225,9 @@
             function updateCountdown() {
                 const now = new Date();
                 const midnight = new Date();
-                midnight.setHours(24, 0, 0, 0); // Set time to 12:00 AM
+                midnight.setHours(24, 0, 0, 0); 
 
-                // Calculate the time difference in seconds
+           
                 const timeRemaining = (midnight - now) / 1000;
 
                 const hours = Math.floor(timeRemaining / 3600);
@@ -333,7 +239,6 @@
                 secondsElem.innerHTML = String(seconds).padStart(2, '0');
 
                 if (timeRemaining <= 0) {
-                    // Optional: Reset countdown or trigger any other action
                     hoursElem.innerHTML = "00";
                     minutesElem.innerHTML = "00";
                     secondsElem.innerHTML = "00";

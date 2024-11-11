@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    // Menambahkan produk ke cart
+    
     public function addToCart(Request $request, $productId)
     {
         $cart = Cart::updateOrCreate(
@@ -17,9 +17,8 @@ class CartController extends Controller
         );
 
         return response()->json(['message' => 'Produk ditambahkan ke keranjang']);
-    }
+    }   
 
-    // Menampilkan isi cart
     public function viewCart()
     {   
         $cartItems = Cart::with('product')->where('user_id', auth()->id())->get();
@@ -28,7 +27,6 @@ class CartController extends Controller
     }
 
 
-    // Menghapus item dari cart
     public function removeFromCart($cartId)
     {
         $cartItem = Cart::findOrFail($cartId);

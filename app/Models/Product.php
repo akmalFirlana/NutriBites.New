@@ -23,11 +23,11 @@ class Product extends Model
         'sold',
         'rating',
         'category',
-        'images' // kolom untuk menyimpan path gambar dalam JSON
+        'images' 
     ];
 
     protected $casts = [
-        'images' => 'array', // Konversi kolom images menjadi array otomatis
+        'images' => 'array', 
     ];
 
     public function user()

@@ -19,14 +19,12 @@
                         <div class="card border mb-2">
                             <div class="p-3">
                                 <div class="d-flex align-items-center">
-                                    <!-- Checkbox -->
                                     <input type="checkbox" class="form-check-input me-2 item-checkbox"
                                         onclick="updateSelectAllCheckbox()" />
 
-                                    <!-- Gambar Produk dan Diskon -->
                                     <div class="position-relative">
                                         @php
-                                            $images = json_decode($item->product->images, true); // Mengubah JSON menjadi array
+                                            $images = json_decode($item->product->images, true);
                                         @endphp
 
                                         @if (!empty($images) && isset($images[0]))
@@ -39,50 +37,46 @@
                                             class="badge bg-danger position-absolute top-0 start-0">{{ $item->product->discount }}%</span>
                                     </div>
 
-                                    <!-- Detail Produk -->
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1 fw-bold">
-                                            {{ $item->product->name }}
-                                        </h6>
-                                        <p class="text-muted mb-1 truncate w-80">
-                                            {{ $item->product->description }}
-                                        </p>
+                                        <h6 class="mb-1 fw-bold">{{ $item->product->name }}</h6>
+                                        <p class="text-muted mb-1 truncate w-80">{{ $item->product->description }}</p>
                                         <p class="text-muted mb-0">
                                             <img src="{{ asset('image/icon_toko.png') }}"
                                                 style="width: 20px; display: inline-flex; margin-right: 5px; margin: 0;">
                                             <strong>{{ $item->product->user->name }}</strong>
                                         </p>
                                     </div>
+
                                     <div class="d-flex align-items-center mx-4 mt-auto mb-2">
                                         <i class="bx bx-edit bx-sm me-2 text-gray-400"></i>
-                                        <i class="bx bx-heart bx-sm me-2 text-gray-400"></i>
+                                        <i class="bx bx-heart bx-sm me-2 text-gray-400"
+                                            onclick="addToWishlist({{ $item->id }})"></i>
                                         <i class="bx bx-trash bx-sm text-gray-400"
                                             onclick="removeFromCart({{ $item->id }})"></i>
                                     </div>
-                                    <!-- Harga dan Kuantitas -->
+
                                     <div class="text-end">
-                                        <p class="font-bold fs-6">
+                                        <p class="font-bold fs-6" id="subtotal-{{ $item->id }}">
                                             Rp{{ number_format($item->product->price, 0, ',', '.') }}
                                         </p>
-                                        <p class="mb-1 font-bold text-gray-400">
-                                            <s>Rp{{ number_format($item->product->original_price, 0, ',', '.') }}</s>
+                                        <p class="mb-1 font-bold text-gray-400" id="discount-{{ $item->id }}">
+                                            <s>Rp{{ number_format($item->product->price * 1.25, 0, ',', '.') }}</s>
                                         </p>
 
-                                        <div class="d-flex align-items-center">
-                                            <button class="btn btn-light border"
-                                                onclick="decreaseQuantity({{ $item->id }})">
-                                                <i class="bx bx-minus"></i>
-                                            </button>
-                                            <input type="text" value="{{ $item->quantity }}"
-                                                class="form-control text-center mx-1" style="width: 50px" readonly />
-                                            <button class="btn btn-light border"
-                                                onclick="increaseQuantity({{ $item->id }})">
-                                                <i class="bx bx-plus"></i>
-                                            </button>
+                                        <div class="checkout d-inline-flex mt-3">
+                                            <div class="input-number-container">
+                                                <button type="button" class="btn-decrement px-1"
+                                                    onclick="decrement('{{ $item->id }}')">−</button>
+                                                <input type="number" id="number-input-{{ $item->id }}"
+                                                    name="quantity" value="1" min="1"
+                                                    max="{{ $item->product->stock }}" class="input-number"
+                                                    oninput="updateSubtotal('{{ $item->id }}')" />
+                                                <button type="button" class="btn-increment px-1"
+                                                    onclick="increment('{{ $item->id }}')">+</button>
+                                            </div>
+                                            <p class="my-auto ms-3 fw-bold">Stok: {{ $item->product->stock }}</p>
                                         </div>
                                     </div>
-
-                                    <!-- Ikon Aksi -->
                                 </div>
                             </div>
                         </div>
@@ -139,7 +133,6 @@
                     </div>
                 </div>
                 <script>
-                    // JavaScript untuk checkbox dan quantity
                     function toggleAllCheckboxes() {
                         const checkboxes = document.querySelectorAll('.item-checkbox');
                         const selectAllCheckbox = document.getElementById('selectAll');
@@ -154,16 +147,41 @@
                         selectAllCheckbox.checked = Array.from(checkboxes).every(checkbox => checkbox.checked);
                     }
 
-                    function decreaseQuantity(cartItemId) {
-                        // Logic to decrease quantity via AJAX
+                    const productPrice = {{ $item->product->price }};
+                    const productStock = {{ $item->product->stock }};
+
+                    function increment(itemId) {
+                        const input = document.getElementById(`number-input-${itemId}`);
+                        const productStock = parseInt(input.getAttribute("max"));
+                        if (parseInt(input.value) < productStock) {
+                            input.value = parseInt(input.value) + 1;
+                            updateSubtotal(itemId);
+                        }
                     }
 
-                    function increaseQuantity(cartItemId) {
-                        // Logic to increase quantity via AJAX
+                    function decrement(itemId) {
+                        const input = document.getElementById(`number-input-${itemId}`);
+                        if (parseInt(input.value) > 1) {
+                            input.value = parseInt(input.value) - 1;
+                            updateSubtotal(itemId);
+                        }
                     }
 
-                    function removeFromCart(cartItemId) {
-                        // Logic to remove item from cart via AJAX
+                    function updateSubtotal(itemId) {
+                        const input = document.getElementById(`number-input-${itemId}`);
+                        const productPrice = {{ $item->product->price }};
+                        let quantity = parseInt(input.value);
+                        const productStock = parseInt(input.getAttribute("max"));
+
+                        if (quantity > productStock) {
+                            input.value = productStock;
+                            quantity = productStock;
+                        }
+
+                        const subtotal = productPrice * quantity;
+                        const discount = productPrice * 1.25 * quantity;
+                        document.getElementById(`subtotal-${itemId}`).innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+                        document.getElementById(`discount-${itemId}`).innerText = 'Rp ' + discount.toLocaleString('id-ID');
                     }
                 </script>
 

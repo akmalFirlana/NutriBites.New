@@ -21,13 +21,13 @@
                     <x-nav-link :href="route('wishlist.index')" :active="request()->routeIs('wishlist.index')">
                         {{ __('Wishlist') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
-                        {{ __('Daftar') }}
+                    <x-nav-link :href="route('pesanan')" :active="request()->routeIs('pesanan')">
+                        {{ __('Transaksi') }}
                     </x-nav-link>
                 </div>
 
                 
-                <form class="form-s mx-4 mt-3 border-2">
+                <form class="form-s mx-4 mt-3 border">
                     <button>
                         <svg width="17" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" role="img"
                             aria-labelledby="search">
@@ -72,6 +72,9 @@
                         </x-dropdown-link>
                         <x-dropdown-link href="#" data-bs-toggle="modal" data-bs-target="#addressModal">
                             {{ __('Alamat') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link href="#" data-bs-toggle="modal" data-bs-target="#addressModal">
+                            {{ __('Buka Toko') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -133,4 +136,5 @@
             </div>
         </div>
     </div>
+    
 </nav>

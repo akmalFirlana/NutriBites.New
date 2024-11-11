@@ -178,5 +178,17 @@ class ProductController extends Controller
         return view('kategori', compact('products'));
     }
 
+    public function pesanan()
+    {
+        $products = Product::all();
+        return view('pesanan', compact('products'));
+    }
+
+    public function home()
+    {
+        $products = Product::all();
+        return view('welcome', compact('products'));
+    }
+
     
 }

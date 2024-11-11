@@ -32,14 +32,6 @@ class UserController extends Controller
         return view('cart');
     }
 
-    public function kategori()
-    {
-        return view('kategori');
-    }
 
-    public function produk()
-    {
-        return view('produk');
-    }
 }
 

@@ -59,7 +59,7 @@
                                         <div
                                             class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
                                             <div class="float-md-end">
-                                                <a href="{{ route('cart.add', $wishlist->product->id) }}"
+                                                <a onclick="addToCart('{{ $wishlist->product->id }}')"
                                                     class="btn btn-success border px-2 icon-hover-primary">+
                                                     Keranjang</a>
                                                 <button onclick="removeFromWishlist('{{ $wishlist->id }}')"

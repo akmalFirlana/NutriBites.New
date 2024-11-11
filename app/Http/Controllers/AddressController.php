@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AddressController extends Controller
 {
-    // Display user's addresses
     public function index()
     {
         $addresses = UserAddress::where('user_id', Auth::id())->with('alamat')->get();
@@ -49,16 +48,12 @@ class AddressController extends Controller
     // Show form for adding a new address
     public function create()
     {
-        $provinces = Alamat::select('prov_id', 'prov_name')->distinct()->get(); // Mendapatkan daftar provinsi yang unik
+        $provinces = Alamat::select('prov_id', 'prov_name')->distinct()->get(); 
         return view('alamat', [
-            'provinces' => $provinces, // Mengirim data provinsi ke view
+            'provinces' => $provinces,
             'showForm' => true,
         ]);
     }
-
-
-    // Store a new address
-
 
     public function store(Request $request)
     {
@@ -84,7 +79,7 @@ class AddressController extends Controller
                 'phone_number' => $request->phone_number,
                 'full_address' => $request->full_address,
                 'postal_code' => $request->postal_code,
-                'is_primary' => false, // Set default value
+                'is_primary' => false, 
             ]);
 
             return redirect()->back()->with('success', 'Alamat berhasil ditambahkan.');

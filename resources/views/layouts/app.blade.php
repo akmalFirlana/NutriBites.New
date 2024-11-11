@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="stylesheet" href="{{ asset('css/user.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ani masi.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/animasi.css') }}">
     <link rel="stylesheet" href="{{ asset('css/font.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS -->
@@ -22,6 +22,7 @@
 </head>
 
 <body class="font-sans antialiased">
+    <x-address-component/>
     <div class="min-h-screen ">
         @include('layouts.navigation')
 
@@ -198,7 +199,7 @@
                 },
                 success: function (response) {
                     alert(response.message);
-                    location.reload(); // refresh halaman setelah menghapus
+                    location.reload(); 
                 },
                 error: function (xhr) {
                     console.log(xhr.responseText);

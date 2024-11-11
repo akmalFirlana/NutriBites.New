@@ -8,10 +8,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\TransactionController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/tes', function () {
     return view('testing');
@@ -25,6 +23,8 @@ Route::get('/fix', function () {
     return view('fix');
 })->middleware(['auth', 'verified'])->name('fix');
 
+Route::get('/', [ProductController::class, 'home'])->name('landingpage');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -34,13 +34,16 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'userMiddleware'])->group(function () {
+    Route::post('/transaction', [TransactionController::class, 'store'])->name('transaction.store');
+    Route::post('/checkout', [TransactionController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/{transaction}', [TransactionController::class, 'show'])->name('checkout.show');
     Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
     Route::get('/products/{id}', [ProductController::class, 'detail'])->name('product.show');
-    Route::get('/checkout', [UserController::class, 'checkout'])->name('checkout');
     Route::get('/kategori', [ProductController::class, 'kategori'])->name('kategori');
     Route::get('/produk', [UserController::class, 'produk'])->name('produk');
     Route::get('/produk/{id}', [ProductController::class, 'detail'])->name('product.detail');
+    Route::get('/pesanan', [ProductController::class, 'pesanan'])->name('pesanan');
 });
 
 

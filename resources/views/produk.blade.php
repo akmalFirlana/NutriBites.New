@@ -3,7 +3,7 @@
         <a href="{{ route('dashboard') }}" class="text-muted me-2">Beranda</a> >
         <a href="{{ route('kategori') }}" class="text-muted ms-2">{{ $product->name }}</a>
     </div>
-    <x-address-component/>
+  
     <div class="row pt-3 px-5">
         <div class="main col-md-8">
             <div class="section tw-pt-10 pb-5">
@@ -16,7 +16,7 @@
                                 @endphp
 
                                 <!-- Tampilkan gambar utama, default ke gambar pertama -->
-                                @if(!empty($images) && isset($images[0]))
+                                @if (!empty($images) && isset($images[0]))
                                     <img id="mainImage" src="{{ asset('storage/' . $images[0]) }}" alt="Product"
                                         class="main-img mx-auto">
                                 @else
@@ -25,12 +25,14 @@
                             </div>
 
                             <!-- Container untuk thumbnail, tampilkan jika lebih dari satu gambar tersedia -->
-                            @if(count($images) > 1)
+                            @if (count($images) > 1)
                                 <div class="thumbnail-container mt-2">
-                                    @foreach($images as $index => $image)
-                                        @if($index < 4) <!-- Batasi hingga 4 gambar -->
+                                    @foreach ($images as $index => $image)
+                                        @if ($index < 4)
+                                            <!-- Batasi hingga 4 gambar -->
                                             <img src="{{ asset('storage/' . $image) }}" onclick="changeImage(this)"
-                                                alt="Thumbnail {{ $index + 1 }}" class="thumbnail @if($index === 0) active @endif">
+                                                alt="Thumbnail {{ $index + 1 }}"
+                                                class="thumbnail @if ($index === 0) active @endif">
                                         @endif
                                     @endforeach
                                 </div>
@@ -41,7 +43,7 @@
                     <div class="col-md-7 hero-desk tw-mt-20">
                         <h1 class="title-text text-2xl font-black">{{ $product->name }}</h1>
                         <div class="d-flex mt-1 fs-6">
-                            <span class="badge bg-success ms-2 me-2">Terjual {{ $product->sold }}.</span> |
+                            <span class="badge bg-success ms-2 me-2">Terjual {{ $product->sold }}</span> |
                             <i class='bx bxs-star ms-2' style='color:#d0e12b'></i>
                             <span class="font-semibold text-gray-700">{{ $product->rating }} (126 Rating)</span>
                         </div>
@@ -59,8 +61,10 @@
                         <hr class="bawah">
                         <div class="deskripsi py-2">
                             <h4 class="fw-bold fs-5 pb-2">Deskripsi</h4>
-                            <p class=""><span class="text-gray-400 ">Berat :</span> {{ $product->weight }} gram</p>
-                            <p class=""><span class="text-gray-400 ">Daya Tahan :</span> {{ $product->shelf_life }} Hari
+                            <p class=""><span class="text-gray-400 ">Berat :</span> {{ $product->weight }} gram
+                            </p>
+                            <p class=""><span class="text-gray-400 ">Daya Tahan :</span>
+                                {{ $product->shelf_life }} Hari
                             </p>
                             <div class="relative">
                                 <!-- Teks Deskripsi Produk -->
@@ -88,10 +92,10 @@
                                         style="width: 20px; display: inline-flex; margin: 0 5px;">
                                     {{ $product->user->name }}
                                 </p>
-                                <p class="status text-muted"
-                                    style="line-height: 0.2; font-weight: semibold; margin: 0 5px"><span
-                                        class="fw-bold">{{ $product->user->address}}</span></p>
-                                <div class="btn fw-bold mx-3 border-success w-72 my-3">Ikuti Toko</div>
+                                <p class="status"
+                                    style="line-height: 0.4; font-weight: semibold; margin: 0 5px">Toko Di <span
+                                        class="fw-bold">{{ ucwords(strtolower( $product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span></p>
+                                <div class="btn fw-bold mx-3 border-success w-72 my-3">Kunjungi Toko</div>
                             </div>
                         </div>
                         <div class="Pengiriman-container row mx-2 py-2">
@@ -100,16 +104,16 @@
                                     style="display: inline-flex; align-items: center; margin: 0; padding: 0; line-height: 0.8;">
                                     Pengiriman
                                 </p>
-                                <p class="status text-muted" style=" font-weight: semibold; margin: 0 5px"><i
+                                <p class="status" style=" font-weight: semibold; margin: 0 5px"><i
                                         class='bx bx-map bx-sm'></i> Dikirim Dari <span
-                                        class="fw-bold">{{ $product->user->address }}</span>
+                                        class="fw-bold">{{ ucwords(strtolower( $product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span>
                                 </p>
                             </div>
                         </div>
                         <hr class="bawah">
                         <div class="report d-inline-flex justify-content-between w-100 px-2 py-2">
                             <p class="text-muted d-flex mb-0">Ada Masalah dengan Produk ini?</p>
-                            <p class="fw-bold d-flex mb-0"><i class='bx bx-error'></i>laporkan!</p>
+                            <a class="fw-bold d-flex mb-0" href=""><i class='bx bx-error'></i>laporkan!</a>
                         </div>
                     </div>
                     <hr class="bawah">
@@ -357,7 +361,8 @@
                                         <i class="bx bxs-check-circle text-green-500 ml-1"></i>
                                     </h1>
                                 </div>
-                                <p class="text-gray-700 mb-2">"Apakah bahan kaos ini mudah rusak setelah dicuci beberapa
+                                <p class="text-gray-700 mb-2">"Apakah bahan kaos ini mudah rusak setelah dicuci
+                                    beberapa
                                     kali?"</p>
                                 <p class="text-gray-500 font-semibold text-sm">Posted on August 14, 2023</p>
 
@@ -396,54 +401,60 @@
         </div>
         <div class="side col-md-4">
             <div class="wrapper px-5" style="position: sticky; top: 130px">
-                <div class="upper-card rounded mb-3" style="padding: 10px; margin: 0;
+                <div class="upper-card rounded mb-3"
+                    style="padding: 10px; margin: 0;
                 background: rgb(0,164,47);
                 background: linear-gradient(90deg, rgba(0,164,47,1) 28%, rgba(6,210,64,1) 95%);">
                     <p class="fw-bold text-white ms-2">Beli Jajan</p>
                 </div>
-
-                <div class="lower-card border-1 rounded p-3">
-                    <p class="font-extrabold pb-2">Atur Jumlah Dan Catatan </p>
-                    <div class="produk d-inline-flex">
-                        <img class="img-fluid" src="{{ asset('storage/' . $images[0]) }}" alt=""
-                            style=" height: 56px; width: 56px;">
-                        <p class="d-flex fs-6 ms-2 truncate w-40">{{ $product->name }}</p>
-                    </div>
-                    <hr>
-                    <div class="checkout d-inline-flex mt-3">
-                        <div class="input-number-container">
-                            <button type="button" class="btn-decrement px-1" onclick="decrement()">−</button>
-                            <input type="number" id="number-input" value="1" min="1" max="{{ $product->stock }}"
-                                class="input-number" oninput="updateSubtotal()" />
-                            <button type="button" class="btn-increment px-1" onclick="increment()">+</button>
+                <form action="{{ route('checkout.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <div class="lower-card border-1 rounded p-3">
+                        <p class="font-extrabold pb-2">Atur Jumlah Dan Catatan</p>
+                        <div class="produk d-inline-flex">
+                            <img class="img-fluid" src="{{ asset('storage/' . $images[0]) }}" alt=""
+                                style=" height: 56px; width: 56px;">
+                            <p class="d-flex fs-6 ms-2 truncate w-40">{{ $product->name }}</p>
                         </div>
-                        <p class="my-auto ms-3 fw-bold">Stok: {{ $product->stock }}</p>
-                    </div>
+                        <hr>
+                        <div class="checkout d-inline-flex mt-3">
+                            <div class="input-number-container">
+                                <button type="button" class="btn-decrement px-1" onclick="decrement()">−</button>
+                                <input type="number" id="number-input" name="quantity" value="1"
+                                    min="1" max="{{ $product->stock }}" class="input-number"
+                                    oninput="updateSubtotal()" />
+                                <button type="button" class="btn-increment px-1" onclick="increment()">+</button>
+                            </div>
+                            <p class="my-auto ms-3 fw-bold">Stok: {{ $product->stock }}</p>
+                        </div>
 
-                    <div class="harga d-inline-flex justify-content-between w-100 mt-3">
-                        <p class="text-muted my-auto fw-bold">Subtotal</p>
-                        <p>
-                            <span class="fw-bold text-sm text-gray-400 text-decoration-line-through"
-                                style="line-height: 0;" id="discount">Rp
-                                {{ number_format($product->price * 1.25, 0, ',', '.') }}</span><br>
-                            <span id="subtotal" class="fw-bold fs-5" style="line-height: 0;">Rp
-                                {{ number_format($product->price, 0, ',', '.') }}</span>
-                        </p>
-                    </div>
+                        <div class="harga d-inline-flex justify-content-between w-100 mt-3">
+                            <p class="text-muted my-auto fw-bold">Subtotal</p>
+                            <p>
+                                <span class="fw-bold text-sm text-gray-400 text-decoration-line-through"
+                                    style="line-height: 0;" id="discount">Rp
+                                    {{ number_format($product->price * 1.25, 0, ',', '.') }}</span><br>
+                                <span id="subtotal" class="fw-bold fs-5" style="line-height: 0;">Rp
+                                    {{ number_format($product->price, 0, ',', '.') }}</span>
+                            </p>
+                        </div>
 
-                    <div class="action justify-content-between d-flex mt-3">
-                        <button class="btn border border-success fw-bold"
-                            style="width: 48%; padding: 6px!important;">Beli Langsung</button>
-                        <button class="btn btn-success fw-bold" style="width: 48%; padding: 6px!important;">+
-                            Keranjang</button>
-                    </div>
+                        <div class="action justify-content-between d-flex mt-3">
+                            <button type="submit" class="btn border border-success fw-bold"
+                                style="width: 48%; padding: 6px!important;">Beli Langsung</button>
+                            <button type="submit" class="btn btn-success fw-bold" onclick="addToCart('{{ $product->id }}')"
+                                style="width: 48%; padding: 6px!important;">+ Keranjang</button>
+                        </div>
 
-                    <div class="footer_action text-muted d-flex justify-content-evenly px-1 mt-3 fs-6 fw-bold">
-                        <a href="" class="link_footer"><i class='bx bx-conversation'></i> Chat</a> |
-                        <a href="" class="link_footer"> <i class='bx bx-heart'></i> wishlist</a> |
-                        <a href="" class="link_footer"><i class='bx bx-share-alt'></i> Bagikan</a>
+                        <div class="footer_action text-muted d-flex justify-content-evenly px-1 mt-3 fs-6 fw-bold">
+                            <a href="" class="link_footer"><i class='bx bx-conversation'></i> Chat</a> |
+                            <a onclick="addToWishlist('{{ $product->id }}')"class="link_footer"> <i class='bx bx-heart'></i> wishlist</a> |
+                            <a href="" class="link_footer"><i class='bx bx-share-alt'></i> Bagikan</a>
+                        </div>
                     </div>
-                </div>
+                </form>
+
             </div>
         </div>
         <div class="col-md-12">
@@ -491,7 +502,7 @@
             const input = document.getElementById('number-input');
             let quantity = parseInt(input.value);
 
-            
+
             if (quantity > productStock) {
                 input.value = productStock;
                 quantity = productStock;
@@ -515,7 +526,7 @@
             const description = document.getElementById("description");
             const button = document.getElementById("toggleButton");
 
-            
+
             if (description.classList.contains("clamp-7")) {
                 description.classList.remove("clamp-7");
                 button.innerText = "Lihat Lebih Sedikit";

@@ -483,3 +483,56 @@ fieldset {
 .tab-content:first-child {
     display: block;
 }
+
+/* ============================================  histori Transaksi =========================================== */
+
+
+.card-transaction {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+}
+.transaction-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.transaction-header .status-completed {
+    background-color: #d4f4d4;
+    color: #2c7a2c;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.transaction-header .invoice {
+    font-size: 12px;
+    color: #888;
+}
+.transaction-body {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+.transaction-body img {
+    border-radius: 5px;
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+.transaction-body .item-info {
+    margin-left: 15px;
+    flex-grow: 1;
+}
+.transaction-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+.transaction-footer .total {
+    font-size: 16px;
+    font-weight: bold;
+}
+.transaction-footer button {
+    margin-left: 10px;
+}

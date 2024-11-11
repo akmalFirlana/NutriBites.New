@@ -8,45 +8,58 @@
                             <h2 class="card-title mb-4 fw-bold">Barang Yang Dibeli</h2>
                             <div class="row gy-3 mb-4 px-3">
                                 <div class="penjual mb-1">
-                                    <p class= fw-bold mb-0"
+                                    <p class=fw-bold mb-0"
                                         style="display: inline-flex; align-items: center; margin: 0; padding: 0;">
                                         <img src="{{ asset('image/icon_toko.png') }}"
                                             style="width: 30px; display: inline-flex; margin-right: 5px; margin: 0;">
-                                        penjual
+                                        {{ $transaction->product->user->name }}
                                     </p>
                                     <p class="text-muted" style="line-height: 0.2">Kota Asal</p>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="me-lg-8 row">
                                         <div class="d-flex col-md-4 ps-3">
-                                            <img src="{{ asset('image/dummi2.webp') }}" class="border rounded"
-                                                style="width: 96px; height: 96px;" />
+                                            @php
+                                                $images = json_decode($transaction->product->images, true); // Mengubah JSON menjadi array
+                                            @endphp
+
+                                            @if (!empty($images) && isset($images[0]))
+                                                <img src="{{ asset('storage/' . $images[0]) }}" alt="Product"
+                                                    class="border rounded" style="width: 96px; height: 96px;">
+                                            @else
+                                                <span>No Image</span>
+                                            @endif
+
                                         </div>
                                         <div class="col-md-7 px-0 ">
-                                            <a href="#" class="nav-link d-block">Kripik Nangka Original</a>
+                                            <a href="#"
+                                                class="nav-link d-block">{{ $transaction->product->name }}</a>
                                             <div class="flex items-center space-x-2 mb-2">
                                                 <!-- Diskon Badge dan Harga Lama -->
                                                 <div class="flex items-center space-x-1 text-gray-500 line-through">
                                                     <span
-                                                        class="bg-green-500 text-white text-xs font-semibold px-2 py-0.5 rounded">10%</span>
-                                                    <span>Rp 60.000</span>
+                                                        class="bg-green-500 text-white text-xs font-semibold px-2 py-0.5 rounded">20%</span>
+                                                    <span  id="discount">{{ number_format($transaction->product->price * $transaction->quantity * 1.25, 0, ',', '.') }}</span>
                                                 </div>
                                                 <!-- Harga Baru -->
-                                                <p class="text-lg font-bold text-black">Rp 50.000</p>
+                                                <p class="text-lg font-bold text-black" id="subtotal">
+                                                    {{ number_format($transaction->product->price * $transaction->quantity, 0, ',', '.') }}
+                                                </p>
                                             </div>
-                                            <a href="" class="catatan text-success fw-bold">Tulis Catatan</a> | 
+                                            <a href="" class="catatan text-success fw-bold">Tulis Catatan</a> |
                                             <div class="input-number-container ms-2">
                                                 <button type="button" class="btn-decrement px-1"
                                                     onclick="decrement()">−</button>
-                                                <input type="number" id="number-input" value="1" min="0"
-                                                    class="input-number" />
+                                                    <input type="number" id="number-input" name="quantity" value="{{ $transaction->quantity }}"
+                                                    min="1" max="{{ $transaction->product->stock }}" class="input-number"
+                                                    oninput="updateSubtotal()" />
                                                 <button type="button" class="btn-increment px-1"
                                                     onclick="increment()">+</button>
                                             </div>
                                         </div>
-                                       
+
                                     </div>
-                                    
+
                                 </div>
 
                                 <hr style="width: 90%; border: 5px solid" class="mx-auto mt-5">
@@ -242,8 +255,8 @@
 
                                 <div class="mt-3">
                                     <!-- Tombol untuk memicu modal -->
-                                    <a href="#" class="btn btn-success w-100 shadow-0 py-2 fs-6" data-bs-toggle="modal"
-                                        data-bs-target="#beliModal">
+                                    <a href="#" class="btn btn-success w-100 shadow-0 py-2 fs-6"
+                                        data-bs-toggle="modal" data-bs-target="#beliModal">
                                         <i class='bx bxs-check-shield me-1' style='color:#ffffff'></i> Beli Sekarang
                                     </a>
 
@@ -277,4 +290,41 @@
             </div>
         </div>
     </section>
+    <x-address-component />
+    <script>
+        const productPrice = {{ $transaction->product->price }};
+        const productStock = {{ $transaction->product->stock }};
+
+        function increment() {
+            const input = document.getElementById('number-input');
+            if (parseInt(input.value) < productStock) {
+                input.value = parseInt(input.value) + 1;
+                updateSubtotal();
+            }
+        }
+
+        function decrement() {
+            const input = document.getElementById('number-input');
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+                updateSubtotal();
+            }
+        }
+
+        function updateSubtotal() {
+            const input = document.getElementById('number-input');
+            let quantity = parseInt(input.value);
+
+
+            if (quantity > productStock) {
+                input.value = productStock;
+                quantity = productStock;
+            }
+
+            const subtotal = productPrice * quantity;
+            const discount = productPrice * 1.25 * quantity;
+            document.getElementById('subtotal').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+            document.getElementById('discount').innerText = 'Rp ' + discount.toLocaleString('id-ID');
+        }
+    </script>
 </x-app-layout>
