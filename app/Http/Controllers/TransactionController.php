@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\UserAddress;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -73,9 +75,14 @@ class TransactionController extends Controller
 
 
     public function show(Transaction $transaction)
-    {
-        return view('checkout', ['transaction' => $transaction]);
-    }
+{   
+    $addresses = UserAddress::where('user_id', Auth::id())->get();
+    return view('checkout', [
+        'transaction' => $transaction,
+        'addresses' => $addresses 
+    ]);
+}
+
 
 }
 

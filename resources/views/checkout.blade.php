@@ -6,7 +6,7 @@
                     <div class="card border shadow-0">
                         <div class="m-4">
                             <h2 class="card-title mb-4 fw-bold">Barang Yang Dibeli</h2>
-                            <div class="row gy-3 mb-4 px-3">
+                            <div class="row gy-3 mb-2 px-3">
                                 <div class="penjual mb-1">
                                     <p class=fw-bold mb-0"
                                         style="display: inline-flex; align-items: center; margin: 0; padding: 0;">
@@ -14,11 +14,13 @@
                                             style="width: 30px; display: inline-flex; margin-right: 5px; margin: 0;">
                                         {{ $transaction->product->user->name }}
                                     </p>
-                                    <p class="text-muted" style="line-height: 0.2">Kota Asal</p>
+                                    <p class="text-muted" style="line-height: 0.2">
+                                        {{ ucwords(strtolower($transaction->product->shippingAddress && $transaction->product->shippingAddress->kota ? $transaction->product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}
+                                    </p>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="me-lg-8 row">
-                                        <div class="d-flex col-md-4 ps-3">
+                                <div class="col-lg-8 mt-0">
+                                    <div class="col-md-12 mt-2 row">
+                                        <div class="d-flex col-md-3 ps-3">
                                             @php
                                                 $images = json_decode($transaction->product->images, true); // Mengubah JSON menjadi array
                                             @endphp
@@ -31,15 +33,25 @@
                                             @endif
 
                                         </div>
-                                        <div class="col-md-7 px-0 ">
+                                        <div class="col-md-9 px-0 ">
                                             <a href="#"
                                                 class="nav-link d-block">{{ $transaction->product->name }}</a>
+                                                <div class="d-flex align-items-center">
+                                                    <p class="weight text-sm text-gray-400 fw-bold me-3">
+                                                        {{ $transaction->product->weight }}gr
+                                                    </p>
+                                                    <p class="text-sm text-danger fw-bold">
+                                                        stok sisa: {{ $transaction->product->stock }}
+                                                    </p>
+                                                </div>
+                                                
+
                                             <div class="flex items-center space-x-2 mb-2">
-                                                <!-- Diskon Badge dan Harga Lama -->
                                                 <div class="flex items-center space-x-1 text-gray-500 line-through">
                                                     <span
                                                         class="bg-green-500 text-white text-xs font-semibold px-2 py-0.5 rounded">20%</span>
-                                                    <span  id="discount">{{ number_format($transaction->product->price * $transaction->quantity * 1.25, 0, ',', '.') }}</span>
+                                                    <span
+                                                        id="discount">{{ number_format($transaction->product->price * $transaction->quantity * 1.25, 0, ',', '.') }}</span>
                                                 </div>
                                                 <!-- Harga Baru -->
                                                 <p class="text-lg font-bold text-black" id="subtotal">
@@ -50,8 +62,9 @@
                                             <div class="input-number-container ms-2">
                                                 <button type="button" class="btn-decrement px-1"
                                                     onclick="decrement()">−</button>
-                                                    <input type="number" id="number-input" name="quantity" value="{{ $transaction->quantity }}"
-                                                    min="1" max="{{ $transaction->product->stock }}" class="input-number"
+                                                <input type="number" id="number-input" name="quantity"
+                                                    value="{{ $transaction->quantity }}" min="1"
+                                                    max="{{ $transaction->product->stock }}" class="input-number"
                                                     oninput="updateSubtotal()" />
                                                 <button type="button" class="btn-increment px-1"
                                                     onclick="increment()">+</button>
@@ -68,117 +81,26 @@
                             <div class="mt-2">
                                 <div class="box-shadow">
                                     <p>Pengiriman dan Pembayaran</p>
-                                    <div class="d-flex justify-content-between align-items-start mt-3 p-3 border">
+                                    <div
+                                        class="d-flex justify-content-between align-items-start mt-3 p-3 border rounded-md">
                                         <div>
-                                            <span class="label-badge">Utama</span>
-                                            <p class="fw-bold mb-0">Rumah (bengkel) - Raka Bagus (6282237650234)</p>
-                                            <p class="small-text">DS. Petungsewu RT 09 RW 03 Kec. Wagir Kab. Malang
-                                                (bengkel), Wagir, Kab. Malang</p>
+                                            @foreach ($addresses as $address)
+                                                <p class="text-semibold mb-0"><i
+                                                        class='bx bxs-map text-success'></i><span
+                                                        class="bg-gray-300 fw-bolder text-sm mx-1 rounded-1 text-white p-1 ">Utama</span><span
+                                                        class="fw-bold">{{ $address->label ?? 'Alamat' }} -
+                                                    </span>{{ $address->recipient_name }}
+                                                    ({{ $address->phone_number }})
+                                                </p>
+                                                <p class="mt-2">{{ $address->full_address }}
+                                                    {{ ucwords(strtolower($address->kecamatan->dis_name ?? 'Kecamatan tidak ditemukan')) }},
+                                                    {{ ucwords(strtolower($address->kota->city_name ?? 'Kota tidak ditemukan')) }},
+                                                    {{ ucwords(strtolower($address->provinsi->prov_name ?? 'Provinsi tidak ditemukan')) }}
+                                                </p>
+                                            @endforeach
                                         </div>
-                                        <button class="btn btn-link">></button>
+                                        <button class="btn">></button>
                                     </div>
-
-                                    <div class="divider"></div>
-
-                                    <div class="dropdown mb-4 col-md-9">
-                                        <p> Pilih Metode Pengiriman:</p>
-                                        <!-- Tombol untuk memilih metode pengiriman -->
-                                        <button class="btn btn-outline-secondary w-100 dropdown-toggle mb-4"
-                                            type="button" id="dropdownShipping" data-bs-toggle="dropdown"
-                                            aria-expanded="false"
-                                            style="background-color: #fff; color: black; padding: 1rem 3rem; font-size: 1.5rem; font-weight: 500">
-                                            Pilih Metode Pengiriman
-                                        </button>
-
-                                        <!-- Dropdown metode pengiriman -->
-                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownShipping">
-                                            <li class="dropdown-item"
-                                                onclick="selectShipping('Reguler', 'Rp23.000 - Rp25.900', 'Estimasi tiba 24 - 28 Sep')">
-                                                <div class="d-flex justify-content-between">
-                                                    <span class="fw-bold fs-6">Reguler</span>
-                                                    <span class="text-muted ">Rp23.000 - Rp25.900</span>
-                                                </div>
-                                                <small class="text-muted ">Estimasi tiba 24 - 28 Sep</small>
-                                            </li>
-                                            <li class="dropdown-item"
-                                                onclick="selectShipping('Kargo', 'Rp80.000', 'Estimasi tiba 25 - 30 Sep', 'Rekomendasi berat di atas 5kg')">
-                                                <div class="d-flex justify-content-between">
-                                                    <span class="fw-bold fs-6">Kargo</span>
-                                                    <span class="text-muted ">Rp80.000</span>
-                                                </div>
-                                                <small class="text-muted ">Estimasi tiba 25 - 30 Sep</small>
-                                                <small class="text-danger ">Rekomendasi berat di atas 5kg</small>
-                                            </li>
-                                            <li class="dropdown-item"
-                                                onclick="selectShipping('Ekonomi', 'Rp23.400', 'Estimasi tiba 25 - 28 Sep')">
-                                                <div class="d-flex justify-content-between">
-                                                    <span class="fw-bold fs-6">Ekonomi</span>
-                                                    <span class="text-muted ">Rp23.400</span>
-                                                </div>
-                                                <small class="text-muted ">Estimasi tiba 25 - 28 Sep</small>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- Tempat untuk menampilkan dropdown kurir dengan desain yang sama -->
-                                    <div id="selectedShipping" class="mt-3 col-md-9"></div>
-
-                                    <script>
-                                        // Fungsi untuk menampilkan metode pengiriman yang dipilih di tombol dan menampilkan dropdown kurir
-                                        function selectShipping(method, price, estimate, note = '') {
-                                            // Ubah teks tombol menjadi pilihan pengiriman
-                                            const button = document.getElementById('dropdownShipping');
-                                            button.innerText = `${method} - ${price}`;
-
-                                            // Dropdown untuk kurir dengan desain serupa
-                                            const courierDropdown = `
-    <button class="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownCourier"
-        data-bs-toggle="dropdown" aria-expanded="false"
-        style="background-color: #fff; color: black; padding: 1rem 3rem; font-size: 1.5rem; font-weight: 500">
-        Pilih Kurir
-    </button>
-    <ul class="dropdown-menu w-75" aria-labelledby="dropdownCourier">
-        <li class="dropdown-item" onclick="selectCourier('JNE', 'Rp10.000', 'Estimasi tiba 1 - 3 hari')">
-            <div class="d-flex justify-content-between">
-                <span class="fw-bold">JNE</span>
-                <span class="text-muted ">Rp10.000</span>
-            </div>
-            <small class="text-muted ">Estimasi tiba 1 - 3 hari</small>
-        </li>
-        <li class="dropdown-item" onclick="selectCourier('TIKI', 'Rp11.500', 'Estimasi tiba 2 - 4 hari')">
-            <div class="d-flex justify-content-between">
-                <span class="fw-bold">TIKI</span>
-                <span class="text-muted ">Rp11.500</span>
-            </div>
-            <small class="text-muted ">Estimasi tiba 2 - 4 hari</small>
-        </li>
-        <li class="dropdown-item" onclick="selectCourier('POS Indonesia', 'Rp9.000', 'Estimasi tiba 3 - 5 hari')">
-            <div class="d-flex justify-content-between">
-                <span class="fw-bold">POS Indonesia</span>
-                <span class="text-muted ">Rp9.000</span>
-            </div>
-            <small class="text-muted ">Estimasi tiba 3 - 5 hari</small>
-        </li>
-        <li class="dropdown-item" onclick="selectCourier('SiCepat', 'Rp12.000', 'Estimasi tiba 1 - 3 hari')">
-            <div class="d-flex justify-content-between">
-                <span class="fw-bold">SiCepat</span>
-                <span class="text-muted ">Rp12.000</span>
-            </div>
-            <small class="text-muted ">Estimasi tiba 1 - 3 hari</small>
-        </li>
-    </ul>`;
-
-                                            // Tampilkan dropdown kurir di div "selectedShipping"
-                                            document.getElementById('selectedShipping').innerHTML = courierDropdown;
-                                        }
-
-                                        // Fungsi untuk menampilkan kurir yang dipilih di tombol
-                                        function selectCourier(courier, price, estimate) {
-                                            const courierButton = document.getElementById('dropdownCourier');
-                                            courierButton.innerText = `${courier} - ${price}`;
-                                        }
-                                    </script>
-
-
                                     <div class="divider"></div>
 
                                     <div class="mb-3">
@@ -191,7 +113,7 @@
 
                                     <div class="divider"></div>
 
-                                    <div class="mb-3">
+                                    <div class="mb-3 p-4 rounded-md shadow-md border-top">
                                         <div class="d-flex justify-content-between">
                                             <p class="fw-bold">Asuransi Pengiriman</p>
                                             <span>Rp3.700</span>

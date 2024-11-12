@@ -3,7 +3,7 @@
         <a href="{{ route('dashboard') }}" class="text-muted me-2">Beranda</a> >
         <a href="{{ route('kategori') }}" class="text-muted ms-2">{{ $product->name }}</a>
     </div>
-  
+
     <div class="row pt-3 px-5">
         <div class="main col-md-8">
             <div class="section tw-pt-10 pb-5">
@@ -92,9 +92,10 @@
                                         style="width: 20px; display: inline-flex; margin: 0 5px;">
                                     {{ $product->user->name }}
                                 </p>
-                                <p class="status"
-                                    style="line-height: 0.4; font-weight: semibold; margin: 0 5px">Toko Di <span
-                                        class="fw-bold">{{ ucwords(strtolower( $product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span></p>
+                                <p class="status" style="line-height: 0.4; font-weight: semibold; margin: 0 5px">Toko Di
+                                    <span
+                                        class="fw-bold">{{ ucwords(strtolower($product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span>
+                                </p>
                                 <div class="btn fw-bold mx-3 border-success w-72 my-3">Kunjungi Toko</div>
                             </div>
                         </div>
@@ -106,14 +107,15 @@
                                 </p>
                                 <p class="status" style=" font-weight: semibold; margin: 0 5px"><i
                                         class='bx bx-map bx-sm'></i> Dikirim Dari <span
-                                        class="fw-bold">{{ ucwords(strtolower( $product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span>
+                                        class="fw-bold">{{ ucwords(strtolower($product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span>
                                 </p>
                             </div>
                         </div>
                         <hr class="bawah">
                         <div class="report d-inline-flex justify-content-between w-100 px-2 py-2">
                             <p class="text-muted d-flex mb-0">Ada Masalah dengan Produk ini?</p>
-                            <a class="fw-bold d-flex mb-0" href=""><i class='bx bx-error'></i>laporkan!</a>
+                            <a class="fw-bold d-flex mb-0" href="#" data-bs-toggle="modal"
+                                data-bs-target="#reportModal"><i class='bx bx-error'></i>laporkan!</a>
                         </div>
                     </div>
                     <hr class="bawah">
@@ -137,17 +139,12 @@
 
                             <!-- Deskripsi dan Komposisi Produk -->
                             <div class="row">
-                                <div class="col-md-6 mb-4">
+                                <div class="col-md-8 mb-4">
                                     <h2 class="fs-6 fw-bold">Deskripsi Produk</h2>
-                                    <p class="text-muted">Produk ini adalah makanan ringan sehat yang terbuat dari bahan
-                                        alami
-                                        dan
-                                        bergizi. Cocok untuk kamu yang ingin menjaga pola makan dengan makanan yang
-                                        sehat dan
-                                        praktis.
+                                    <p class="text-muted">{!! nl2br(e($product->description)) !!}
                                     </p>
                                 </div>
-                                <div class="col-md-6 mb-4">
+                                <div class="col-md-4 mb-4">
                                     <h2 class="fs-6 fw-bold">Komposisi</h2>
                                     <ul class="list-unstyled text-muted">
                                         <li>- Biji Gandum Utuh</li>
@@ -157,26 +154,9 @@
                                         <li>- Kacang Almond</li>
                                     </ul>
                                 </div>
-                            </div>
-
-                            <!-- Informasi Gizi -->
-                            <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <h2 class="fs-6 fw-bold">Informasi Gizi</h2>
-                                    <p class="text-muted">Per sajian (100g):</p>
-                                    <ul class="list-unstyled text-muted">
-                                        <li>- Kalori: 250 kkal</li>
-                                        <li>- Lemak: 12g</li>
-                                        <li>- Karbohidrat: 30g</li>
-                                        <li>- Protein: 6g</li>
-                                        <li>- Serat: 5g</li>
-                                    </ul>
-                                </div>
-                                <!-- Foto Informasi Gizi -->
-                                <div class="col-md-6 mb-4 text-center">
-
-                                    <p class="text-muted mt-2">Informasi Gizi Lengkap</p>
-                                    <p>-</p>
+                                <div class="BPOM">
+                                    <h2 class="fs-6 fw-bold">BPOM</h2>
+                                    <p class="text-muted">{{ $product->bpom_license }}</p>
                                 </div>
                             </div>
                         </div>
@@ -399,6 +379,7 @@
                 </div>
             </div>
         </div>
+
         <div class="side col-md-4">
             <div class="wrapper px-5" style="position: sticky; top: 130px">
                 <div class="upper-card rounded mb-3"
@@ -443,18 +424,19 @@
                         <div class="action justify-content-between d-flex mt-3">
                             <button type="submit" class="btn border border-success fw-bold"
                                 style="width: 48%; padding: 6px!important;">Beli Langsung</button>
-                            <button type="submit" class="btn btn-success fw-bold" onclick="addToCart('{{ $product->id }}')"
+                            <button type="submit" class="btn btn-success fw-bold"
+                                onclick="addToCart('{{ $product->id }}')"
                                 style="width: 48%; padding: 6px!important;">+ Keranjang</button>
                         </div>
 
                         <div class="footer_action text-muted d-flex justify-content-evenly px-1 mt-3 fs-6 fw-bold">
                             <a href="" class="link_footer"><i class='bx bx-conversation'></i> Chat</a> |
-                            <a onclick="addToWishlist('{{ $product->id }}')"class="link_footer"> <i class='bx bx-heart'></i> wishlist</a> |
+                            <a onclick="addToWishlist('{{ $product->id }}')"class="link_footer"> <i
+                                    class='bx bx-heart'></i> wishlist</a> |
                             <a href="" class="link_footer"><i class='bx bx-share-alt'></i> Bagikan</a>
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
         <div class="col-md-12">
@@ -462,6 +444,77 @@
             </div>
         </div>
     </div>
+
+    {{-- ================================================================================================== --}}
+
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title fs-4 font-extrabold" id="reportModalLabel">Laporkan Produk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <!-- Jenis Pelanggaran -->
+                        <div class="mb-3 text-medium">
+                            <label class="form-label fw-bold">Pilih kategori pelanggaran yang terjadi pada produk ini!</label>
+                            <div>
+                                <input type="radio" name="violation_type" value="Palsu" id="fake" required class="custom-radio">
+                                <label for="fake">Produk Palsu</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="violation_type" value="Informasi Menyesatkan" id="misleading" required class="custom-radio">
+                                <label for="misleading">Informasi Menyesatkan</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="violation_type" value="Produk Berbahaya" id="dangerous" required class="custom-radio">
+                                <label for="dangerous">Produk Berbahaya</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="violation_type" value="Lainnya" id="other" required class="custom-radio">
+                                <label for="other">Lainnya</label>
+                            </div>
+                        </div>
+                        
+                        <style>
+                            .custom-radio {
+                                transform: scale(1.3); 
+                                margin: 8px; 
+                            }
+                        </style>
+                        
+                        <div class="mb-3">
+                            <label for="reason" class="form-label fw-bold">Detail Pelanggaran</label>
+                            <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="proof" class="form-label fw-bold">Bukti (opsional)</label>
+                            <div class="image-upload-wrapper flex flex-col p-2">
+                                <label for="image-upload" class="image-upload-label relative">
+                                    <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload" accept="image/*" onchange="previewImage(event, 0)" multiple />
+                                    <div id="preview-0" class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
+                                        <i class='bx bx-plus text-gray-400 text-2xl'></i>
+                                    </div>
+                                </label>
+                            </div>                            
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="honesty" required>
+                            <label class="form-check-label text-sm" for="honesty">Saya dengan ini menyatakan bahwa segala informasi yang dilaporkan memang benar.</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" form="reportForm" class="btn btn-primary">Kirim</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ================================================================================================== --}}
     <script>
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
@@ -535,5 +588,26 @@
                 button.innerText = "Lihat Selengkapnya";
             }
         }
+
+        document.getElementById('reportForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Logika untuk mengirim laporan
+            alert('Laporan telah dikirim!');
+            // Setelah laporan dikirim, tutup modal
+            let modal = bootstrap.Modal.getInstance(document.getElementById('reportModal'));
+            modal.hide();
+        });
+
+        function previewImage(event, index) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                const previewContainer = document.getElementById(`preview-${index}`);
+                                previewContainer.innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded" />`;
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    }
     </script>
 </x-app-layout>

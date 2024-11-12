@@ -22,7 +22,6 @@
                             {{ ucwords(strtolower($address->kecamatan->dis_name ?? 'Kecamatan tidak ditemukan')) }},
                             {{ ucwords(strtolower($address->kota->city_name ?? 'Kota tidak ditemukan')) }},
                             {{ ucwords(strtolower($address->provinsi->prov_name ?? 'Provinsi tidak ditemukan')) }}
-
                     </div>
                 @endforeach
 
