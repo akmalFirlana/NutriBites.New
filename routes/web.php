@@ -36,7 +36,10 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::post('/transaction', [TransactionController::class, 'store'])->name('transaction.store');
     Route::post('/checkout', [TransactionController::class, 'store'])->name('checkout.store');
-    Route::get('/checkout/{transaction}', [TransactionController::class, 'show'])->name('checkout.show');
+    Route::get('/transaction/{transaction}', [TransactionController::class, 'show'])->name('transaction.show');
+    Route::post('/transaction/{transaction}/calculate-shipping', [TransactionController::class, 'calculateShipping'])
+    ->name('transaction.calculateShipping');
+
     Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
     Route::get('/products/{id}', [ProductController::class, 'detail'])->name('product.show');

@@ -448,7 +448,7 @@
     {{-- ================================================================================================== --}}
 
     <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header py-2">
                     <h5 class="modal-title fs-4 font-extrabold" id="reportModalLabel">Laporkan Produk</h5>

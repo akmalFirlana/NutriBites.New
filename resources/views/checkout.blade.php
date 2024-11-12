@@ -36,15 +36,15 @@
                                         <div class="col-md-9 px-0 ">
                                             <a href="#"
                                                 class="nav-link d-block">{{ $transaction->product->name }}</a>
-                                                <div class="d-flex align-items-center">
-                                                    <p class="weight text-sm text-gray-400 fw-bold me-3">
-                                                        {{ $transaction->product->weight }}gr
-                                                    </p>
-                                                    <p class="text-sm text-danger fw-bold">
-                                                        stok sisa: {{ $transaction->product->stock }}
-                                                    </p>
-                                                </div>
-                                                
+                                            <div class="d-flex align-items-center">
+                                                <p class="weight text-sm text-gray-400 fw-bold me-3">
+                                                    {{ $transaction->product->weight }}gr
+                                                </p>
+                                                <p class="text-sm text-danger fw-bold">
+                                                    stok sisa: {{ $transaction->product->stock }}
+                                                </p>
+                                            </div>
+
 
                                             <div class="flex items-center space-x-2 mb-2">
                                                 <div class="flex items-center space-x-1 text-gray-500 line-through">
@@ -102,6 +102,24 @@
                                         <button class="btn">></button>
                                     </div>
                                     <div class="divider"></div>
+                                    <form
+                                        action="{{ route('transaction.calculateShipping', ['transaction' => $transaction->id]) }}"
+                                        method="POST">
+                                        @csrf
+                                        <label for="courier">Pilih Kurir:</label>
+                                        <select name="courier" id="courier" required>
+                                            <option value="jne">JNE</option>
+                                            <option value="pos">POS Indonesia</option>
+                                            <option value="tiki">TIKI</option>
+                                        </select>
+
+                                        <button type="submit">Hitung Ongkir</button>
+                                    </form>
+
+
+                                    <div id="shipping-costs">
+                                        <!-- Tempat untuk menampilkan data biaya pengiriman -->
+                                    </div>
 
                                     <div class="mb-3">
                                         <div class="d-flex justify-content-between">
@@ -120,6 +138,90 @@
                                             <input class="form-check-input" type="checkbox" checked>
                                         </div>
                                     </div>
+
+                                    <button id="calculateShipping" onclick="calculateShipping()">Hitung Ongkir</button>
+                                    <div id="shippingCostResult"></div>
+
+                                    <script>
+                                        function calculateShipping() {
+                                            // Prepare the data to send
+                                            const transactionId = "{{ $transaction->id }}";
+                                            const url = `/transaction/${transactionId}/calculate-shipping`;
+                                            const courier = document.getElementById("courier").value;
+
+                                            // Use Fetch API to make a POST request
+                                            fetch(url, {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                                    },
+                                                    body: JSON.stringify({
+                                                        courier: courier
+                                                    })
+                                                })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data.error) {
+                                                        document.getElementById('shippingCostResult').innerHTML = `<p>${data.error}</p>`;
+                                                    } else {
+                                                        const costs = data.shipping_costs;
+                                                        let result = '<ul>';
+                                                        costs.forEach(cost => {
+                                                            result +=
+                                                                `<li>Service: ${cost.service} - Cost: ${cost.cost[0].value} - Estimasi: ${cost.cost[0].etd} Hari</li>`;
+                                                        });
+                                                        result += '</ul>';
+                                                        document.getElementById('shippingCostResult').innerHTML = result;
+                                                    }
+                                                })
+                                                .catch(error => console.error('Error:', error));
+                                        }
+
+
+                                        document.querySelector('form').addEventListener('submit', function(event) {
+                                            event.preventDefault();
+
+                                            const formData = new FormData(this);
+                                            const url = this.action;
+
+                                            fetch(url, {
+                                                    method: 'POST',
+                                                    body: formData,
+                                                    headers: {
+                                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                                            'content')
+                                                    }
+                                                })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    const shippingCostsDiv = document.getElementById('shipping-costs');
+                                                    shippingCostsDiv.innerHTML = '';
+
+                                                    if (data.error) {
+                                                        shippingCostsDiv.innerHTML = `<p>${data.error}</p>`;
+                                                        return;
+                                                    }
+
+                                                    let options =
+                                                        `<label for="service">Pilih Layanan:</label><select name="service" id="service">`;
+                                                    data.shipping_costs.forEach(cost => {
+                                                        const service = cost.service;
+                                                        const value = cost.cost[0].value;
+                                                        const etd = cost.cost[0].etd;
+                                                        options +=
+                                                            `<option value="${value}">${service} - Rp${value} (Estimasi: ${etd} hari)</option>`;
+                                                    });
+                                                    options += `</select>`;
+                                                    shippingCostsDiv.innerHTML = options;
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                });
+                                        });
+                                    </script>
+
+
                                 </div>
                             </div>
                         </div>
