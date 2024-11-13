@@ -175,16 +175,11 @@
         }
     }
 
-    // Tampilkan step pertama saat modal dibuka
     document.addEventListener('DOMContentLoaded', function () {
         showStep(currentStep);
     });
-</script>
 
-
-
-<script>
-        document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
             // Perubahan pada Provinsi
             document.getElementById('province').addEventListener('change', function () {
                 let provinceId = this.value;
@@ -241,4 +236,4 @@
             });
         });
 
-    </script>
+</script>

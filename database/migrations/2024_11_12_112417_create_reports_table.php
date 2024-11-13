@@ -15,6 +15,7 @@ class CreateReportsTable extends Migration
             $table->string('violation_type');
             $table->text('reason');
             $table->json('proof_images')->nullable();
+            $table->boolean('honesty'); // Kolom honesty ditambahkan
             $table->timestamps();
 
             // Relasi ke tabel users dan products
