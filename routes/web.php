@@ -9,6 +9,11 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\PaymentController;
+
+Route::post('/payment/get-snap-token', [PaymentController::class, 'getSnapToken'])->name('payment.get-snap-token');
+Route::post('/payment/notification', [PaymentController::class, 'notificationHandler'])->name('payment.notification');
+Route::post('/get-midtrans-token', [PaymentController::class, 'getMidtransToken']);
 
 
 Route::get('/tes', function () {

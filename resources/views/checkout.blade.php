@@ -313,33 +313,9 @@
 
 
                                 <div class="mt-3">
-                                    <!-- Tombol untuk memicu modal -->
-                                    <a href="#" class="btn btn-success w-100 shadow-0 py-2 fs-6"
-                                        data-bs-toggle="modal" data-bs-target="#beliModal">
+                                    <a href="#" onclick="buyNow()" class="btn btn-success w-100 shadow-0 py-2 fs-6">
                                         <i class='bx bxs-check-shield me-1' style='color:#ffffff'></i> Beli Sekarang
                                     </a>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="beliModal" tabindex="-1"
-                                        aria-labelledby="beliModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content ">
-                                                <div class="modal-body text-center">
-                                                    <i class='bx bx-check bg-light p-3 fs-1 rounded-circle'></i><br>
-                                                    <h2>Pesanan Tervalidasi</h2>
-                                                    <p class="text-muted pt-3 fw-3">Terima kasih atas pembelian
-                                                        Anda.<br>
-                                                        Paket Anda akan dikirim dalam waktu 2 hari<br> setelah pembelian
-                                                        Anda</p>
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Batal</button>
-                                                    <button type="button" class="btn btn-success">Lanjutkan
-                                                        Pembelian</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -350,6 +326,7 @@
         </div>
     </section>
     <x-address-component />
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
     <script>
         const productPrice = {{ $transaction->product->price }};
         const productStock = {{ $transaction->product->stock }};
@@ -386,5 +363,75 @@
             document.getElementById('discount').innerText = 'Rp ' + discount.toLocaleString('id-ID');
             document.getElementById('total').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
         }
+
+        function buyNow() {
+        fetch('/get-midtrans-token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                total_price: document.getElementById('total-price').innerText.replace(/[^\d]/g, '') // Ambil angka total harga
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.token) {
+                snap.pay(data.token, {
+                    onSuccess: function(result) {
+                        alert("Pembayaran berhasil!");
+                        // Redirect atau lakukan aksi lain setelah pembayaran sukses
+                    },
+                    onPending: function(result) {
+                        alert("Menunggu pembayaran Anda!");
+                    },
+                    onError: function(result) {
+                        alert("Pembayaran gagal!");
+                    },
+                    onClose: function() {
+                        alert("Anda menutup pembayaran tanpa menyelesaikannya.");
+                    }
+                });
+            } else {
+                console.error('Token tidak ditemukan');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+        document.querySelector('[data-bs-target="#beliModal"]').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            fetch("{{ route('payment.get-snap-token') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        total_price: {{ $transaction->product->price * $transaction->quantity + ($transaction->shipping_cost ?? 0) + 3700 + ($transaction->service_fee ?? 6000) + ($transaction->application_fee ?? 1000) }}
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            alert("Pembayaran berhasil!");
+                            console.log(result);
+                            window.location.href = "/payment/success"; // Arahkan ke halaman sukses
+                        },
+                        onPending: function(result) {
+                            alert("Pembayaran belum selesai. Silakan lakukan pembayaran.");
+                            console.log(result);
+                        },
+                        onError: function(result) {
+                            alert("Pembayaran gagal.");
+                            console.log(result);
+                        }
+                    });
+                });
+        });
     </script>
 </x-app-layout>
