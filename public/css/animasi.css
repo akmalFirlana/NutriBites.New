@@ -1,3 +1,42 @@
+/* Loader Styles */
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .bubble {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-image: linear-gradient(to right, #ff6b81, #ff9a44);
+    margin: 0 5px;
+    animation: bubbleAnimation 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes bubbleAnimation {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(2); opacity: 0.5; }
+  }
+  
+  .hide-loading {
+    display: none;
+  }
+  
+
+@keyframes bubbleAnimation {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(2);
+        opacity: 0.5;
+    }
+}
+
+
 @keyframes rollIn {
     0% {
         transform: translateX(50vw) rotate(0deg);

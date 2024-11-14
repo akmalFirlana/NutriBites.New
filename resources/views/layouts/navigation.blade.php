@@ -73,7 +73,7 @@
                         <x-dropdown-link href="#" data-bs-toggle="modal" data-bs-target="#addressModal">
                             {{ __('Alamat') }}
                         </x-dropdown-link>
-                        <x-dropdown-link href="#" data-bs-toggle="modal" data-bs-target="#addressModal">
+                        <x-dropdown-link href="#" data-bs-toggle="modal" data-bs-target="#bukaTokoModal">
                             {{ __('Buka Toko') }}
                         </x-dropdown-link>
 

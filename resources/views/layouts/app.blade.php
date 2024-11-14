@@ -22,7 +22,14 @@
 </head>
 
 <body class="font-sans antialiased">
-    <x-address-component/>
+
+    <div id="loader" class="loader hide-loading fixed inset-0 z-50 bg-white flex items-center justify-center">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <x-address-component />
     <div class="min-h-screen ">
         @include('layouts.navigation')
 
@@ -173,6 +180,35 @@
         </div>
     </footer>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('loader');
+
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (!link.target && link.href && !link.href.includes(
+                            '#')) {
+                        e.preventDefault();
+                        loader.classList.remove('hide-loading');
+                        setTimeout(() => {
+                            window.location = link.href;
+                        }, 300);
+                    }
+                });
+            });
+
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function() {
+                    loader.classList.remove('hide-loading');
+                });
+            });
+
+
+            window.addEventListener('load', () => {
+                loader.classList.add('hide-loading');
+            });
+        });
+
+
         function addToCart(productId) {
             $.ajax({
                 url: `/cart/add/${productId}`,
@@ -181,10 +217,10 @@
                     _token: '{{ csrf_token() }}',
                     quantity: 1
                 },
-                success: function (response) {
+                success: function(response) {
                     alert(response.message);
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr.responseText);
                 }
             });
@@ -197,11 +233,11 @@
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
-                success: function (response) {
+                success: function(response) {
                     alert(response.message);
-                    location.reload(); 
+                    location.reload();
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr.responseText);
                 }
             });
@@ -216,10 +252,10 @@
                     _token: '{{ csrf_token() }}',
                     quantity: 1
                 },
-                success: function (response) {
+                success: function(response) {
                     alert(response.message);
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr.responseText);
                 }
             });
@@ -232,28 +268,27 @@
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
-                success: function (response) {
+                success: function(response) {
                     alert(response.message);
                     location.reload(); // refresh halaman setelah menghapus
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr.responseText);
                 }
             });
         }
 
         function changeImage(element) {
-        // Mengubah gambar utama
-        document.getElementById("mainImage").src = element.src;
+            // Mengubah gambar utama
+            document.getElementById("mainImage").src = element.src;
 
-        // Menghilangkan class "active" dari semua thumbnail
-        const thumbnails = document.querySelectorAll('.thumbnail-container img');
-        thumbnails.forEach(thumbnail => thumbnail.classList.remove('active'));
+            // Menghilangkan class "active" dari semua thumbnail
+            const thumbnails = document.querySelectorAll('.thumbnail-container img');
+            thumbnails.forEach(thumbnail => thumbnail.classList.remove('active'));
 
-        // Menambahkan class "active" ke thumbnail yang diklik
-        element.classList.add('active');
-    }
-
+            // Menambahkan class "active" ke thumbnail yang diklik
+            element.classList.add('active');
+        }
     </script>
 
 </body>

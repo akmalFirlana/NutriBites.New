@@ -1,8 +1,8 @@
 <x-app-layout>
-    <section class="row header">
-        <div class="cont ms-5 col-md-3 col-lg-2">
-            <h1 class="fw-bold fs-3 mb-3  pt-24">Filter</h1>
-            <div class="border bg-white shadow-sm px-4 py-4 rounded-lg">
+    <section class="row header ">
+        <div class="cont ms-5 col-md-3">
+            <h1 class="fw-bold fs-3 mb-3 ms-16 pt-24">Filter</h1>
+            <div class="border bg-white shadow-sm px-4 py-4 rounded-lg w-[200px] ms-16">
                 <!-- Dropdown Kategori -->
                 <div class="mb-5">
                     <h5 class="font-semibold text-gray-700 mb-3">Kategori</h5>
@@ -88,14 +88,14 @@
 
 
         </div>
-        <div class="content col-md-9">
+        <div class="content col-md-8">
             <div class="hook">
                 <h1 class="fw-bold fs-3 mb-5 pt-24">Produk</h1>
             </div>
             <div class="row justify-content-around mx-auto">
-                <div class="row">
+                <div class="row ps-0">
                     @foreach($products as $product)
-                                        <div class="col-sm-3 pe-0 mt-3 procard overflow-hidden">
+                                        <div class="col-sm-3 ps-0 mt-3 procard overflow-hidden">
                                             <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="product-card-link">
                                                 <div class="product-card border mb-4 position-relative rounded-md shadow-md"
                                                     style="width: 188px;">

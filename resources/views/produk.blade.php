@@ -96,7 +96,13 @@
                                     <span
                                         class="fw-bold">{{ ucwords(strtolower($product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span>
                                 </p>
-                                <div class="btn fw-bold mx-3 border-success w-72 my-3">Kunjungi Toko</div>
+                                <div class="btn fw-bold mx-3 border-success w-72 my-3">
+                                    <a href="{{ route('store.show', ['user_id' => $product->user_id]) }}"
+                                        class="text-decoration-none text-dark">
+                                        Kunjungi Toko
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                         <div class="Pengiriman-container row mx-2 py-2">
@@ -458,32 +464,37 @@
                     <form id="reportForm">
                         <!-- Jenis Pelanggaran -->
                         <div class="mb-3 text-medium">
-                            <label class="form-label fw-bold">Pilih kategori pelanggaran yang terjadi pada produk ini!</label>
+                            <label class="form-label fw-bold">Pilih kategori pelanggaran yang terjadi pada produk
+                                ini!</label>
                             <div>
-                                <input type="radio" name="violation_type" value="Palsu" id="fake" required class="custom-radio">
+                                <input type="radio" name="violation_type" value="Palsu" id="fake" required
+                                    class="custom-radio">
                                 <label for="fake">Produk Palsu</label>
                             </div>
                             <div>
-                                <input type="radio" name="violation_type" value="Informasi Menyesatkan" id="misleading" required class="custom-radio">
+                                <input type="radio" name="violation_type" value="Informasi Menyesatkan"
+                                    id="misleading" required class="custom-radio">
                                 <label for="misleading">Informasi Menyesatkan</label>
                             </div>
                             <div>
-                                <input type="radio" name="violation_type" value="Produk Berbahaya" id="dangerous" required class="custom-radio">
+                                <input type="radio" name="violation_type" value="Produk Berbahaya" id="dangerous"
+                                    required class="custom-radio">
                                 <label for="dangerous">Produk Berbahaya</label>
                             </div>
                             <div>
-                                <input type="radio" name="violation_type" value="Lainnya" id="other" required class="custom-radio">
+                                <input type="radio" name="violation_type" value="Lainnya" id="other" required
+                                    class="custom-radio">
                                 <label for="other">Lainnya</label>
                             </div>
                         </div>
-                        
+
                         <style>
                             .custom-radio {
-                                transform: scale(1.3); 
-                                margin: 8px; 
+                                transform: scale(1.3);
+                                margin: 8px;
                             }
                         </style>
-                        
+
                         <div class="mb-3">
                             <label for="reason" class="form-label fw-bold">Detail Pelanggaran</label>
                             <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
@@ -492,17 +503,21 @@
                             <label for="proof" class="form-label fw-bold">Bukti (opsional)</label>
                             <div class="image-upload-wrapper flex flex-col p-2">
                                 <label for="image-upload" class="image-upload-label relative">
-                                    <input type="file" name="photos[]" class="image-upload-input hidden" id="image-upload" accept="image/*" onchange="previewImage(event, 0)" multiple />
-                                    <div id="preview-0" class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
+                                    <input type="file" name="photos[]" class="image-upload-input hidden"
+                                        id="image-upload" accept="image/*" onchange="previewImage(event, 0)"
+                                        multiple />
+                                    <div id="preview-0"
+                                        class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
                                         <i class='bx bx-plus text-gray-400 text-2xl'></i>
                                     </div>
                                 </label>
-                            </div>                            
+                            </div>
                         </div>
 
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="honesty" required>
-                            <label class="form-check-label text-sm" for="honesty">Saya dengan ini menyatakan bahwa segala informasi yang dilaporkan memang benar.</label>
+                            <label class="form-check-label text-sm" for="honesty">Saya dengan ini menyatakan bahwa
+                                segala informasi yang dilaporkan memang benar.</label>
                         </div>
                     </form>
                 </div>
@@ -599,15 +614,16 @@
         });
 
         function previewImage(event, index) {
-                        const file = event.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = function (e) {
-                                const previewContainer = document.getElementById(`preview-${index}`);
-                                previewContainer.innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded" />`;
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    }
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewContainer = document.getElementById(`preview-${index}`);
+                    previewContainer.innerHTML =
+                        `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded" />`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     </script>
 </x-app-layout>

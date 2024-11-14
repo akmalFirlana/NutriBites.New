@@ -190,5 +190,12 @@ class ProductController extends Controller
         return view('welcome', compact('products'));
     }
 
-    
+    public function Toko($user_id)
+    {
+        $user = \App\Models\User::findOrFail($user_id);
+        $products = Product::where('user_id', $user_id)->get();
+        return view('toko', compact('user', 'products'));
+    }
+
+
 }

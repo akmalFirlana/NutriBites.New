@@ -6,7 +6,7 @@
         </div>
 
         <div class="container pb-5 pt-5">
-            <div class="row pt-72">
+            <div class="row pt-40">
                 <div class="col-lg-12 mt-72">
                     <div class="card border shadow-0">
                         <div class="m-4">

@@ -44,7 +44,7 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::get('/transaction/{transaction}', [TransactionController::class, 'show'])->name('transaction.show');
     Route::post('/transaction/{transaction}/calculate-shipping', [TransactionController::class, 'calculateShipping'])
     ->name('transaction.calculateShipping');
-
+    Route::get('/store/{user_id}', [ProductController::class, 'toko'])->name('store.show');
     Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
     Route::get('/products/{id}', [ProductController::class, 'detail'])->name('product.show');

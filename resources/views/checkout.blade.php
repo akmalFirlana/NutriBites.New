@@ -136,11 +136,12 @@
                                                         alt="BNI Logo" width="40">
                                                     <p class="fw-bold text-sm mx-2">BNI Virtual Account</p>
                                                 </div>
-                                                <a href="" class=""><box-icon
+                                                <a onclick="buyNow()" class=""><box-icon
                                                         name='chevron-right'></box-icon></a>
                                             </div>
                                         </div>
                                     </div>
+
                                     <script>
                                         document.getElementById("courier").addEventListener("change", function() {
                                             calculateShipping();
@@ -180,28 +181,28 @@
                                                     let options = `
                                                         <label for="service" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Layanan:</label>
                                                         <select name="service" id="service" required
-                                                            class="w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                                            onchange="updateShippingCost(this)">
-                                                    `;
+                                                        class="w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                        onchange="updateShippingCost(this)">
+                                                        `;
 
-                                                    data.shipping_costs.forEach((cost) => {
+                                                    data.shipping_costs.forEach((cost, index) => {
                                                         const service = cost.service;
                                                         const originalValue = cost.cost[0].value;
                                                         const discountedValue = originalValue / 4;
                                                         const etd = cost.cost[0].etd;
 
                                                         options +=
-                                                            `<option value="${discountedValue}" data-etd="${etd}">${service} - Rp ${discountedValue.toLocaleString()}</option>`;
+                                                            `<option value="${discountedValue}" data-etd="${etd}" ${index === 0 ? 'selected' : ''}>${service} - Rp ${discountedValue.toLocaleString()}</option>`;
                                                     });
 
-                                                    options +=
-                                                        `</select>
+                                                    options += `</select>
                                                         <p id="estimated-time" class="mt-2 text-sm text-gray-600">Estimasi waktu pengiriman: - hari</p>`;
 
                                                     shippingCostsDiv.innerHTML = options;
                                                 })
                                                 .catch(error => console.error('Error:', error));
                                         }
+
 
                                         function updateShippingCost(selectElement) {
                                             const selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -223,8 +224,6 @@
                                             totalPriceElement.innerText = `Rp ${totalCost.toLocaleString()}`;
                                         }
                                     </script>
-
-
                                     <div class="mb-3 mt-4 p-4 rounded-md shadow-md border-top">
                                         <div class="d-flex justify-content-between">
                                             <p class="fw-bold">Asuransi Pengiriman</p>
@@ -313,7 +312,8 @@
 
 
                                 <div class="mt-3">
-                                    <a href="#" onclick="buyNow()" class="btn btn-success w-100 shadow-0 py-2 fs-6">
+                                    <a href="#" onclick="buyNow()"
+                                        class="btn btn-success w-100 shadow-0 py-2 fs-6">
                                         <i class='bx bxs-check-shield me-1' style='color:#ffffff'></i> Beli Sekarang
                                     </a>
                                 </div>
@@ -326,7 +326,8 @@
         </div>
     </section>
     <x-address-component />
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}">
+    </script>
     <script>
         const productPrice = {{ $transaction->product->price }};
         const productStock = {{ $transaction->product->stock }};
@@ -365,41 +366,42 @@
         }
 
         function buyNow() {
-        fetch('/get-midtrans-token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                total_price: document.getElementById('total-price').innerText.replace(/[^\d]/g, '') // Ambil angka total harga
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.token) {
-                snap.pay(data.token, {
-                    onSuccess: function(result) {
-                        alert("Pembayaran berhasil!");
-                        // Redirect atau lakukan aksi lain setelah pembayaran sukses
+            fetch('/get-midtrans-token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    onPending: function(result) {
-                        alert("Menunggu pembayaran Anda!");
-                    },
-                    onError: function(result) {
-                        alert("Pembayaran gagal!");
-                    },
-                    onClose: function() {
-                        alert("Anda menutup pembayaran tanpa menyelesaikannya.");
+                    body: JSON.stringify({
+                        total_price: document.getElementById('total-price').innerText.replace(/[^\d]/g,
+                            '') // Ambil angka total harga
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        snap.pay(data.token, {
+                            onSuccess: function(result) {
+                                alert("Pembayaran berhasil!");
+                                // Redirect atau lakukan aksi lain setelah pembayaran sukses
+                            },
+                            onPending: function(result) {
+                                alert("Menunggu pembayaran Anda!");
+                            },
+                            onError: function(result) {
+                                alert("Pembayaran gagal!");
+                            },
+                            onClose: function() {
+                                alert("Anda menutup pembayaran tanpa menyelesaikannya.");
+                            }
+                        });
+                    } else {
+                        console.error('Token tidak ditemukan');
                     }
-                });
-            } else {
-                console.error('Token tidak ditemukan');
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-    
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
         document.querySelector('[data-bs-target="#beliModal"]').addEventListener('click', function(e) {
             e.preventDefault();
 

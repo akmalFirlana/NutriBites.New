@@ -111,8 +111,8 @@
                                                     </a>
                                                 </div>
                 @endforeach
-                                        </div>
-                                    </div>
+            </div>
+        </div>
 
                                     <div class=" text-center mx-5 my-3">
                                         <button class="btn btn-white border">Muat Lebih</button>

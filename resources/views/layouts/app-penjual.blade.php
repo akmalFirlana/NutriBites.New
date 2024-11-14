@@ -10,6 +10,7 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="stylesheet" href="{{ asset('css/penjual.css') }}">
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/animasi.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -24,6 +25,13 @@
         <header class="header">
             <div class="header__container w-100">
                 <div class="position-absolute end-0 me-5 d-flex">
+                    <!-- Loader HTML -->
+                    <div id="loader"
+                        class="loader hide-loading fixed inset-0 z-50 bg-white flex items-center justify-center">
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                    </div>
 
                     <div class="hidden sm:flex sm:items-center sm:ms-6 me-3 border-0">
                         <x-dropdown align="right" width="48">
@@ -52,7 +60,8 @@
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
 
-                                    <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                                    <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                         {{ __('Log Out') }}
                                     </x-dropdown-link>
@@ -126,7 +135,8 @@
 
                                 <div class="nav__dropdown-collapse">
                                     <div class="nav__dropdown-content">
-                                        <a href="{{ route('admin.produk') }}" class="nav__dropdown-item">Produk kamu</a>
+                                        <a href="{{ route('admin.produk') }}" class="nav__dropdown-item">Produk
+                                            kamu</a>
                                         <a href="{{ route('admin.upload') }}" class="nav__dropdown-item">Tambah-
                                             Produk</a>
                                     </div>
@@ -179,6 +189,35 @@
         <script src="{{ asset('js/nav.js') }}"></script>
         <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
         @vite('resources/js/app.js')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const loader = document.getElementById('loader');
+
+                document.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        if (!link.target && link.href && !link.href.includes(
+                            '#')) { 
+                            e.preventDefault(); 
+                            loader.classList.remove('hide-loading');
+                            setTimeout(() => {
+                                window.location = link.href; 
+                            }, 300);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('form').forEach(form => {
+                    form.addEventListener('submit', function() {
+                        loader.classList.remove('hide-loading');
+                    });
+                });
+
+                
+                window.addEventListener('load', () => {
+                    loader.classList.add('hide-loading');
+                });
+            });
+        </script>
     </body>
 
     </html>
