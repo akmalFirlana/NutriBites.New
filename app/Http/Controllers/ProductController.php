@@ -53,7 +53,8 @@ class ProductController extends Controller
             'shipping_address_id' => 'nullable|exists:user_addresses,id',
             'bpom_license' => 'nullable|string',
             'sold' => 'nullable|integer',
-            'rating' => 'nullable|numeric'
+            'rating' => 'nullable|numeric',
+            'composition' => 'nullable|string'
         ]);
 
         $product = new Product();
@@ -69,6 +70,7 @@ class ProductController extends Controller
         $product->bpom_license = $request->bpom_license;
         $product->sold = $request->input('sold', 0);
         $product->rating = $request->rating;
+        $product->composition = $request->composition;
 
         // Simpan info gizi
         if ($request->hasFile('nutrition_info')) {
@@ -124,6 +126,7 @@ class ProductController extends Controller
             'shelf_life' => 'nullable|integer',
             'weight' => 'nullable|numeric',
             'shipping_address_id' => 'nullable|exists:user_addresses,id'
+            
         ]);
 
         $product->update([

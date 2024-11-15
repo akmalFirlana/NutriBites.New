@@ -135,7 +135,7 @@
                     </div>
 
                     <div id="productDetails" class="tab-content" style="display: block;">
-                        <div class="product-detail container my-5">
+                        <div class="product-detail container my-5 px-2">
                             <!-- Nama Produk -->
                             <div class="row">
                                 <div class="col-md-12 text-center">
@@ -152,13 +152,8 @@
                                 </div>
                                 <div class="col-md-4 mb-4">
                                     <h2 class="fs-6 fw-bold">Komposisi</h2>
-                                    <ul class="list-unstyled text-muted">
-                                        <li>- Biji Gandum Utuh</li>
-                                        <li>- Gula Kelapa</li>
-                                        <li>- Garam Laut</li>
-                                        <li>- Minyak Zaitun</li>
-                                        <li>- Kacang Almond</li>
-                                    </ul>
+                                    {!! $product->composition ? nl2br(e($product->composition)) : 'Penjual Belum Menambahkan komposisi' !!}
+                                </p>
                                 </div>
                                 <div class="BPOM">
                                     <h2 class="fs-6 fw-bold">BPOM</h2>

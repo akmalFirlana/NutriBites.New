@@ -117,6 +117,7 @@
                                                         Kurir:</label>
                                                     <select name="courier" id="courier" required
                                                         class="w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                        <option value="">Pilih Kurir</option>
                                                         <option value="jne">JNE</option>
                                                         <option value="pos">POS Indonesia</option>
                                                         <option value="tiki">TIKI</option>
@@ -141,6 +142,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <input type="hidden" id="transaction-id" value="1">
 
                                     <script>
                                         document.getElementById("courier").addEventListener("change", function() {
@@ -195,7 +197,8 @@
                                                             `<option value="${discountedValue}" data-etd="${etd}" ${index === 0 ? 'selected' : ''}>${service} - Rp ${discountedValue.toLocaleString()}</option>`;
                                                     });
 
-                                                    options += `</select>
+                                                    options +=
+                                                        `</select>
                                                         <p id="estimated-time" class="mt-2 text-sm text-gray-600">Estimasi waktu pengiriman: - hari</p>`;
 
                                                     shippingCostsDiv.innerHTML = options;
@@ -373,8 +376,7 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        total_price: document.getElementById('total-price').innerText.replace(/[^\d]/g,
-                            '') // Ambil angka total harga
+                        total_price: document.getElementById('total-price').innerText.replace(/[^\d]/g, '')
                     })
                 })
                 .then(response => response.json())
@@ -383,7 +385,7 @@
                         snap.pay(data.token, {
                             onSuccess: function(result) {
                                 alert("Pembayaran berhasil!");
-                                // Redirect atau lakukan aksi lain setelah pembayaran sukses
+                                saveTransaction(result);
                             },
                             onPending: function(result) {
                                 alert("Menunggu pembayaran Anda!");
@@ -402,38 +404,32 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        document.querySelector('[data-bs-target="#beliModal"]').addEventListener('click', function(e) {
-            e.preventDefault();
-
-            fetch("{{ route('payment.get-snap-token') }}", {
-                    method: "POST",
+        function saveTransaction(paymentResult) {
+            fetch('/api/save-transaction', {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                            'content')
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        total_price: {{ $transaction->product->price * $transaction->quantity + ($transaction->shipping_cost ?? 0) + 3700 + ($transaction->service_fee ?? 6000) + ($transaction->application_fee ?? 1000) }}
+                        transaction_id: document.querySelector('#transaction-id')
+                        .value, // Tambahkan transaction_id
+                        order_id: paymentResult.order_id,
+                        payment_type: paymentResult.payment_type,
+                        transaction_time: paymentResult.transaction_time,
+                        gross_amount: paymentResult.gross_amount,
+                        status: 'success'
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    snap.pay(data.snap_token, {
-                        onSuccess: function(result) {
-                            alert("Pembayaran berhasil!");
-                            console.log(result);
-                            window.location.href = "/payment/success"; // Arahkan ke halaman sukses
-                        },
-                        onPending: function(result) {
-                            alert("Pembayaran belum selesai. Silakan lakukan pembayaran.");
-                            console.log(result);
-                        },
-                        onError: function(result) {
-                            alert("Pembayaran gagal.");
-                            console.log(result);
-                        }
-                    });
-                });
-        });
+                    if (data.success) {
+                        window.location.href = "/payment/success";
+                    } else {
+                        console.error('Gagal menyimpan transaksi');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
     </script>
 </x-app-layout>

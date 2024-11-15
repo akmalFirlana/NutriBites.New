@@ -139,6 +139,11 @@
                         <textarea name="description" class="form-control" rows="3"
                             placeholder="Deskripsikan produkmu"></textarea>
                     </div>
+                    <div class="col-md-7">
+                        <label class="fw-bold">Komposisi:</label>
+                        <textarea name="composition" class="form-control" rows="3"
+                            placeholder="Masukkan komposisi produk"></textarea>
+                    </div>
                     <div class="col-md-5 mt-3">
                         <label class="fw-bold">Informasi Gizi:</label>
                         <div class="grid w-full max-w-xs items-center gap-1.5">

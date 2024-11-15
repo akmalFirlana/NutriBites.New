@@ -4,11 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateTransactionsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
@@ -18,15 +15,18 @@ return new class extends Migration
             $table->integer('quantity');
             $table->decimal('total_price', 10, 2);
             $table->enum('status', ['pending', 'confirmed', 'shipped', 'delivered'])->default('pending');
+            $table->string('shipping_method')->nullable();
+            $table->string('estimated_delivery')->nullable();
+            $table->string('order_status')->default('pending');
+            $table->string('payment_type')->nullable();
+            $table->dateTime('transaction_time')->nullable();
+            $table->decimal('shipping_cost', 10, 2)->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('transactions');
     }
-};
+}

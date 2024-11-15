@@ -1,56 +1,56 @@
 <?php
-// app/Http/Controllers/TransactionController.php
+
 namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 use App\Models\UserAddress;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
 
 class TransactionController extends Controller
 {
-    // Fungsi untuk menampilkan halaman checkout
     public function checkout(Product $product)
     {
         return view('checkout', compact('product'));
     }
 
-    // Fungsi untuk menyimpan transaksi
     public function store(Request $request)
     {
-        // Validasi input
         $validated = $request->validate([
             'quantity' => 'required|integer|min:1',
+            'product_id' => 'required|exists:products,id',
         ]);
 
-        // Ambil data produk
         $product = Product::findOrFail($request->input('product_id'));
         $quantity = $request->input('quantity');
         $subtotal = $product->price * $quantity;
 
-        // Simpan transaksi
+        // Simpan transaksi tanpa order_id, status 'pending'
         $transaction = new Transaction();
         $transaction->user_id = auth()->id();
         $transaction->product_id = $product->id;
         $transaction->quantity = $quantity;
         $transaction->total_price = $subtotal;
-        $transaction->status = 'uncheck';
+        $transaction->status = 'pending';
         $transaction->save();
 
         return redirect()->route('transaction.show', ['transaction' => $transaction->id]);
     }
 
+
+
+
     public function updateStatus(Request $request, Transaction $transaction)
     {
         $newStatus = $request->input('status');
 
-        // Update status transaksi
         $transaction->status = $newStatus;
         $transaction->save();
 
-        // Jika status berubah menjadi 'delivered', update stok dan penjualan produk
         if ($newStatus === 'delivered') {
             $this->updateProductStockAndSales($transaction);
         }
@@ -59,13 +59,15 @@ class TransactionController extends Controller
             ->with('success', 'Status transaksi diperbarui.');
     }
 
-    // Fungsi untuk mengurangi stok dan menambah sales di tabel produk
     private function updateProductStockAndSales(Transaction $transaction)
     {
         $product = $transaction->product;
-        $quantity = $transaction->quantity;
 
-        // Kurangi stok dan tambah penjualan (sales)
+        if (!$product) {
+            return;
+        }
+
+        $quantity = $transaction->quantity;
         $product->stock -= $quantity;
         $product->sold += $quantity;
         $product->save();
@@ -74,8 +76,6 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         $addresses = UserAddress::where('user_id', Auth::id())->get();
-
-        // Pastikan mengambil transaksi beserta relasinya untuk menghindari masalah N+1 query
         $transaction->load('product.shippingAddress.kota');
 
         return view('checkout', [
@@ -85,51 +85,80 @@ class TransactionController extends Controller
     }
 
     public function calculateShipping(Request $request, Transaction $transaction)
-{
-    // Ambil kurir yang dipilih oleh user dari request
-    $selectedCourier = $request->input('courier', 'jne'); // Default ke 'jne' jika tidak ada input
+    {
+        $selectedCourier = $request->input('courier', 'jne');
 
-    // Lanjutkan dengan kode yang lain, seperti mengambil alamat user dan kota asal produk
-    $userAddress = UserAddress::where('user_id', $transaction->user_id)
-        ->where('is_primary', true)
-        ->with('kota')
-        ->first();
+        $userAddress = UserAddress::where('user_id', $transaction->user_id)
+            ->where('is_primary', true)
+            ->with('kota')
+            ->first();
 
-    $originCity = optional($transaction->product->shippingAddress->kota)->city_id;
-    $destinationCity = optional($userAddress->kota)->city_id;
-    $weight = $transaction->product->weight;
+        $originCity = optional($transaction->product->shippingAddress->kota)->city_id;
+        $destinationCity = optional($userAddress->kota)->city_id;
+        $weight = $transaction->product->weight;
 
-    // Cek data lengkap
-    if (!$originCity || !$destinationCity || !$weight) {
-        return response()->json([
-            'error' => 'Data alamat atau berat produk tidak lengkap.',
-            'originCity' => $originCity,
-            'destinationCity' => $destinationCity,
-            'weight' => $weight,
-        ], 422);
-    }
-
-    // Mengirim permintaan ke API Raja Ongkir dengan kurir yang dipilih
-    $response = Http::withHeaders([
-        'key' => env('RAJAONGKIR_API_KEY')
-    ])->post('https://api.rajaongkir.com/starter/cost', [
-                'origin' => $originCity,
-                'destination' => $destinationCity,
+        if (!$originCity || !$destinationCity || !$weight) {
+            return response()->json([
+                'error' => 'Data alamat atau berat produk tidak lengkap.',
+                'originCity' => $originCity,
+                'destinationCity' => $destinationCity,
                 'weight' => $weight,
-                'courier' => $selectedCourier
+            ], 422);
+        }
+
+        $response = Http::withHeaders([
+            'key' => env('RAJAONGKIR_API_KEY')
+        ])->post('https://api.rajaongkir.com/starter/cost', [
+                    'origin' => $originCity,
+                    'destination' => $destinationCity,
+                    'weight' => $weight,
+                    'courier' => $selectedCourier
+                ]);
+
+        $data = $response->json();
+
+        if ($response->successful() && isset($data['rajaongkir']['results'][0]['costs']) && !empty($data['rajaongkir']['results'][0]['costs'])) {
+            $costs = $data['rajaongkir']['results'][0]['costs'];
+            $shippingCost = $costs[0]['cost'][0]['value'];
+
+            session(['shipping_cost' => $shippingCost]);
+
+            return response()->json([
+                'courier' => $selectedCourier,
+                'shipping_costs' => $costs
             ]);
-
-    $data = $response->json();
-
-    if ($response->successful() && isset($data['rajaongkir']['results'])) {
-        $costs = $data['rajaongkir']['results'][0]['costs'];
-        return response()->json([
-            'courier' => $selectedCourier,
-            'shipping_costs' => $costs
-        ]);
+        } else {
+            return response()->json(['error' => 'Data biaya pengiriman tidak tersedia.'], 500);
+        }
     }
 
-    return response()->json(['error' => 'Gagal menghitung ongkir.'], 500);
+    public function saveTransaction(Request $request)
+{
+    dd('Fungsi dipanggil');
+
+    // Ambil data dari request
+    $order_id = $request->input('order_id');
+    $transaction_id = $request->input('transaction_id'); 
+
+    // Cari transaksi berdasarkan ID internal
+    $transaction = Transaction::find($transaction_id);
+
+    if ($transaction) {
+        // Update data transaksi dengan data dari Midtrans
+        $transaction->order_id = $order_id;
+        $transaction->status = $request->input('status');
+        $transaction->payment_type = $request->input('payment_type');
+        $transaction->transaction_time = $request->input('transaction_time');
+        $transaction->total_price = $request->input('gross_amount');
+        $transaction->save();
+        \Log::info('Data request:', $request->all());
+
+        return response()->json(['success' => true]);
+    } else {
+        \Log::warning('Transaksi tidak ditemukan:', ['order_id' => $order_id]);
+        \Log::warning('Data transaksi dari Midtrans tidak ditemukan.', ['transaction_id' => $transaction_id]);
+        return response()->json(['success' => false, 'message' => 'Transaksi tidak ditemukan'], 404);
+    }
 }
 
 

@@ -13,10 +13,17 @@ class Transaction extends Model
     protected $fillable = [
         'user_id',
         'product_id',
-        'quantity',
         'total_price',
         'status',
+        'shipping_method',
+        'estimated_delivery',
+        'order_status',
+        'quantity',
+        'payment_type',
+        'transaction_time',
+        'shipping_cost'
     ];
+
 
     public function user()
     {

@@ -14,6 +14,7 @@ use App\Http\Controllers\PaymentController;
 Route::post('/payment/get-snap-token', [PaymentController::class, 'getSnapToken'])->name('payment.get-snap-token');
 Route::post('/payment/notification', [PaymentController::class, 'notificationHandler'])->name('payment.notification');
 Route::post('/get-midtrans-token', [PaymentController::class, 'getMidtransToken']);
+Route::post('/save-transaction', [TransactionController::class, 'saveTransaction']);
 
 
 Route::get('/tes', function () {
@@ -52,6 +53,8 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::get('/produk', [UserController::class, 'produk'])->name('produk');
     Route::get('/produk/{id}', [ProductController::class, 'detail'])->name('product.detail');
     Route::get('/pesanan', [ProductController::class, 'pesanan'])->name('pesanan');
+    Route::post('/api/save-transaction', [TransactionController::class, 'saveTransaction']);
+
 });
 
 

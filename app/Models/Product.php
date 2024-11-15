@@ -22,7 +22,8 @@ class Product extends Model
         'sold',
         'rating',
         'category',
-        'images' 
+        'images',
+        'composition'
     ];
 
     protected $casts = [
