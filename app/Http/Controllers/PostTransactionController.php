@@ -36,8 +36,9 @@ class PostTransactionController extends Controller
             // Log data transaksi yang berhasil disimpan
             Log::info('PostTransaction created:', $transaction->toArray());
 
-            return redirect()->route('transaction.show', $transaction->id)
+            return redirect()->route('pesanan')
                 ->with('success', 'Transaksi berhasil diproses');
+
         } catch (\Exception $e) {
             // Log error jika terjadi masalah
             Log::error('Error creating post transaction:', [

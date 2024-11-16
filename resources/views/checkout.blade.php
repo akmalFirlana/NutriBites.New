@@ -234,23 +234,25 @@
                                     class="fixed inset-0 bg-gray-500 bg-opacity-50 justify-center items-center hidden">
                                     <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                                         <h2 class="text-xl font-semibold mb-4">Proses Transaksi</h2>
-                                        <form id="postTransactionForm" action="{{ route('post_transaction.store') }}" method="POST">
+                                        <form id="postTransactionForm" action="{{ route('post_transaction.store') }}"
+                                            method="POST">
                                             @csrf
                                             <!-- Form fields -->
                                             <input type="hidden" id="user_id" name="user_id"
                                                 value="{{ Auth::user()->id }}" />
                                             <input type="hidden" id="product_id" name="product_id"
-                                                value="{{ $transaction->product->id }}" /> 
-                                            <input type="hidden" id="quantity" name="quantity" value="1" />
+                                                value="{{ $transaction->product->id }}" />
+                                            <input type="hidden" id="quantity" name="quantity"
+                                                value="{{ number_format($transaction->quantity) }}" />
                                             <!-- Quantity -->
                                             <input type="hidden" id="total_price" name="total_price"
-                                                value="{{ $transaction->product->price }}" /> 
+                                                value="{{ $transaction->product->price * $transaction->quantity }}" />
                                             <input type="hidden" id="status" name="status" value="pending" />
                                             <!-- Status -->
                                             <input type="hidden" id="shipping_method" name="shipping_method"
                                                 value="jne" /> <!-- Shipping method -->
                                             <input type="hidden" id="estimated_delivery" name="estimated_delivery"
-                                                value="3-5 days" />
+                                                value="5-8 days" />
                                             <input type="hidden" id="order_status" name="order_status"
                                                 value="processing" /> <!-- Order status -->
                                             <input type="hidden" id="payment_type" name="payment_type"
@@ -258,7 +260,7 @@
                                             <input type="hidden" id="transaction_time" name="transaction_time"
                                                 value="{{ now() }}" /> <!-- Transaction time -->
                                             <input type="hidden" id="shipping_cost" name="shipping_cost"
-                                                value="0" /> <!-- Shipping cost -->
+                                                value="16000" />
 
                                             <!-- Submit Button -->
                                             <div class="flex justify-end">
@@ -345,28 +347,22 @@
                     if (data.token) {
                         snap.pay(data.token, {
                             onSuccess: function(result) {
-                                document.getElementById("paymentModal").classList.remove("hidden");
+                                // Menyembunyikan modal jika ada
+                                document.getElementById("paymentModal").classList.add("hidden");
+
+                                // Mengisi nilai input pada form dengan data dari result
                                 document.getElementById("shipping_method").value = result.shipping_method ||
                                     "jne";
-                                document.getElementById("estimated_delivery").value = result
-                                    .estimated_delivery || "3-5 days";
-                                document.getElementById("quantity").value = result.quantity || 1;
-                                document.getElementById("total_price").value = result.total_price || 0;
                                 document.getElementById("status").value = "pending";
                                 document.getElementById("order_status").value = "processing";
                                 document.getElementById("payment_type").value = result.payment_type ||
                                     "credit_card";
                                 document.getElementById("transaction_time").value = result
                                     .transaction_time || new Date().toISOString();
-                                document.getElementById("shipping_cost").value = result.shipping_cost || 0;
 
-                                // Mengatur form untuk disubmit setelah user menekan tombol submit
+                                // Menyubmit form langsung tanpa menunggu interaksi dari user
                                 const form = document.getElementById("postTransactionForm");
-                                form.addEventListener('submit', function(e) {
-                                    e
-                                .preventDefault(); // Mencegah form disubmit sebelum modal ditutup
-                                    form.submit(); // Submit form setelah user mengkonfirmasi
-                                });
+                                form.submit();
                             },
                             onPending: function(result) {
                                 alert("Menunggu pembayaran Anda!");
@@ -383,19 +379,6 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
-        }
-
-
-        function saveTransaction(paymentResult) {
-            document.getElementById('quantity').value = document.getElementById('number-input').value;
-            document.getElementById('total_price').value = paymentResult.gross_amount;
-            document.getElementById('payment_type').value = paymentResult.payment_type;
-            document.getElementById('transaction_time').value = paymentResult.transaction_time;
-            document.getElementById('shipping_method').value = paymentResult.shipping_method || '';
-            document.getElementById('estimated_delivery').value = paymentResult.estimated_delivery || '';
-            document.getElementById('shipping_cost').value = paymentResult.shipping_cost || 0;
-
-            document.getElementById('postTransactionForm').submit();
         }
 
         document.getElementById("courier").addEventListener("change", function() {
@@ -475,6 +458,7 @@
             // Update elemen tersembunyi dengan shipping method dan estimated delivery
             document.getElementById("shipping_method").value = shippingMethod;
             document.getElementById("estimated_delivery").value = etd;
+            document.getElementById("shipping_cost").value = shippingCost;
 
             const totalPriceElement = document.getElementById("total-price");
             const productPrice = parseFloat("{{ $transaction->product->price * $transaction->quantity }}") || 0;
