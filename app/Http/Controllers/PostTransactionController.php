@@ -13,17 +13,20 @@ class PostTransactionController extends Controller
         Log::info('Request data before validation:', $request->all());
 
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
+            'user_id' => 'required|integer',
+            'product_id' => 'required|integer',
+            'quantity' => 'required|integer',
             'total_price' => 'required|numeric',
             'status' => 'required|string',
-            'shipping_method' => 'nullable|string',
-            'estimated_delivery' => 'nullable|string',
+            'shipping_method' => 'required|string',
+            'estimated_delivery' => 'required|string',
             'order_status' => 'required|string',
-            'payment_type' => 'nullable|string',
-            'transaction_time' => 'nullable|date',
-            'shipping_cost' => 'nullable|numeric',
+            'payment_type' => 'required|string',
+            'shipping_cost' => 'required|numeric',
+            'recipient_name' => 'required|string|max:255',
+            'recipient_phone' => 'required|string|max:15',
+            'full_address' => 'required|string',
+            'transaction_time' => 'required|date',
         ]);
 
         // Log data yang sudah divalidasi
@@ -54,10 +57,54 @@ class PostTransactionController extends Controller
     {
         $transactions = PostTransaction::with(['product', 'userAddress'])
             ->whereHas('product', function ($query) {
-                $query->where('user_id', auth()->id()); 
+                $query->where('user_id', auth()->id());
             })
             ->get();
 
         return view('admin.order', compact('transactions'));
     }
+
+    public function confirm($id)
+    {
+        $transaction = PostTransaction::findOrFail($id);
+        $transaction->update(['status' => 'confirmed']);
+        return redirect()->back()->with('success', 'Pesanan berhasil dikonfirmasi.');
+    }
+
+    public function ship(Request $request, $id)
+    {
+        $transaction = PostTransaction::findOrFail($id);
+
+        // Validasi nomor resi jika diperlukan
+        $request->validate([
+            'resi' => 'required|string|max:255',
+        ]);
+
+        // Update status dan nomor resi
+        $transaction->update([
+            'status' => 'shipped',
+            'resi' => $request->resi,
+        ]);
+
+        return redirect()->back()->with('success', 'Pesanan berhasil dikirim.');
+    }
+
+
+    public function complete($id)
+    {
+        $transaction = PostTransaction::findOrFail($id);
+        $transaction->update(['status' => 'completed']);
+        return redirect()->back()->with('success', 'Pesanan berhasil diselesaikan.');
+    }
+
+    public function cancel($id)
+    {
+        $transaction = PostTransaction::findOrFail($id);
+        if ($transaction->status === 'pending') {
+            $transaction->update(['status' => 'cancelled']);
+            return response()->json(['message' => 'Pesanan berhasil dibatalkan.']);
+        }
+        return response()->json(['message' => 'Pesanan tidak dapat dibatalkan.'], 400);
+    }
+
 }

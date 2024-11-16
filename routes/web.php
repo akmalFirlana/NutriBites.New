@@ -64,6 +64,11 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
     Route::get('/Admin/Pesan', [AdminController::class, 'pesan'])->name('admin.pesan');
     Route::get('/Penjual/Pesanan', [PostTransactionController::class, 'index'])->name('admin.pesanan');
+    Route::put('/transactions/{transaction}/confirm', [PostTransactionController::class, 'confirm'])->name('transactions.confirm');
+    Route::put('/transactions/{transaction}/ship', [PostTransactionController::class, 'ship'])->name('transactions.ship');
+    Route::put('/transactions/{transaction}/complete', [PostTransactionController::class, 'complete'])->name('transactions.complete');
+    Route::put('/transactions/{transaction}/cancel', [PostTransactionController::class, 'cancel'])->name('transactions.cancel');
+
 
 });
 

@@ -245,6 +245,17 @@
                                             <input type="hidden" id="quantity" name="quantity"
                                                 value="{{ number_format($transaction->quantity) }}" />
                                             <!-- Quantity -->
+                                            @foreach ($addresses as $address)
+                                                <input type="hidden" name="recipient_name"
+                                                    value="{{ $address->recipient_name }}">
+                                                <input type="hidden" name="recipient_phone"
+                                                    value="{{ $address->phone_number }}">
+                                                <input type="hidden" name="full_address"
+                                                    value="{{ $address->full_address }}, {{ ucwords(strtolower($address->kecamatan->dis_name ?? 'Kecamatan tidak ditemukan')) }},
+                                                            {{ ucwords(strtolower($address->kota->city_name ?? 'Kota tidak ditemukan')) }},
+                                                             {{ ucwords(strtolower($address->provinsi->prov_name ?? 'Provinsi tidak ditemukan')) }}">
+                                            @endforeach
+
                                             <input type="hidden" id="total_price" name="total_price"
                                                 value="{{ $transaction->product->price * $transaction->quantity }}" />
                                             <input type="hidden" id="status" name="status" value="pending" />

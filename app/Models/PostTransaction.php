@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\UserAddress;
-
 class PostTransaction extends Model
 {
     use HasFactory;
@@ -23,10 +22,17 @@ class PostTransaction extends Model
         'order_status',
         'payment_type',
         'shipping_cost',
+        'recipient_name',
+        'resi',
+        'recipient_phone',
+        'full_address',
+        'transaction_time',
     ];
+
     protected $casts = [
         'transaction_time' => 'datetime',
     ];
+
 
     // Relasi dengan User
     public function user()
