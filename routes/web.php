@@ -10,6 +10,8 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PostTransactionController;
+
 
 Route::post('/payment/get-snap-token', [PaymentController::class, 'getSnapToken'])->name('payment.get-snap-token');
 Route::post('/payment/notification', [PaymentController::class, 'notificationHandler'])->name('payment.notification');
@@ -44,7 +46,7 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::post('/checkout', [TransactionController::class, 'store'])->name('checkout.store');
     Route::get('/transaction/{transaction}', [TransactionController::class, 'show'])->name('transaction.show');
     Route::post('/transaction/{transaction}/calculate-shipping', [TransactionController::class, 'calculateShipping'])
-    ->name('transaction.calculateShipping');
+        ->name('transaction.calculateShipping');
     Route::get('/store/{user_id}', [ProductController::class, 'toko'])->name('store.show');
     Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
@@ -54,7 +56,7 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::get('/produk/{id}', [ProductController::class, 'detail'])->name('product.detail');
     Route::get('/pesanan', [ProductController::class, 'pesanan'])->name('pesanan');
     Route::post('/api/save-transaction', [TransactionController::class, 'saveTransaction']);
-
+    Route::post('/post-transactions/store', [PostTransactionController::class, 'store'])->name('post_transaction.store');
 });
 
 

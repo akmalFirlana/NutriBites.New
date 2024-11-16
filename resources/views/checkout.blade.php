@@ -144,89 +144,6 @@
                                     </div>
                                     <input type="hidden" id="transaction-id" value="1">
 
-                                    <script>
-                                        document.getElementById("courier").addEventListener("change", function() {
-                                            calculateShipping();
-                                        });
-
-                                        function calculateShipping() {
-                                            const transactionId = "{{ $transaction->id }}";
-                                            const url = `/transaction/${transactionId}/calculate-shipping`;
-                                            const courier = document.getElementById("courier").value;
-
-                                            fetch(url, {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json',
-                                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                                    },
-                                                    body: JSON.stringify({
-                                                        courier: courier
-                                                    })
-                                                })
-                                                .then(response => response.json())
-                                                .then(data => {
-                                                    const shippingCostsDiv = document.getElementById('shipping-costs');
-                                                    shippingCostsDiv.innerHTML = '';
-
-                                                    if (data.error) {
-                                                        shippingCostsDiv.innerHTML = `<p class="text-red-500">${data.error}</p>`;
-                                                        return;
-                                                    }
-
-                                                    if (!data.shipping_costs || data.shipping_costs.length === 0) {
-                                                        shippingCostsDiv.innerHTML =
-                                                            `<p class="text-red-500">Tidak ada pilihan layanan tersedia untuk kurir ini.</p>`;
-                                                        return;
-                                                    }
-
-                                                    let options = `
-                                                        <label for="service" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Layanan:</label>
-                                                        <select name="service" id="service" required
-                                                        class="w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                                        onchange="updateShippingCost(this)">
-                                                        `;
-
-                                                    data.shipping_costs.forEach((cost, index) => {
-                                                        const service = cost.service;
-                                                        const originalValue = cost.cost[0].value;
-                                                        const discountedValue = originalValue / 4;
-                                                        const etd = cost.cost[0].etd;
-
-                                                        options +=
-                                                            `<option value="${discountedValue}" data-etd="${etd}" ${index === 0 ? 'selected' : ''}>${service} - Rp ${discountedValue.toLocaleString()}</option>`;
-                                                    });
-
-                                                    options +=
-                                                        `</select>
-                                                        <p id="estimated-time" class="mt-2 text-sm text-gray-600">Estimasi waktu pengiriman: - hari</p>`;
-
-                                                    shippingCostsDiv.innerHTML = options;
-                                                })
-                                                .catch(error => console.error('Error:', error));
-                                        }
-
-
-                                        function updateShippingCost(selectElement) {
-                                            const selectedOption = selectElement.options[selectElement.selectedIndex];
-                                            const shippingCost = parseFloat(selectedOption.value) || 0;
-
-                                            const etd = selectedOption.getAttribute("data-etd") || "-";
-
-                                            document.getElementById("estimated-time").innerText = `Estimasi waktu pengiriman: ${etd} hari`;
-
-                                            document.getElementById("shipping-cost-display").innerText = `Rp ${shippingCost.toLocaleString()}`;
-                                            const totalPriceElement = document.getElementById("total-price");
-                                            const productPrice = parseFloat("{{ $transaction->product->price * $transaction->quantity }}") || 0;
-                                            const serviceFee = parseFloat("{{ $transaction->service_fee ?? 6000 }}");
-                                            const applicationFee = parseFloat("{{ $transaction->application_fee ?? 1000 }}");
-                                            const insuranceFee = 3700;
-
-                                            // Perhitungan total tanpa membagi ulang ongkos kirim
-                                            const totalCost = productPrice + shippingCost + serviceFee + applicationFee + insuranceFee;
-                                            totalPriceElement.innerText = `Rp ${totalCost.toLocaleString()}`;
-                                        }
-                                    </script>
                                     <div class="mb-3 mt-4 p-4 rounded-md shadow-md border-top">
                                         <div class="d-flex justify-content-between">
                                             <p class="fw-bold">Asuransi Pengiriman</p>
@@ -313,6 +230,50 @@
                                     </p>
                                 </div>
 
+                                <div id="paymentModal"
+                                    class="fixed inset-0 bg-gray-500 bg-opacity-50 justify-center items-center hidden">
+                                    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                                        <h2 class="text-xl font-semibold mb-4">Proses Transaksi</h2>
+                                        <form id="postTransactionForm" action="{{ route('post_transaction.store') }}" method="POST">
+                                            @csrf
+                                            <!-- Form fields -->
+                                            <input type="hidden" id="user_id" name="user_id"
+                                                value="{{ Auth::user()->id }}" />
+                                            <input type="hidden" id="product_id" name="product_id"
+                                                value="{{ $transaction->product->id }}" /> 
+                                            <input type="hidden" id="quantity" name="quantity" value="1" />
+                                            <!-- Quantity -->
+                                            <input type="hidden" id="total_price" name="total_price"
+                                                value="{{ $transaction->product->price }}" /> 
+                                            <input type="hidden" id="status" name="status" value="pending" />
+                                            <!-- Status -->
+                                            <input type="hidden" id="shipping_method" name="shipping_method"
+                                                value="jne" /> <!-- Shipping method -->
+                                            <input type="hidden" id="estimated_delivery" name="estimated_delivery"
+                                                value="3-5 days" />
+                                            <input type="hidden" id="order_status" name="order_status"
+                                                value="processing" /> <!-- Order status -->
+                                            <input type="hidden" id="payment_type" name="payment_type"
+                                                value="credit_card" /> <!-- Payment type -->
+                                            <input type="hidden" id="transaction_time" name="transaction_time"
+                                                value="{{ now() }}" /> <!-- Transaction time -->
+                                            <input type="hidden" id="shipping_cost" name="shipping_cost"
+                                                value="0" /> <!-- Shipping cost -->
+
+                                            <!-- Submit Button -->
+                                            <div class="flex justify-end">
+                                                <button type="submit"
+                                                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Proses
+                                                    Transaksi</button>
+                                            </div>
+                                        </form>
+                                        <div class="mt-4 text-center">
+                                            <button class="text-red-500" id="closeModalBtn">Tutup</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
 
                                 <div class="mt-3">
                                     <a href="#" onclick="buyNow()"
@@ -384,8 +345,28 @@
                     if (data.token) {
                         snap.pay(data.token, {
                             onSuccess: function(result) {
-                                alert("Pembayaran berhasil!");
-                                saveTransaction(result);
+                                document.getElementById("paymentModal").classList.remove("hidden");
+                                document.getElementById("shipping_method").value = result.shipping_method ||
+                                    "jne";
+                                document.getElementById("estimated_delivery").value = result
+                                    .estimated_delivery || "3-5 days";
+                                document.getElementById("quantity").value = result.quantity || 1;
+                                document.getElementById("total_price").value = result.total_price || 0;
+                                document.getElementById("status").value = "pending";
+                                document.getElementById("order_status").value = "processing";
+                                document.getElementById("payment_type").value = result.payment_type ||
+                                    "credit_card";
+                                document.getElementById("transaction_time").value = result
+                                    .transaction_time || new Date().toISOString();
+                                document.getElementById("shipping_cost").value = result.shipping_cost || 0;
+
+                                // Mengatur form untuk disubmit setelah user menekan tombol submit
+                                const form = document.getElementById("postTransactionForm");
+                                form.addEventListener('submit', function(e) {
+                                    e
+                                .preventDefault(); // Mencegah form disubmit sebelum modal ditutup
+                                    form.submit(); // Submit form setelah user mengkonfirmasi
+                                });
                             },
                             onPending: function(result) {
                                 alert("Menunggu pembayaran Anda!");
@@ -404,32 +385,106 @@
                 .catch(error => console.error('Error:', error));
         }
 
+
         function saveTransaction(paymentResult) {
-            fetch('/api/save-transaction', {
+            document.getElementById('quantity').value = document.getElementById('number-input').value;
+            document.getElementById('total_price').value = paymentResult.gross_amount;
+            document.getElementById('payment_type').value = paymentResult.payment_type;
+            document.getElementById('transaction_time').value = paymentResult.transaction_time;
+            document.getElementById('shipping_method').value = paymentResult.shipping_method || '';
+            document.getElementById('estimated_delivery').value = paymentResult.estimated_delivery || '';
+            document.getElementById('shipping_cost').value = paymentResult.shipping_cost || 0;
+
+            document.getElementById('postTransactionForm').submit();
+        }
+
+        document.getElementById("courier").addEventListener("change", function() {
+            calculateShipping();
+        });
+
+        function calculateShipping() {
+            const transactionId = "{{ $transaction->id }}";
+            const url = `/transaction/${transactionId}/calculate-shipping`;
+            const courier = document.getElementById("courier").value;
+
+            console.log('Mengirim permintaan ongkir untuk transaksi ID:', transactionId, 'dengan kurir:', courier);
+
+            fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        transaction_id: document.querySelector('#transaction-id')
-                        .value, // Tambahkan transaction_id
-                        order_id: paymentResult.order_id,
-                        payment_type: paymentResult.payment_type,
-                        transaction_time: paymentResult.transaction_time,
-                        gross_amount: paymentResult.gross_amount,
-                        status: 'success'
+                        courier: courier
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        window.location.href = "/payment/success";
-                    } else {
-                        console.error('Gagal menyimpan transaksi');
+                    const shippingCostsDiv = document.getElementById('shipping-costs');
+                    shippingCostsDiv.innerHTML = '';
+
+                    if (data.error) {
+                        shippingCostsDiv.innerHTML = `<p class="text-red-500">${data.error}</p>`;
+                        return;
                     }
+
+                    if (!data.shipping_costs || data.shipping_costs.length === 0) {
+                        shippingCostsDiv.innerHTML =
+                            `<p class="text-red-500">Tidak ada pilihan layanan tersedia untuk kurir ini.</p>`;
+                        return;
+                    }
+
+                    let options = `
+                                                        <label for="service" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Layanan:</label>
+                                                        <select name="service" id="service" required
+                                                        class="w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                        onchange="updateShippingCost(this)">
+                                                        `;
+
+                    data.shipping_costs.forEach((cost, index) => {
+                        const service = cost.service;
+                        const originalValue = cost.cost[0].value;
+                        const discountedValue = originalValue / 4;
+                        const etd = cost.cost[0].etd;
+
+                        options +=
+                            `<option value="${discountedValue}" data-etd="${etd}" ${index === 0 ? 'selected' : ''}>${service} - Rp ${discountedValue.toLocaleString()}</option>`;
+                    });
+
+                    options += `
+                                                        </select>
+                                                        <p id="estimated-time" class="mt-2 text-sm text-gray-600">Estimasi waktu pengiriman: - hari</p>
+                                                    `;
+
+                    shippingCostsDiv.innerHTML = options;
                 })
                 .catch(error => console.error('Error:', error));
+        }
+
+        function updateShippingCost(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const shippingCost = parseFloat(selectedOption.value) || 0;
+            const etd = selectedOption.getAttribute("data-etd") || "-";
+            const shippingMethod = selectElement.options[selectElement.selectedIndex].text.split(' - ')[0];
+
+            // Menampilkan estimasi waktu pengiriman
+            document.getElementById("estimated-time").innerText = `Estimasi waktu pengiriman: ${etd} hari`;
+            document.getElementById("shipping-cost-display").innerText = `Rp ${shippingCost.toLocaleString()}`;
+
+            // Update elemen tersembunyi dengan shipping method dan estimated delivery
+            document.getElementById("shipping_method").value = shippingMethod;
+            document.getElementById("estimated_delivery").value = etd;
+
+            const totalPriceElement = document.getElementById("total-price");
+            const productPrice = parseFloat("{{ $transaction->product->price * $transaction->quantity }}") || 0;
+            const serviceFee = parseFloat("{{ $transaction->service_fee ?? 6000 }}");
+            const applicationFee = parseFloat("{{ $transaction->application_fee ?? 1000 }}");
+            const insuranceFee = 3700;
+
+            // Perhitungan total biaya
+            const totalCost = productPrice + shippingCost + serviceFee + applicationFee + insuranceFee;
+            totalPriceElement.innerText = `Rp ${totalCost.toLocaleString()}`;
         }
     </script>
 </x-app-layout>

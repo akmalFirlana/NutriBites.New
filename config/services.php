@@ -27,6 +27,9 @@ return [
     'resend' => [
         'key' => env('RESEND_KEY'),
     ],
+    'rajaongkir' => [
+        'api_key' => env('RAJAONGKIR_API_KEY'),
+    ],
 
     'slack' => [
         'notifications' => [
