@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\UserAddress;
 
 class PostTransaction extends Model
 {
@@ -21,10 +22,11 @@ class PostTransaction extends Model
         'estimated_delivery',
         'order_status',
         'payment_type',
-        'transaction_time',
         'shipping_cost',
     ];
-
+    protected $casts = [
+        'transaction_time' => 'datetime',
+    ];
 
     // Relasi dengan User
     public function user()
@@ -36,5 +38,10 @@ class PostTransaction extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function userAddress()
+    {
+        return $this->belongsTo(UserAddress::class, 'user_id', 'user_id');
     }
 }

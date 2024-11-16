@@ -49,4 +49,15 @@ class PostTransactionController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat memproses transaksi.');
         }
     }
+
+    public function index()
+    {
+        $transactions = PostTransaction::with(['product', 'userAddress'])
+            ->whereHas('product', function ($query) {
+                $query->where('user_id', auth()->id()); 
+            })
+            ->get();
+
+        return view('admin.order', compact('transactions'));
+    }
 }

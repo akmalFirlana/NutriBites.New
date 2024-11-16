@@ -18,18 +18,15 @@ Route::post('/payment/notification', [PaymentController::class, 'notificationHan
 Route::post('/get-midtrans-token', [PaymentController::class, 'getMidtransToken']);
 Route::post('/save-transaction', [TransactionController::class, 'saveTransaction']);
 
-
-Route::get('/tes', function () {
-    return view('testing');
-});
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect()->route('login');
+})->name('logout');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/fix', function () {
-    return view('fix');
-})->middleware(['auth', 'verified'])->name('fix');
 
 Route::get('/', [ProductController::class, 'home'])->name('landingpage');
 
@@ -65,8 +62,8 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::get('/adminDB', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/Admin/Upload', [AddressController::class, 'upload'])->name('admin.upload');
     Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
-    Route::get('/Admin/Pesanan', [AdminController::class, 'pesanan'])->name('admin.pesanan');
     Route::get('/Admin/Pesan', [AdminController::class, 'pesan'])->name('admin.pesan');
+    Route::get('/Penjual/Pesanan', [PostTransactionController::class, 'index'])->name('admin.pesanan');
 
 });
 
