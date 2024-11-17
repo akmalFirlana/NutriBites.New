@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\PostTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\Product;
 
 class PostTransactionController extends Controller
 {
@@ -91,11 +92,27 @@ class PostTransactionController extends Controller
 
 
     public function complete($id)
-    {
-        $transaction = PostTransaction::findOrFail($id);
+{
+    $transaction = PostTransaction::findOrFail($id);
+
+    // Pastikan transaksi belum diselesaikan
+    if ($transaction->status !== 'completed') {
+        // Ambil produk terkait
+        $product = Product::findOrFail($transaction->product_id);
+
+        // Update stok dan sales produk
+        $product->update([
+            'stock' => $product->stock - $transaction->quantity,
+            'sold' => $product->sold + $transaction->quantity,
+        ]);
+
+        // Update status transaksi
         $transaction->update(['status' => 'completed']);
-        return redirect()->back()->with('success', 'Pesanan berhasil diselesaikan.');
     }
+
+    return redirect()->back()->with('success', 'Pesanan berhasil diselesaikan.');
+}
+
 
     public function cancel($id)
     {
@@ -107,4 +124,10 @@ class PostTransactionController extends Controller
         return response()->json(['message' => 'Pesanan tidak dapat dibatalkan.'], 400);
     }
 
+    public function pembelian()
+{
+    $transactions = PostTransaction::with('product')->where('user_id', auth()->id())->get();
+    return view('pesanan', compact('transactions'));
+}
+    
 }

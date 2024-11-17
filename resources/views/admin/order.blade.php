@@ -58,7 +58,6 @@
                                         {{ ucfirst($transaction->status) }}
                                     </span>
                                 </td>
-
                             </tr>
                         @endforeach
                     </tbody>

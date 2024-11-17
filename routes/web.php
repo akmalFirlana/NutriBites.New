@@ -45,15 +45,14 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::post('/transaction/{transaction}/calculate-shipping', [TransactionController::class, 'calculateShipping'])
         ->name('transaction.calculateShipping');
     Route::get('/store/{user_id}', [ProductController::class, 'toko'])->name('store.show');
-    Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [ProductController::class, 'list'])->name('dashboard');
     Route::get('/products/{id}', [ProductController::class, 'detail'])->name('product.show');
     Route::get('/kategori', [ProductController::class, 'kategori'])->name('kategori');
     Route::get('/produk', [UserController::class, 'produk'])->name('produk');
     Route::get('/produk/{id}', [ProductController::class, 'detail'])->name('product.detail');
-    Route::get('/pesanan', [ProductController::class, 'pesanan'])->name('pesanan');
     Route::post('/api/save-transaction', [TransactionController::class, 'saveTransaction']);
     Route::post('/post-transactions/store', [PostTransactionController::class, 'store'])->name('post_transaction.store');
+    Route::get('/pembelian', [PostTransactionController::class, 'pembelian'])->name('pesanan');
 });
 
 
@@ -66,17 +65,13 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::get('/Penjual/Pesanan', [PostTransactionController::class, 'index'])->name('admin.pesanan');
     Route::put('/transactions/{transaction}/confirm', [PostTransactionController::class, 'confirm'])->name('transactions.confirm');
     Route::put('/transactions/{transaction}/ship', [PostTransactionController::class, 'ship'])->name('transactions.ship');
-    Route::put('/transactions/{transaction}/complete', [PostTransactionController::class, 'complete'])->name('transactions.complete');
     Route::put('/transactions/{transaction}/cancel', [PostTransactionController::class, 'cancel'])->name('transactions.cancel');
-
-
 });
 
-
+Route::put('/transactions/{transaction}/complete', [PostTransactionController::class, 'complete'])->name('transactions.complete');
 Route::resource('products', ProductController::class);
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
-
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
