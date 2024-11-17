@@ -45,7 +45,9 @@
                         <div class="d-flex mt-1 fs-6">
                             <span class="badge bg-success ms-2 me-2">Terjual {{ $product->sold }}</span> |
                             <i class='bx bxs-star ms-2' style='color:#d0e12b'></i>
-                            <span class="font-semibold text-gray-700">{{ $product->rating }} (126 Rating)</span>
+                            <span class="font-semibold text-gray-700">
+                                 {{ number_format($averageRating, 1, ',', '.') }} ({{ $reviews->count() }} Ulasan)
+                            </span>
                         </div>
 
                         <div class="harga mt-4 mb-4">
@@ -168,7 +170,7 @@
                         <div class="ulasan-header">
                             <div class="ulasan-header">
                                 <h2>Ulasan <span class="text-muted fs-6">({{ $reviews->count() }})</span></h2>
-                            
+
                                 <div class="flex p-4 rounded-lg justify-between items-center bg-gray-100 mb-4">
                                     <div class="text-center">
                                         <p class="text-2xl font-semibold">{{ $usersCount }}</p>
@@ -181,34 +183,38 @@
                                     <div class="text-center">
                                         <div class="flex items-center justify-center">
                                             @for ($i = 1; $i <= 5; $i++)
-                                                <i class='bx {{ $i <= round($averageRating) ? "bxs-star text-yellow-400" : "bx-star text-gray-400" }}'></i>
+                                                <i
+                                                    class='bx {{ $i <= round($averageRating) ? 'bxs-star text-yellow-400' : 'bx-star text-gray-400' }}'></i>
                                             @endfor
                                         </div>
                                         <p class="text-gray-500">Overall rating</p>
                                     </div>
                                 </div>
-                            
+
                                 <div class="space-y-2 bg-gray-100 p-4 rounded-lg">
                                     @for ($i = 5; $i >= 1; $i--)
                                         @php
                                             $ratingCount = $reviews->where('rating', $i)->count();
-                                            $percentage = $reviews->count() > 0 ? ($ratingCount / $reviews->count()) * 100 : 0;
+                                            $percentage =
+                                                $reviews->count() > 0 ? ($ratingCount / $reviews->count()) * 100 : 0;
                                         @endphp
                                         <div class="flex items-center">
                                             <div class="flex items-center space-x-1 text-yellow-400">
                                                 @for ($j = 1; $j <= 5; $j++)
-                                                    <i class='bx {{ $j <= $i ? "bxs-star" : "bx-star text-gray-400" }}'></i>
+                                                    <i
+                                                        class='bx {{ $j <= $i ? 'bxs-star' : 'bx-star text-gray-400' }}'></i>
                                                 @endfor
                                             </div>
                                             <div class="flex-1 h-2 bg-gray-200 ml-4 rounded">
-                                                <div class="h-2 bg-gray-400 rounded" style="width: {{ $percentage }}%;"></div>
+                                                <div class="h-2 bg-gray-400 rounded"
+                                                    style="width: {{ $percentage }}%;"></div>
                                             </div>
                                             <span class="ml-4 text-gray-500">{{ $ratingCount }}</span>
                                         </div>
                                     @endfor
                                 </div>
                             </div>
-                            
+
                         </div>
                         @if ($hasPurchased)
                             <div class="submit-review rounded-lg p-6">
@@ -347,7 +353,7 @@
                 </div>
             </div>
         </div>
-            
+
         <div class="side col-md-4">
             <div class="wrapper px-5" style="position: sticky; top: 130px">
                 <div class="upper-card rounded mb-3"

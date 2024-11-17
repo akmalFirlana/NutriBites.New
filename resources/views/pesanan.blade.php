@@ -72,7 +72,7 @@
                                         class="transaction-footer px-3 py-2 d-flex justify-content-between align-items-center">
                                         <div class="total">
                                             Total Belanja Rp
-                                            {{ number_format($transaction->total_price + ($transaction->shipping_cost ?? 0), 0, ',', '.') }}
+                                            {{ number_format($transaction->total_price + ($transaction->shipping_cost ?? 0) + 10700, 0, ',', '.') }}
                                         </div>
                                         <div>
                                             <button class="btn btn-outline-none fw-bold text-success"
@@ -147,19 +147,23 @@
 
     <div class="modal fade" id="transactionDetailModal" tabindex="-1" aria-labelledby="transactionDetailModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="transactionDetailModalLabel">Detail Transaksi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <!-- Header -->
+              <div class="modal-header">
+                <h5 class="modal-title font-bold fs-5" id="orderDetailsLabel">Detail Pesanan</h5>
+                <button type="button" class="btn-close bg-white rounded-full" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+        
+              <!-- Body -->
+              <div class="modal-body">
+                <!-- Loader -->
+                <div id="modalContent" class="text-center mt-5 text-gray-500">
+                  <p>Memuat data...</p>
                 </div>
-                <div class="modal-body row">
-                    <div id="modalContent">
-                        <p>Memuat data...</p>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
+          </div>
     </div>
 
     <script>
@@ -179,41 +183,35 @@
 
 
             modalContent.innerHTML = `
-            <div class="row">
-                <div class="col-md-9">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6><strong>Nomor Resi:</strong></h6>
-                        <p>${resi}</p>
+              <div class="row gap-4">
+                  <!-- Informasi Pesanan -->
+                  <div class="col-md-12">
+                    <div class="bg-gray-100 p-4 pt-0 rounded-lg shadow">
+                      <h6 class="font-semibold text-lg text-gray-700">Nomor Resi:</h6>
+                      <p class="text-gray-600">${resi}</p>
+        
+                      <h6 class="font-semibold text-lg text-gray-700 mt-3">Status:</h6>
+                      <p class="text-gray-600">${status}</p>
+        
+                      <h6 class="font-semibold text-lg text-gray-700 mt-3">Nama Produk:</h6>
+                      <p class="text-gray-600">${productName}</p>
+        
+                      <h6 class="font-semibold text-lg text-gray-700 mt-3">Jumlah:</h6>
+                      <p class="text-gray-600">${quantity}</p>
+        
+                      <h6 class="font-semibold text-lg text-gray-700 mt-3">Total Harga:</h6>
+                      <p class="text-gray-600">Rp ${totalPrice}</p>
+        
+                      <h6 class="font-semibold text-lg text-gray-700 mt-3">Metode Pengiriman:</h6>
+                      <p class="text-gray-600">${shippingMethod}</p>
+        
+                      <h6 class="font-semibold text-lg text-gray-700 mt-3">Alamat Pengiriman:</h6>
+                      <p class="text-gray-600">${shippingAddress}</p>
                     </div>
-                    <div class="col-md-6">
-                        <h6><strong>Status:</strong></h6>
-                        <p>${status}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6><strong>Nama Produk:</strong></h6>
-                        <p>${productName}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6><strong>Jumlah:</strong></h6>
-                        <p>${quantity}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6><strong>Total Harga:</strong></h6>
-                        <p>Rp ${totalPrice}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6><strong>Metode Pengiriman:</strong></h6>
-                        <p>${shippingMethod}</p>
-                    </div>
-                    <div class="col-md-12">
-                        <h6><strong>Alamat Pengiriman:</strong></h6>
-                        <p>${shippingAddress}</p>
-                    </div>
-                </div>
-                </div>
-                <div class="col-md-3">
-                        <div class="custom-loader">
+                  </div>
+        
+                <div class="col-md-5">
+                        <div class="custom-loader mt-72">
                             <div class="custom-truckWrapper">
                                 <div class="custom-truckBody">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 198 93"

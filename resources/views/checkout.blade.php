@@ -197,7 +197,7 @@
                                     <p class="mb-2 text-sm">Asuransi Pengiriman:</p>
                                     <p class="mb-2 text-sm">Rp {{ number_format(3700, 0, ',', '.') }}</p>
                                 </div>
-                                <hr />
+                                <hr/>
 
                                 <h1 class="fs-6 mb-2 mt-1">Biaya Transaksi</h1>
                                 <div class="d-flex justify-content-between text-muted">
