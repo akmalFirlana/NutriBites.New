@@ -11,7 +11,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostTransactionController;
-
+use App\Http\Controllers\ReviewController;
 
 Route::post('/payment/get-snap-token', [PaymentController::class, 'getSnapToken'])->name('payment.get-snap-token');
 Route::post('/payment/notification', [PaymentController::class, 'notificationHandler'])->name('payment.notification');
@@ -53,6 +53,7 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::post('/api/save-transaction', [TransactionController::class, 'saveTransaction']);
     Route::post('/post-transactions/store', [PostTransactionController::class, 'store'])->name('post_transaction.store');
     Route::get('/pembelian', [PostTransactionController::class, 'pembelian'])->name('pesanan');
+    Route::post('/products/{product}/review', [ReviewController::class, 'store'])->name('review.store');
 });
 
 

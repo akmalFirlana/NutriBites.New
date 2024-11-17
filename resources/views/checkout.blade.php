@@ -102,7 +102,7 @@
                                                     </p>
                                                 @endforeach
                                             </div>
-                                            <button class="btn text-lg font-semibold hover:text-gray-700"><box-icon
+                                            <button class="btn text-lg font-semibold hover:text-gray-700" data-bs-toggle="modal" data-bs-target="#addressModal"><box-icon
                                                     name='chevron-right'></box-icon></button>
                                         </div>
                                         <div class="divider border m-0"></div>

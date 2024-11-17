@@ -5,6 +5,8 @@ use App\Models\Product;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Review;
+use App\Http\Controllers\ReviewController;
 
 class ProductController extends Controller
 {
@@ -170,10 +172,24 @@ class ProductController extends Controller
     }
 
     public function detail($id)
-    {
-        $product = Product::findOrFail($id);
-        return view('produk', compact('product'));
-    }
+{
+    $product = Product::findOrFail($id);
+    $user = auth()->user();
+    
+    $hasPurchased = auth()->user()
+    ->postTransactions()
+    ->where('product_id', $product->id)
+    ->where('status', 'completed') // Sesuaikan dengan status transaksi selesai
+    ->exists();
+
+    $reviews = $product->reviews; // Relasi ke model Review
+    $usersCount = $reviews->unique('user_id')->count();
+    $averageRating = $reviews->avg('rating');
+
+
+    return view('produk', compact('product', 'hasPurchased','reviews', 'usersCount', 'averageRating'));
+}
+
 
     public function kategori()
     {

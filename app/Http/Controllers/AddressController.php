@@ -79,7 +79,7 @@ class AddressController extends Controller
                 'phone_number' => $request->phone_number,
                 'full_address' => $request->full_address,
                 'postal_code' => $request->postal_code,
-                'is_primary' => false, 
+                'is_primary' => true, 
             ]);
 
             return redirect()->back()->with('success', 'Alamat berhasil ditambahkan.');

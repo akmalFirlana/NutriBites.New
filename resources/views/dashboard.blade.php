@@ -37,7 +37,6 @@
     </div>
     <div class="" id="rekomendasi"></div>
 
-
     <section class="mt-5">
         <h1 class="text-center fw-bold" style="font-size: 3rem; margin-top: 6rem"> Rekomendasi Produk</h1>
         <p class="text-center text-gray-400 mb-5" style="font-size: 1rem;">Nikmati pilihan produk snack sehat terbaik
@@ -45,7 +44,7 @@
         <div class="row justify-content-around mx-auto">
             <div class="row">
                 @php
-                        $products = \App\Models\Product::inRandomOrder()->take(6)->get();
+                    $products = \App\Models\Product::inRandomOrder()->take(6)->get();
                 @endphp
                 @foreach ($products as $product)
                     <div class="col-sm-2 pe-0 mt-3 procard overflow-hidden">
@@ -110,9 +109,9 @@
                                                         </div>
                                                     </a>
                                                 </div>
-                @endforeach
-            </div>
-        </div>
+ @endforeach
+                                        </div>
+                                    </div>
 
                                     <div class=" text-center mx-5 my-3">
                                         <button class="btn btn-white border">Muat Lebih</button>
@@ -124,7 +123,7 @@
     <section>
         <div class="flash-sale mt-5">
             <div class="flash-header d-inline-flex">
-                <h1 class="fw-bold d-flex ps-3 pe-2" style="font-size: 1.5rem">Flash Sale
+                <h1 class="fw-bold d-flex ps-3 pe-2" style="font-size: 1.5rem"> ⚡Flash Sale
                 </h1>
                 <div class="d-flex pt-auto">
                     <p class="pt-2 pe-2">Berakhir Dalam</p>
@@ -140,8 +139,7 @@
             <div class="row justify-content-around mx-auto">
                 <div class="row">
                     <div class="col-sm-2 mt-3 pt-2 mb-5">
-                        <div
-                            class="shape w-[300px] bg-slate-400 h-100 rounded-2xl d-flex align-items-center">
+                        <div class="shape w-[300px] bg-slate-400 h-100 rounded-2xl d-flex align-items-center">
                             <img src="{{ asset('image/flashsale.png') }}" class="fs-img"
                                 style="width: 200px; height: 220px; object-fit: cover;">
                         </div>
@@ -213,7 +211,105 @@
             </div>
         </div>
     </section>
+    <hr class="mx-auto" style="border-color: #141113; width: 95%; height: 2px">
+    <section>
+        <div class="row p-3 ps-1 mx-4 pb-0">
+            <div class="col-md-2 pb-4 bg-green-500 rounded-md me-2"
+                style="background: rgb(255,193,7);
+                background: linear-gradient(90deg, rgba(255,193,7,1) 45%, rgba(255,223,128,1) 100%); ">
+                <h6 class="fw-bold m-2 text-gray-50">Rekomendasi</h6>
+            </div>
+            <div class="col-md-2 pb-4 bg-green-500 rounded-md me-2"
+                style="background:background: rgb(53,164,0);
+                background: linear-gradient(90deg, rgba(53,164,0,1) 45%, rgba(6,210,64,1) 100%);">
+                <h6 class="fw-bold m-2 text-gray-50">Makanan</h6>
+            </div>
+            <div class="col-md-2 pb-4 bg-green-500 rounded-md me-2"
+                style="background:rgb(156,39,176);
+            background: linear-gradient(90deg, rgba(156,39,176,1) 45%, rgba(200,126,230,1) 100%);">
+                <h6 class="fw-bold m-2 text-gray-50">Minuman</h6>
+            </div>
+            <div class="col-md-2 pb-4 bg-green-500 rounded-md me-2"
+                style="background:  rgb(0,123,255);
+                background: linear-gradient(90deg, rgba(0,123,255,1) 45%, rgba(64,185,255,1) 100%); ">
+                <h6 class="fw-bold m-2 text-gray-50">Herbal</h6>
+            </div>
 
+
+        </div>
+        <div class="row justify-content-around mx-auto">
+            <div class="row">
+                @php
+                    $products = \App\Models\Product::inRandomOrder()->take(24)->get();
+                @endphp
+                @foreach ($products as $product)
+                    <div class="col-sm-2 pe-0 mt-3 procard overflow-hidden">
+
+                        <div class="product-card border mb-4 position-relative rounded-md shadow-md"
+                            style="width: 188px;">
+                            <!-- Konten Card -->
+                            <div class="img-wrapper">
+                                @php
+                                    $images = json_decode($product->images, true); // Mengubah JSON menjadi array
+                                @endphp
+
+                                @if (!empty($images) && isset($images[0]))
+                                    <img src="{{ asset('storage/' . $images[0]) }}" alt="Product"
+                                        class="product-img mx-auto">
+                                @else
+                                    <span>No Image</span>
+                                @endif
+
+
+                                <!-- Hover Action Wrapper -->
+                                <div class="hover-options">
+                                    <button class="action-btn" onclick="addToCart('{{ $product->id }}')"><i
+                                            class='bx bx-cart-add'></i></button>
+                                    <button class="action-btn" onclick="addToWishlist('{{ $product->id }}')"><i
+                                            class='bx bx-heart'></i></button>
+                                </div>
+                            </div>
+                            <a href="{{ route('product.detail', ['id' => $product->id]) }}"
+                                class="product-card-link">
+                                <div class="pointer-event card-footer border-top border-gray-300 pt-1"
+                                    style="padding: 0; margin: 0;"
+                                    onclick="window.location.href='{{ route('product.detail', ['id' => $product->id]) }}'">
+                                    <img src="{{ asset('image/badge1.png') }}"
+                                        style="width: 100px; margin: 0; padding: 0;">
+                                    <div class="keterangan ps-2 pe-2" style="padding: 0; margin: 0;">
+                                        <a href="{{ route('product.detail', ['id' => $product->id]) }}"
+                                            class="product-name"
+                                            style="margin: 0; padding: 0;line-height: 0.8;">{{ $product->name }}</a>
+                                        <div class="" style="margin: 0; padding: 0;">
+                                            <span class="mb-0 text-gray me-2 fs-6 fw-bold d-block"
+                                                style="line-height: 0.8; margin: 0; padding: 0;">Rp
+                                                {{ number_format($product->price, 0, ',', '.') }}</span>
+                                            <span class="text-decoration-line-through"
+                                                style="color:gray; line-height: 0; font-size: 0.8rem; margin: 0; padding: 0;">Rp
+                                                {{ number_format($product->price * 1.25, 0, ',', '.') }}</span>
+                                        </div>
+                                        <p class="text-muted"
+                                            style="display: inline-flex; align-items: center; margin: 0; padding: 0;">
+                                            <img src="{{ asset('image/icon_toko.png') }}"
+                                                style="width: 20px; display: inline-flex; margin-right: 5px; margin: 0;">
+                                            {{ $product->user->name }}
+                                        </p>
+
+                                        <div class="d-flex" style="margin: 0; padding: 0;">
+                                            <i class='bx bxs-star' style='color:#d0e12b; margin: 0; padding: 0;'></i>
+                                            <span class="badge bg-success ms-2"
+                                                style="margin: 0; padding: 0;">{{ $product->rating }}</span> |
+                                            <span class="badge bg-success ms-2" ">{{ $product->sold }} Terjual</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+ @endforeach
+                                        </div>
+                                    </div>
+    </section>
     <x-address-component />
 
     <script>
@@ -225,9 +321,9 @@
             function updateCountdown() {
                 const now = new Date();
                 const midnight = new Date();
-                midnight.setHours(24, 0, 0, 0); 
+                midnight.setHours(24, 0, 0, 0);
 
-           
+
                 const timeRemaining = (midnight - now) / 1000;
 
                 const hours = Math.floor(timeRemaining / 3600);

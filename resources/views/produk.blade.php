@@ -126,7 +126,7 @@
                     </div>
                     <hr class="bawah">
                 </div>
-                <div class="contain  mx-5">
+                <div class="contain  ms-14 me-3">
                     <div class="tabs d-flex justify-content-around">
                         <button class="tab-link active" onclick="openTab(event, 'productDetails')">Detail
                             Produk</button>
@@ -153,7 +153,7 @@
                                 <div class="col-md-4 mb-4">
                                     <h2 class="fs-6 fw-bold">Komposisi</h2>
                                     {!! $product->composition ? nl2br(e($product->composition)) : 'Penjual Belum Menambahkan komposisi' !!}
-                                </p>
+                                    </p>
                                 </div>
                                 <div class="BPOM">
                                     <h2 class="fs-6 fw-bold">BPOM</h2>
@@ -167,165 +167,132 @@
                     <div id="ratingReviews" class="tab-content">
                         <div class="ulasan-header">
                             <div class="ulasan-header">
-                                <h2>Ulasan <span class="text-muted fs-6">(123)</span></h2>
-
-                                <div class="">
-                                    <div class="flex p-4 rounded-lg justify-between items-center bg-gray-100 mb-4">
-                                        <div class="text-center">
-                                            <p class="text-2xl font-semibold">3,851,625</p>
-                                            <p class="text-gray-500">Users</p>
-                                        </div>
-                                        <div class="text-center">
-                                            <p class="text-2xl font-semibold">2,469</p>
-                                            <p class="text-gray-500">Reviews</p>
-                                        </div>
-                                        <div class="text-center">
-                                            <div class="flex items-center justify-center">
-                                                <i class='bx bxs-star text-yellow-400'></i>
-                                                <i class='bx bxs-star text-yellow-400'></i>
-                                                <i class='bx bxs-star text-yellow-400'></i>
-                                                <i class='bx bxs-star text-yellow-400'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                            </div>
-                                            <p class="text-gray-500">Overall rating</p>
-                                        </div>
+                                <h2>Ulasan <span class="text-muted fs-6">({{ $reviews->count() }})</span></h2>
+                            
+                                <div class="flex p-4 rounded-lg justify-between items-center bg-gray-100 mb-4">
+                                    <div class="text-center">
+                                        <p class="text-2xl font-semibold">{{ $usersCount }}</p>
+                                        <p class="text-gray-500">Users</p>
                                     </div>
-
-                                    <div class="space-y-2 bg-gray-100 p-4 rounded-lg">
-                                        <div class="flex items-center">
-                                            <div class="flex items-center space-x-1 text-yellow-400">
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                            </div>
-                                            <div class="flex-1 h-2 bg-gray-200 ml-4 rounded">
-                                                <div class="h-2 bg-gray-400 rounded" style="width: 80%;"></div>
-                                            </div>
-                                            <span class="ml-4 text-gray-500">1855</span>
+                                    <div class="text-center">
+                                        <p class="text-2xl font-semibold">{{ $reviews->count() }}</p>
+                                        <p class="text-gray-500">Reviews</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="flex items-center justify-center">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <i class='bx {{ $i <= round($averageRating) ? "bxs-star text-yellow-400" : "bx-star text-gray-400" }}'></i>
+                                            @endfor
                                         </div>
-
-                                        <div class="flex items-center">
-                                            <div class="flex items-center space-x-1 text-yellow-400">
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                            </div>
-                                            <div class="flex-1 h-2 bg-gray-200 ml-4 rounded">
-                                                <div class="h-2 bg-gray-400 rounded" style="width: 20%;"></div>
-                                            </div>
-                                            <span class="ml-4 text-gray-500">331</span>
-                                        </div>
-
-                                        <div class="flex items-center">
-                                            <div class="flex items-center space-x-1 text-yellow-400">
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                            </div>
-                                            <div class="flex-1 h-2 bg-gray-200 ml-4 rounded">
-                                                <div class="h-2 bg-gray-400 rounded" style="width: 10%;"></div>
-                                            </div>
-                                            <span class="ml-4 text-gray-500">129</span>
-                                        </div>
-
-                                        <div class="flex items-center">
-                                            <div class="flex items-center space-x-1 text-yellow-400">
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                            </div>
-                                            <div class="flex-1 h-2 bg-gray-200 ml-4 rounded">
-                                                <div class="h-2 bg-gray-400 rounded" style="width: 5%;"></div>
-                                            </div>
-                                            <span class="ml-4 text-gray-500">55</span>
-                                        </div>
-
-                                        <div class="flex items-center">
-                                            <div class="flex items-center space-x-1 text-yellow-400">
-                                                <i class='bx bxs-star'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                                <i class='bx bx-star text-gray-400'></i>
-                                            </div>
-                                            <div class="flex-1 h-2 bg-gray-200 ml-4 rounded">
-                                                <div class="h-2 bg-gray-400 rounded" style="width: 7%;"></div>
-                                            </div>
-                                            <span class="ml-4 text-gray-500">99</span>
-                                        </div>
+                                        <p class="text-gray-500">Overall rating</p>
                                     </div>
                                 </div>
+                            
+                                <div class="space-y-2 bg-gray-100 p-4 rounded-lg">
+                                    @for ($i = 5; $i >= 1; $i--)
+                                        @php
+                                            $ratingCount = $reviews->where('rating', $i)->count();
+                                            $percentage = $reviews->count() > 0 ? ($ratingCount / $reviews->count()) * 100 : 0;
+                                        @endphp
+                                        <div class="flex items-center">
+                                            <div class="flex items-center space-x-1 text-yellow-400">
+                                                @for ($j = 1; $j <= 5; $j++)
+                                                    <i class='bx {{ $j <= $i ? "bxs-star" : "bx-star text-gray-400" }}'></i>
+                                                @endfor
+                                            </div>
+                                            <div class="flex-1 h-2 bg-gray-200 ml-4 rounded">
+                                                <div class="h-2 bg-gray-400 rounded" style="width: {{ $percentage }}%;"></div>
+                                            </div>
+                                            <span class="ml-4 text-gray-500">{{ $ratingCount }}</span>
+                                        </div>
+                                    @endfor
+                                </div>
                             </div>
+                            
                         </div>
+                        @if ($hasPurchased)
+                            <div class="submit-review rounded-lg p-6">
+                                <h3 class="text-lg font-bold text-gray-800 mb-4">Berikan Ulasan Anda</h3>
+                                <form method="POST" action="{{ route('review.store', $product->id) }}"
+                                    class="space-y-4">
+                                    @csrf
+                                    <!-- Rating -->
+                                    <div class="form-group">
+                                        <label for="rating"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Rating:</label>
+                                        <select name="rating" id="rating" required
+                                            class="form-select block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                            <option value="1">⭐ - Sangat Buruk</option>
+                                            <option value="2">⭐⭐ - Buruk</option>
+                                            <option value="3">⭐⭐⭐ - Cukup</option>
+                                            <option value="4">⭐⭐⭐⭐ - Bagus</option>
+                                            <option value="5">⭐⭐⭐⭐⭐ - Luar Biasa</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Komentar -->
+                                    <div class="form-group">
+                                        <label for="comment"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Komentar:</label>
+                                        <textarea name="comment" id="comment" rows="4" required
+                                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                            placeholder="Tulis komentar Anda..."></textarea>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <button type="submit"
+                                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        Kirim Ulasan
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <div class="text-center bg-yellow-100 text-yellow-700 py-4 px-6 rounded-md shadow-md mt-3">
+                                <p class="text-sm font-medium">Anda harus membeli produk ini untuk memberikan ulasan.
+                                </p>
+                            </div>
+                        @endif
+
+                        <hr>
+
                         <div class="colom-ulasan row justify-content-around">
-                            <div class="card-ulasan mt-4 px-5 py-2 row">
-                                <div class="comment-profile col-md-4 d-flex align-items-center">
-                                    <img src="https://i.pravatar.cc/300" alt="profile" class="rounded-circle me-2"
-                                        style="width: 40px; height: 40px;">
-                                    <h1 class="fs-6 fw-bold mb-0">Tedeus Judas</h1>
-                                </div>
-
-                                <div class="comment-text col-md-8">
-                                    <div class="rating-date d-flex align-items-center mb-1">
-                                        <div class="rating me-2">
-                                            <i class='bx bxs-star text-yellow-400'></i>
-                                            <i class='bx bxs-star text-yellow-400'></i>
-                                            <i class='bx bxs-star text-yellow-400'></i>
-                                            <i class='bx bxs-star text-yellow-400'></i>
-                                            <i class='bx bx-star text-gray-400'></i>
-                                        </div>
-                                        <p class="text-muted text-sm mb-0">17 Agustus 2045</p>
+                            @forelse ($product->reviews as $review)
+                                <div class="card-ulasan mt-4 px-5 py-2 row">
+                                    <div class="comment-profile col-md-4 d-flex align-items-center">
+                                        <img src="https://i.pravatar.cc/300?u={{ $review->user->id }}" alt="profile"
+                                            class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                        <h1 class="fs-6 fw-bold mb-0">{{ $review->user->name }}</h1>
                                     </div>
 
-                                    <p class="text-muted mb-2">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit
-                                        amet consectetur adipisicing elit.
-                                    </p>
-                                </div>
-                                <hr>
-                            </div>
-                            <div class="card-ulasan mt-4 px-5 py-2 row">
-                                <div class="comment-profile col-md-4 d-flex align-items-center">
-                                    <img src="https://i.pravatar.cc/300" alt="profile" class="rounded-circle me-2"
-                                        style="width: 40px; height: 40px;">
-                                    <h1 class="fs-6 fw-bold mb-0">Tedeus Judas</h1>
-                                </div>
-
-                                <div class="comment-text col-md-8">
-                                    <div class="rating-date d-flex align-items-center mb-1">
-                                        <div class="rating me-2">
-                                            <i class='bx bxs-star text-yellow-400'></i>
-                                            <i class='bx bxs-star text-yellow-400'></i>
-                                            <i class='bx bxs-star text-yellow-400'></i>
-                                            <i class='bx bxs-star text-yellow-400'></i>
-                                            <i class='bx bx-star text-gray-400'></i>
+                                    <div class="comment-text col-md-8">
+                                        <div class="rating-date d-flex align-items-center mb-1">
+                                            <div class="rating me-2">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $review->rating)
+                                                        <i class='bx bxs-star text-yellow-400'></i>
+                                                        <!-- Bintang penuh -->
+                                                    @else
+                                                        <i class='bx bx-star text-gray-400'></i>
+                                                        <!-- Bintang kosong -->
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <p class="text-muted text-sm mb-0">
+                                                {{ $review->created_at->translatedFormat('d F Y') }}</p>
                                         </div>
-                                        <p class="text-muted text-sm mb-0">17 Agustus 2045</p>
+
+                                        <p class="text-muted mb-2">
+                                            {{ $review->comment }}
+                                        </p>
                                     </div>
-
-                                    <p class="text-muted mb-2">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit
-                                        amet consectetur adipisicing elit.
-                                    </p>
+                                    <hr>
                                 </div>
-                                <hr>
-                            </div>
+                            @empty
+                                <p>Belum ada ulasan untuk produk ini.</p>
+                            @endforelse
 
-
-                            <div class="text-center mt-4">
-                                <button class="btn btn-white fw-bold py-2 px-5 fs-6 rounded-pill"
-                                    style="border: #000 1px solid">Muat
-                                    Lebih</button>
-                            </div>
                         </div>
+
                     </div>
 
                     <div id="faqs" class="tab-content">
@@ -380,7 +347,7 @@
                 </div>
             </div>
         </div>
-
+            
         <div class="side col-md-4">
             <div class="wrapper px-5" style="position: sticky; top: 130px">
                 <div class="upper-card rounded mb-3"

@@ -27,7 +27,7 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'images' => 'array', 
+        'images' => 'array',
     ];
 
     public function user()
@@ -44,4 +44,10 @@ class Product extends Model
     {
         return $this->belongsTo(UserAddress::class, 'shipping_address_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
 }
