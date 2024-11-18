@@ -15,6 +15,9 @@ use App\Http\Controllers\PostTransactionController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\DiscussionReplyController;
+use App\Http\Controllers\ReportController;
+
+Route::post('/reports', [ReportController::class, 'store'])->name('report.store');
 
 Route::post('/product/{productId}/discussion', [DiscussionController::class, 'store'])->name('discussion.store');
 Route::post('/discussion/{discussionId}/reply', [DiscussionReplyController::class, 'store'])->name('discussion.reply');
@@ -61,25 +64,27 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::post('/post-transactions/store', [PostTransactionController::class, 'store'])->name('post_transaction.store');
     Route::get('/pembelian', [PostTransactionController::class, 'pembelian'])->name('pesanan');
     Route::post('/products/{product}/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::post('/update-role', [UserController::class, 'updateRole'])->name('updateRole');
+
 });
 
 
 Route::middleware(['auth', 'adminMiddleware'])->group(function () {
-    Route::get('/gudang', [AddressController::class, 'admin'])->name('gudang');
+    Route::get('/penjual/gudang', [AddressController::class, 'admin'])->name('gudang');
     Route::get('/adminDB', [PostTransactionController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/Admin/Upload', [AddressController::class, 'upload'])->name('admin.upload');
-    Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
+    Route::get('/Admin/Produk', [productController::class, 'edit'])->name('admin.produk');
     Route::get('/Admin/Pesan', [AdminController::class, 'pesan'])->name('admin.pesan');
     Route::get('/Penjual/Pesanan', [PostTransactionController::class, 'index'])->name('admin.pesanan');
     Route::put('/transactions/{transaction}/confirm', [PostTransactionController::class, 'confirm'])->name('transactions.confirm');
     Route::put('/transactions/{transaction}/ship', [PostTransactionController::class, 'ship'])->name('transactions.ship');
     Route::put('/transactions/{transaction}/cancel', [PostTransactionController::class, 'cancel'])->name('transactions.cancel');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
 });
 
 Route::put('/transactions/{transaction}/complete', [PostTransactionController::class, 'complete'])->name('transactions.complete');
 Route::resource('products', ProductController::class);
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');

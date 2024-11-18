@@ -131,23 +131,35 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="bukaTokoModal" tabindex="-1" aria-labelledby="tokoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-center" id="addressModalLabel">Buka Tokomu</h5>
+                <h5 class="modal-title text-center" id="tokoModalLabel">Buka Tokomu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            </div>
+            <form id="bukaTokoForm" method="POST" action="{{ route('updateRole') }}">
+                @csrf
+                <div class="modal-body">
+                    <p>
+                        Dengan mengubah akun menjadi penjual, Anda menyetujui bahwa:
+                    </p>
+                    <ul>
+                        <li>Anda hanya akan menjual produk makanan yang bebas dari bahan terlarang (Bahan P5).</li>
+                        <li>Data pembelian Anda sebagai user tidak akan bisa diakses lagi setelah menjadi admin (penjual).</li>
+                    </ul>
+                    <p>Apakah Anda setuju dengan ketentuan ini?</p>
+                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Setuju</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 
 <!-- Script untuk Navigasi Antar Step -->
 <script>

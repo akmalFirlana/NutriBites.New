@@ -28,7 +28,10 @@ class Product extends Model
 
     protected $casts = [
         'images' => 'array',
+        'category' => 'array',
+        'photos' => 'array',
     ];
+
 
     public function user()
     {

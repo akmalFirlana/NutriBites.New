@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -30,6 +31,24 @@ class UserController extends Controller
     public function cart()
     {
         return view('cart');
+    }
+
+    public function updateRole(Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+
+        // Periksa apakah user memiliki role 'user'
+        if ($user->usertype === 'user') {
+            // Ubah role menjadi admin
+            $user->usertype = 'admin';
+
+            // Simpan perubahan
+            $user->save();
+
+            return view('admin.dashboard');
+        }
+
+        return redirect()->back()->with('error', 'Perubahan role tidak dapat dilakukan.');
     }
 
 
