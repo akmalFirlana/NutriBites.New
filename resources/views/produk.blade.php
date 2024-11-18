@@ -125,6 +125,13 @@
                             <a class="fw-bold d-flex mb-0" href="#" data-bs-toggle="modal"
                                 data-bs-target="#reportModal"><i class='bx bx-error'></i>laporkan!</a>
                         </div>
+                        @if ($reportCount > 0)
+                            <div class="alert alert-warning mt-4 d-flex">
+                                Produk ini sudah dilaporkan {{ $reportCount }} kali.
+                                <button class="btn btn-link p-0 ms-3" data-bs-toggle="modal" data-bs-target="#reportModal2">Lihat
+                                    Detail</button>
+                            </div>
+                        @endif
                     </div>
                     <hr class="bawah">
                 </div>
@@ -321,10 +328,10 @@
                                     <img src="https://i.pravatar.cc/300?u={{ $discussion->user->id }}" alt="profile"
                                         class="rounded-circle me-2" style="width: 30px; height: 30px;">
                                     <strong class="text-green-900 me-1">{{ $discussion->user->name }}: </strong>
-                                    <span class="text-gray-800"> {{ $discussion->content }}</span>
+                                    <span class="text-gray-800">{!! nl2br(e( $discussion->content)) !!}</span>
                                 </p>
-                                <small
-                                    class="text-gray-500"> {{ $discussion->created_at->format('d M Y, H:i') }}</small>
+                                <small class="text-gray-500">
+                                    {{ $discussion->created_at->format('d M Y, H:i') }}</small>
 
                                 <!-- List Balasan -->
                                 @foreach ($discussion->replies as $reply)
@@ -432,69 +439,80 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="reportForm">
-                        <!-- Jenis Pelanggaran -->
-                        <div class="mb-3 text-medium">
-                            <label class="form-label fw-bold">Pilih kategori pelanggaran yang terjadi pada produk
-                                ini!</label>
-                            <div>
-                                <input type="radio" name="violation_type" value="Palsu" id="fake" required
-                                    class="custom-radio">
-                                <label for="fake">Produk Palsu</label>
-                            </div>
-                            <div>
-                                <input type="radio" name="violation_type" value="Informasi Menyesatkan"
-                                    id="misleading" required class="custom-radio">
-                                <label for="misleading">Informasi Menyesatkan</label>
-                            </div>
-                            <div>
-                                <input type="radio" name="violation_type" value="Produk Berbahaya" id="dangerous"
-                                    required class="custom-radio">
-                                <label for="dangerous">Produk Berbahaya</label>
-                            </div>
-                            <div>
-                                <input type="radio" name="violation_type" value="Lainnya" id="other" required
-                                    class="custom-radio">
-                                <label for="other">Lainnya</label>
-                            </div>
-                        </div>
-
-                        <style>
-                            .custom-radio {
-                                transform: scale(1.3);
-                                margin: 8px;
-                            }
-                        </style>
+                    <form action="{{ route('product.report') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
 
                         <div class="mb-3">
-                            <label for="reason" class="form-label fw-bold">Detail Pelanggaran</label>
-                            <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="proof" class="form-label fw-bold">Bukti (opsional)</label>
-                            <div class="image-upload-wrapper flex flex-col p-2">
-                                <label for="image-upload" class="image-upload-label relative">
-                                    <input type="file" name="photos[]" class="image-upload-input hidden"
-                                        id="image-upload" accept="image/*" onchange="previewImage(event, 0)"
-                                        multiple />
-                                    <div id="preview-0"
-                                        class="upload-placeholder w-24 h-24 border border-dashed border-gray-300 rounded flex justify-center items-center">
-                                        <i class='bx bx-plus text-gray-400 text-2xl'></i>
-                                    </div>
-                                </label>
+                            <label for="reason" class="form-label">Alasan Laporan:</label>
+                            <div>
+                                <label><input type="radio" name="reason" value="Produk tidak sesuai" required>
+                                    Produk tidak sesuai</label><br>
+                                <label><input type="radio" name="reason" value="Produk rusak"> Produk
+                                    rusak</label><br>
+                                <label><input type="radio" name="reason" value="Produk ilegal"> Produk
+                                    ilegal</label><br>
+                                <label><input type="radio" name="reason" value="Lainnya"> Lainnya</label>
                             </div>
                         </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="honesty" required>
-                            <label class="form-check-label text-sm" for="honesty">Saya dengan ini menyatakan bahwa
-                                segala informasi yang dilaporkan memang benar.</label>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Gambar Bukti (Opsional):</label>
+                            <input type="file" class="form-control" name="image" accept="image/*">
                         </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Deskripsi:</label>
+                            <textarea name="description" class="form-control" rows="4" placeholder="Jelaskan lebih detail..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Kirim Laporan</button>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" form="reportForm" class="btn btn-primary">Kirim</button>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="reportModal2" tabindex="-1" aria-labelledby="reportModal2Label"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">Detail Laporan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-s align-middle">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Pelapor</th>
+                                <th>Alasan</th>
+                                <th>Deskripsi</th>
+                                <th>Gambar</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($productReports as $index => $report)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $report->user->name }}</td>
+                                    <td>{{ $report->reason }}</td>
+                                    <td>{{ $report->description }}</td>
+                                    <td>
+                                        @if ($report->image)
+                                            <a href="{{ asset('storage/' . $report->image) }}"
+                                                target="_blank" class="text-primary underline">Lihat</a>
+                                        @else
+                                            Tidak Ada
+                                        @endif
+                                    </td>
+                                    <td>{{ $report->created_at->format('d M Y, H:i') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -106,7 +106,7 @@
                     </div>
 
                     <div class="text-center">
-                        <button class="bg-green-500 text-white rounded-full px-6 py-2 font-semibold">Terapkan</button>
+                        <button class="bg-green-500 text-white rounded-md px-6 py-2 font-semibold">Terapkan</button>
                     </div>
                 </div>
             </form>

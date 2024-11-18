@@ -15,9 +15,9 @@ use App\Http\Controllers\PostTransactionController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\DiscussionReplyController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ProductReportController;
 
-Route::post('/reports', [ReportController::class, 'store'])->name('report.store');
+Route::post('/product-report', [ProductReportController::class, 'store'])->middleware('auth')->name('product.report');
 
 Route::post('/product/{productId}/discussion', [DiscussionController::class, 'store'])->name('discussion.store');
 Route::post('/discussion/{discussionId}/reply', [DiscussionReplyController::class, 'store'])->name('discussion.reply');

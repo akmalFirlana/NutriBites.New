@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Review;
 use App\Http\Controllers\ReviewController;
-
+use App\Models\ProductReport;
 
 
 class ProductController extends Controller
@@ -112,61 +112,58 @@ class ProductController extends Controller
 
 
     public function update(Request $request, Product $product)
-{
-    // Ensure only the owner can update the product
-    if ($product->user_id != auth()->id()) {
-        abort(403, 'Unauthorized action.');
-    }
-
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'stock' => 'required|integer',
-        'price' => 'required|numeric',
-        'category' => 'required|array', // Validasi kategori sebagai array
-        'description' => 'nullable|string',
-        'nutrition_info' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,xlsx',
-        'images' => 'nullable|array', // Foto sebagai array
-        'shelf_life' => 'nullable|integer',
-        'weight' => 'nullable|numeric',
-        'shipping_address_id' => 'nullable|exists:user_addresses,id',
-        'bpom_license' => 'nullable|string',
-        'sold' => 'nullable|integer',
-        'rating' => 'nullable|numeric',
-        'composition' => 'nullable|string'
-    ]);
-
-    // Update product attributes
-    $product->update([
-        'name' => $request->name,
-        'stock' => $request->stock,
-        'price' => $request->price,
-        'description' => $request->description,
-        'category' => implode(',', $request->category), // Simpan kategori sebagai VARCHAR
-        'shelf_life' => $request->shelf_life,
-        'weight' => $request->weight,
-        'shipping_address_id' => $request->shipping_address_id,
-        'bpom_license' => $request->bpom_license,
-        'sold' => $request->input('sold', $product->sold),
-        'rating' => $request->rating,
-        'composition' => $request->composition,
-    ]);
-
-    // Menyimpan data foto sebagai JSON
-    if ($request->hasFile('images')) {
-        $images = [];
-        foreach ($request->file('images') as $image) {
-            $images[] = $image->store('product_images', 'public');
+    {
+        // Ensure only the owner can update the product
+        if ($product->user_id != auth()->id()) {
+            abort(403, 'Unauthorized action.');
         }
-        $product->images = json_encode($images); // Mengonversi array gambar menjadi JSON
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'stock' => 'required|integer',
+            'price' => 'required|numeric',
+            'category' => 'required|array', // Validasi kategori sebagai array
+            'description' => 'nullable|string',
+            'nutrition_info' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,xlsx',
+            'images' => 'nullable|array', // Foto sebagai array
+            'shelf_life' => 'nullable|integer',
+            'weight' => 'nullable|numeric',
+            'shipping_address_id' => 'nullable|exists:user_addresses,id',
+            'bpom_license' => 'nullable|string',
+            'sold' => 'nullable|integer',
+            'rating' => 'nullable|numeric',
+            'composition' => 'nullable|string'
+        ]);
+
+        // Update product attributes
+        $product->update([
+            'name' => $request->name,
+            'stock' => $request->stock,
+            'price' => $request->price,
+            'description' => $request->description,
+            'category' => implode(',', $request->category), // Simpan kategori sebagai VARCHAR
+            'shelf_life' => $request->shelf_life,
+            'weight' => $request->weight,
+            'shipping_address_id' => $request->shipping_address_id,
+            'bpom_license' => $request->bpom_license,
+            'sold' => $request->input('sold', $product->sold),
+            'rating' => $request->rating,
+            'composition' => $request->composition,
+        ]);
+
+        // Menyimpan data foto sebagai JSON
+        if ($request->hasFile('images')) {
+            $images = [];
+            foreach ($request->file('images') as $image) {
+                $images[] = $image->store('product_images', 'public');
+            }
+            $product->images = json_encode($images); // Mengonversi array gambar menjadi JSON
+        }
+
+        $product->save();
+
+        return redirect()->route('admin.produk')->with('success', 'Produk berhasil diperbarui.');
     }
-
-    $product->save();
-
-    return redirect()->route('admin.produk')->with('success', 'Produk berhasil diperbarui.');
-}
-
-
-
 
     public function destroy(Product $product)
     {
@@ -190,6 +187,13 @@ class ProductController extends Controller
         $product = Product::with('discussions.replies.user', 'reviews.user')->findOrFail($id); // Include diskusi, balasan, dan user
         $user = auth()->user();
 
+        $productReports = ProductReport::with('user')
+            ->where('product_id', $product->id)
+            ->get();
+
+        $reportCount = $productReports->count();
+
+
         $hasPurchased = $user->postTransactions()
             ->where('product_id', $product->id)
             ->where('status', 'completed') // Sesuaikan dengan status transaksi selesai
@@ -201,7 +205,7 @@ class ProductController extends Controller
 
         $discussions = $product->discussions()->with('user', 'replies.user')->get(); // Ambil diskusi dan balasan
 
-        return view('produk', compact('product', 'hasPurchased', 'reviews', 'usersCount', 'averageRating', 'discussions'));
+        return view('produk', compact('product', 'hasPurchased','productReports', 'reportCount', 'reviews', 'usersCount', 'averageRating', 'discussions'));
     }
 
 
@@ -213,25 +217,25 @@ class ProductController extends Controller
         // Filter berdasarkan kategori
         if ($request->has('kategori') && !empty($request->kategori)) {
             $selectedCategories = $request->kategori;
-    
+
             $query->where(function ($q) use ($selectedCategories) {
                 foreach ($selectedCategories as $category) {
                     $q->orWhere('category', 'LIKE', "%$category%");
                 }
             });
         }
-    
+
         // Filter berdasarkan harga
         if ($request->has('harga_min') && $request->harga_min) {
             $query->where('price', '>=', $request->harga_min);
         }
-    
+
         if ($request->has('harga_max') && $request->harga_max) {
             $query->where('price', '<=', $request->harga_max);
         }
-    
+
         $products = $query->get(); // Ambil produk yang sudah difilter
-    
+
         return view('kategori', compact('products'));
     }
 
