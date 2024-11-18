@@ -92,26 +92,25 @@ class PostTransactionController extends Controller
 
 
     public function complete($id)
-{
-    $transaction = PostTransaction::findOrFail($id);
+    {
+        $transaction = PostTransaction::findOrFail($id);
 
-    // Pastikan transaksi belum diselesaikan
-    if ($transaction->status !== 'completed') {
-        // Ambil produk terkait
-        $product = Product::findOrFail($transaction->product_id);
+        if ($transaction->status !== 'completed') {
+            // Ambil produk terkait
+            $product = Product::findOrFail($transaction->product_id);
 
-        // Update stok dan sales produk
-        $product->update([
-            'stock' => $product->stock - $transaction->quantity,
-            'sold' => $product->sold + $transaction->quantity,
-        ]);
+            // Update stok dan sales produk
+            $product->update([
+                'stock' => $product->stock - $transaction->quantity,
+                'sold' => $product->sold + $transaction->quantity,
+            ]);
 
-        // Update status transaksi
-        $transaction->update(['status' => 'completed']);
+            // Update status transaksi
+            $transaction->update(['status' => 'completed']);
+        }
+
+        return redirect()->back()->with('success', 'Pesanan berhasil diselesaikan.');
     }
-
-    return redirect()->back()->with('success', 'Pesanan berhasil diselesaikan.');
-}
 
 
     public function cancel($id)
@@ -125,9 +124,62 @@ class PostTransactionController extends Controller
     }
 
     public function pembelian()
-{
-    $transactions = PostTransaction::with('product')->where('user_id', auth()->id())->get();
-    return view('pesanan', compact('transactions'));
-}
-    
+    {
+        $transactions = PostTransaction::with('product')->where('user_id', auth()->id())->get();
+        return view('pesanan', compact('transactions'));
+    }
+
+    public function dashboard()
+    {
+        $userId = auth()->id(); // ID penjual yang sedang login
+
+        // Total Pesanan
+        $totalOrders = PostTransaction::whereHas('product', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->count();
+
+        // Pesanan Dalam Pengiriman
+        $inShipping = PostTransaction::whereHas('product', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->where('status', 'shipped')->count();
+
+        // Pesanan Selesai
+        $completedOrders = PostTransaction::whereHas('product', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->where('status', 'completed')->count();
+
+        // Total Pemasukan
+        $completedTransactions = PostTransaction::whereHas('product', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->where('status', 'completed')->get();
+
+        $totalEarnings = $completedTransactions->sum(function ($transaction) {
+            return $transaction->total_price + $transaction->shipping_cost;
+        });
+
+        $recentOrders = PostTransaction::whereHas('product', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->latest()->take(10)->get();
+
+        $salesData = PostTransaction::whereHas('product', function ($query) use ($userId) {
+            $query->where('user_id', $userId); // Filter berdasarkan penjual
+        })
+            ->where('status', 'completed') // Hanya transaksi yang selesai
+            ->selectRaw('MONTH(transaction_time) as month, DAY(transaction_time) as day, SUM(total_price + shipping_cost) as total_sales') // Total pendapatan per bulan dan tanggal
+            ->groupBy('month', 'day') // Mengelompokkan berdasarkan bulan dan tanggal
+            ->orderByRaw('month, day') // Urutkan berdasarkan bulan dan tanggal
+            ->get();
+
+        $dataPoints = $salesData->map(function ($item) {
+            // Mengonversi bulan dan tanggal menjadi timestamp
+            $timestamp = strtotime("2024-{$item->month}-{$item->day}") * 1000; // Gunakan tahun acuan jika perlu (misalnya 2024)
+            return ['x' => $timestamp, 'y' => $item->total_sales];
+        })->toArray();
+
+
+
+        return view('admin.dashboard', compact('totalOrders', 'inShipping', 'completedOrders', 'totalEarnings', 'recentOrders', 'dataPoints'));
+    }
+
+
 }

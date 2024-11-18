@@ -111,47 +111,58 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, Product $product)
-    {
-        // Ensure only the owner can update the product
-        if ($product->user_id != auth()->id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'stock' => 'required|integer',
-            'price' => 'required|numeric',
-            'category' => 'required|string',
-            'description' => 'nullable|string',
-            'nutrition_info' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,xlsx',
-            'photos.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg',
-            'shelf_life' => 'nullable|integer',
-            'weight' => 'nullable|numeric',
-            'shipping_address_id' => 'nullable|exists:user_addresses,id'
-        ]);
-
-        $product->update([
-            'name' => $request->name,
-            'stock' => $request->stock,
-            'price' => $request->price,
-            'category' => $request->category,
-            'description' => $request->description,
-            'shelf_life' => $request->shelf_life,
-            'weight' => $request->weight,
-            'shipping_address_id' => $request->shipping_address_id
-        ]);
-
-        // Update nutrition info if exists
-        if ($request->hasFile('nutrition_info')) {
-            $product->nutrition_info = $request->file('nutrition_info')->store('nutrition_info', 'public');
-        }
-
-        // Update photos
-        $this->storeProductPhotos($request, $product);
-
-        $product->save();
-        return redirect()->route('admin.produk')->with('success', 'Produk berhasil diperbarui');
+{
+    // Ensure only the owner can update the product
+    if ($product->user_id != auth()->id()) {
+        abort(403, 'Unauthorized action.');
     }
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'stock' => 'required|integer',
+        'price' => 'required|numeric',
+        'category' => 'required|array',
+        'description' => 'nullable|string',
+        'nutrition_info' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,xlsx',
+        'photos.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg',
+        'shelf_life' => 'nullable|integer',
+        'weight' => 'nullable|numeric',
+        'shipping_address_id' => 'nullable|exists:user_addresses,id',
+        'bpom_license' => 'nullable|string',
+        'sold' => 'nullable|integer',
+        'rating' => 'nullable|numeric',
+        'composition' => 'nullable|string'
+    ]);
+
+    // Update product attributes
+    $product->update([
+        'name' => $request->name,
+        'stock' => $request->stock,
+        'price' => $request->price,
+        'description' => $request->description,
+        'category' => implode(',', $request->category),
+        'shelf_life' => $request->shelf_life,
+        'weight' => $request->weight,
+        'shipping_address_id' => $request->shipping_address_id,
+        'bpom_license' => $request->bpom_license,
+        'sold' => $request->input('sold', $product->sold), // Default ke nilai saat ini
+        'rating' => $request->rating,
+        'composition' => $request->composition
+    ]);
+
+    // Update nutrition info if exists
+    if ($request->hasFile('nutrition_info')) {
+        $product->nutrition_info = $request->file('nutrition_info')->store('nutrition_info', 'public');
+    }
+
+    // Update photos
+    $this->storeProductPhotos($request, $product);
+
+    $product->save();
+
+    return redirect()->route('admin.produk')->with('success', 'Produk berhasil diperbarui.');
+    }
+
 
     public function destroy(Product $product)
     {

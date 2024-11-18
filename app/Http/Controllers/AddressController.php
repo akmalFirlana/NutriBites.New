@@ -45,7 +45,7 @@ class AddressController extends Controller
         ]);
     }
 
-    // Show form for adding a new address
+
     public function create()
     {
         $provinces = Alamat::select('prov_id', 'prov_name')->distinct()->get(); 
@@ -87,8 +87,6 @@ class AddressController extends Controller
             return redirect()->back()->with('error', 'Gagal menambahkan alamat: ' . $e->getMessage());
         }
     }
-
-
 
     public function getCities($provinceId)
     {

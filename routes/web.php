@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\PostTransaction;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
@@ -65,7 +66,7 @@ Route::middleware(['auth', 'userMiddleware'])->group(function () {
 
 Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::get('/gudang', [AddressController::class, 'admin'])->name('gudang');
-    Route::get('/adminDB', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/adminDB', [PostTransactionController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/Admin/Upload', [AddressController::class, 'upload'])->name('admin.upload');
     Route::get('/Admin/Produk', [AdminController::class, 'produk'])->name('admin.produk');
     Route::get('/Admin/Pesan', [AdminController::class, 'pesan'])->name('admin.pesan');

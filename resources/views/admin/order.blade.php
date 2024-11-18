@@ -32,7 +32,7 @@
                                 </td>
                                 <td class="px-6 py-4"
                                     style="word-wrap: break-word;
-                                    max-width: 150px;">
+                                    max-width: 250px;">
                                     {{ $transaction->full_address ?? 'Alamat tidak ditemukan' }}
                                 </td>
                                 <td class="px-6 py-4">
@@ -47,7 +47,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="inline-block px-3 py-1 rounded-full text-xs font-semibold text-white cursor-pointer
+                                        class="inline-block px-3 py-1 rounded-md text-xs font-semibold text-white cursor-pointer
                                         {{ strtolower($transaction->status) === 'completed' ? 'bg-green-500' : '' }}
                                         {{ strtolower($transaction->status) === 'pending' ? 'bg-yellow-500' : '' }}
                                         {{ strtolower($transaction->status) === 'confirmed' ? 'bg-blue-500' : '' }}
