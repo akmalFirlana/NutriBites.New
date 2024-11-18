@@ -12,6 +12,12 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostTransactionController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\DiscussionReplyController;
+
+Route::post('/product/{productId}/discussion', [DiscussionController::class, 'store'])->name('discussion.store');
+Route::post('/discussion/{discussionId}/reply', [DiscussionReplyController::class, 'store'])->name('discussion.reply');
+
 
 Route::post('/payment/get-snap-token', [PaymentController::class, 'getSnapToken'])->name('payment.get-snap-token');
 Route::post('/payment/notification', [PaymentController::class, 'notificationHandler'])->name('payment.notification');

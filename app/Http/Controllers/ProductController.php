@@ -128,7 +128,6 @@ class ProductController extends Controller
             'shelf_life' => 'nullable|integer',
             'weight' => 'nullable|numeric',
             'shipping_address_id' => 'nullable|exists:user_addresses,id'
-            
         ]);
 
         $product->update([
@@ -173,22 +172,23 @@ class ProductController extends Controller
 
     public function detail($id)
 {
-    $product = Product::findOrFail($id);
+    $product = Product::with('discussions.replies.user', 'reviews.user')->findOrFail($id); // Include diskusi, balasan, dan user
     $user = auth()->user();
     
-    $hasPurchased = auth()->user()
-    ->postTransactions()
-    ->where('product_id', $product->id)
-    ->where('status', 'completed') // Sesuaikan dengan status transaksi selesai
-    ->exists();
+    $hasPurchased = $user->postTransactions()
+        ->where('product_id', $product->id)
+        ->where('status', 'completed') // Sesuaikan dengan status transaksi selesai
+        ->exists();
 
     $reviews = $product->reviews; // Relasi ke model Review
     $usersCount = $reviews->unique('user_id')->count();
     $averageRating = $reviews->avg('rating');
 
+    $discussions = $product->discussions()->with('user', 'replies.user')->get(); // Ambil diskusi dan balasan
 
-    return view('produk', compact('product', 'hasPurchased','reviews', 'usersCount', 'averageRating'));
+    return view('produk', compact('product', 'hasPurchased', 'reviews', 'usersCount', 'averageRating', 'discussions'));
 }
+
 
 
     public function kategori()

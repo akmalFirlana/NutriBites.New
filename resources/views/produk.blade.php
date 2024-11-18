@@ -46,7 +46,7 @@
                             <span class="badge bg-success ms-2 me-2">Terjual {{ $product->sold }}</span> |
                             <i class='bx bxs-star ms-2' style='color:#d0e12b'></i>
                             <span class="font-semibold text-gray-700">
-                                 {{ number_format($averageRating, 1, ',', '.') }} ({{ $reviews->count() }} Ulasan)
+                                {{ number_format($averageRating, 1, ',', '.') }} ({{ $reviews->count() }} Ulasan)
                             </span>
                         </div>
 
@@ -302,54 +302,57 @@
                     </div>
 
                     <div id="faqs" class="tab-content">
-                        <div class="ulasan-header">
-                            <h2>Pertanyaan <span class="text-muted fs-6">(12)</span></h2>
+                        <h2>Pertanyaan</h2>
 
-                        </div>
-                        <div class="faq-ulasan row justify-content-around">
-                            <div class="card-ulasan border rounded-lg px-6 py-4 mb-6 bg-white shadow-md">
-                                <!-- User Comment Section -->
-                                <div class="d-flex items-center mb-3">
-                                    <i class='bx bxs-user-circle text-blue-500' style='font-size:28px;'></i>
-                                    <h1 class="text-lg font-bold mx-2 flex items-center">Samantha D.
-                                        <i class="bx bxs-check-circle text-green-500 ml-1"></i>
-                                    </h1>
-                                </div>
-                                <p class="text-gray-700 mb-2">"Apakah bahan kaos ini mudah rusak setelah dicuci
-                                    beberapa
-                                    kali?"</p>
-                                <p class="text-gray-500 font-semibold text-sm">Posted on August 14, 2023</p>
+                        <form method="POST" action="{{ route('discussion.store', $product->id) }}" class="mb-5">
+                            @csrf
+                            <textarea name="content" placeholder="Tulis pertanyaan..." required
+                                class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <button type="submit"
+                                class="btn btn-outline-success font-semibold py-2 px-6 rounded hover:bg-blue-600 mt-2 focus:outline-none">
+                                Kirim Pertanyaan
+                            </button>
+                        </form>
 
-                                <!-- Seller Reply Section -->
-                                <div class="d-flex items-center mt-6 mb-2 ml-6">
-                                    <i class='bx bxs-store text-blue-500' style='font-size:28px;'></i>
-                                    <h1 class="text-lg font-bold mx-2 flex items-center">Penjual
-                                        <i class="bx bxs-check-circle text-green-500 ml-1"></i>
-                                    </h1>
-                                </div>
-                                <p class="text-gray-500 ml-8 mb-3">"Terima kasih atas pertanyaannya. Bahan kaos ini
-                                    sangat tahan lama dan tidak mudah rusak bahkan setelah dicuci berkali-kali. Pastikan
-                                    mencuci dengan air dingin dan jangan menggunakan pemutih untuk menjaga kualitas
-                                    bahan."</p>
-                                <a href="#" class="text-blue-500 font-bold ml-8 mb-4 inline-block">Lihat Lebih
-                                    Banyak</a>
+                        <!-- List Diskusi -->
+                        @foreach ($discussions as $discussion)
+                            <div class="discussion border border-gray-200 p-4 my-3 rounded-md bg-white shadow-md">
+                                <p class="mb-2 flex items-center">
+                                    <img src="https://i.pravatar.cc/300?u={{ $discussion->user->id }}" alt="profile"
+                                        class="rounded-circle me-2" style="width: 30px; height: 30px;">
+                                    <strong class="text-green-900 me-1">{{ $discussion->user->name }}: </strong>
+                                    <span class="text-gray-800"> {{ $discussion->content }}</span>
+                                </p>
+                                <small
+                                    class="text-gray-500"> {{ $discussion->created_at->format('d M Y, H:i') }}</small>
 
-                                <!-- Text Input Section -->
-                                <div class="mt-4">
-                                    <input type="text" placeholder="Tulis balasan..."
-                                        class="border border-gray-300 rounded-md w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <div class="flex justify-end mt-2">
-                                        <button
-                                            class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none">
-                                            Kirim
-                                        </button>
+                                <!-- List Balasan -->
+                                @foreach ($discussion->replies as $reply)
+                                    <div class="reply pl-4 mt-3 border-l-2 border-green-500">
+                                        <p class="mb-2">
+                                            <strong class="text-green-500">{{ $reply->user->name }}:</strong>
+                                            <span class="text-gray-700">{{ $reply->content }}</span>
+                                        </p>
+                                        <small
+                                            class="text-gray-500">{{ $reply->created_at->format('d M Y, H:i') }}</small>
                                     </div>
-                                </div>
+                                @endforeach
+
+                                <!-- Form Balasan -->
+                                <form method="POST" action="{{ route('discussion.reply', $discussion->id) }}"
+                                    class="mt-4">
+                                    @csrf
+                                    <textarea name="content" placeholder="Tulis balasan..." required
+                                        class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                    <button type="submit"
+                                        class="bg-green-500 text-white font-semibold py-2 px-6 rounded hover:bg-green-600 mt-2 focus:outline-none">
+                                        Kirim Balasan
+                                    </button>
+                                </form>
                             </div>
-
-
-                        </div>
+                        @endforeach
                     </div>
+
                 </div>
             </div>
         </div>
