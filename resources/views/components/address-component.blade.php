@@ -43,7 +43,7 @@
                 <h5 class="modal-title font-semibold text-lg" id="addAddressModalLabel">Tambah Alamat</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <!-- Body Modal (Multi-Halaman) -->
             <form id="addressForm" action="{{ route('user.addresses.store') }}" method="POST">
                 @csrf
@@ -51,15 +51,20 @@
                     <!-- Step Progress -->
                     <div class="flex justify-around mb-2">
                         <div class="flex items-center space-x-2">
-                            <div class="rounded-full w-8 h-8 bg-green-500 text-white flex items-center justify-center">1</div>
+                            <div class="rounded-full w-8 h-8 bg-green-500 text-white flex items-center justify-center">1
+                            </div>
                             <span>Informasi Kontak</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <div class="rounded-full w-8 h-8 bg-gray-300 text-gray-700 flex items-center justify-center">2</div>
+                            <div
+                                class="rounded-full w-8 h-8 bg-gray-300 text-gray-700 flex items-center justify-center">
+                                2</div>
                             <span>Lokasi</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <div class="rounded-full w-8 h-8 bg-gray-300 text-gray-700 flex items-center justify-center">3</div>
+                            <div
+                                class="rounded-full w-8 h-8 bg-gray-300 text-gray-700 flex items-center justify-center">
+                                3</div>
                             <span>Detail Alamat</span>
                         </div>
                     </div>
@@ -73,7 +78,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="recipient_name" class="form-label">Nama Penerima</label>
-                            <input type="text" class="form-control" id="recipient_name" name="recipient_name" required>
+                            <input type="text" class="form-control" id="recipient_name" name="recipient_name"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="phone_number" class="form-label">Nomor Telepon</label>
@@ -88,7 +94,7 @@
                             <label for="province" class="form-label">Provinsi</label>
                             <select id="province" name="province_id" class="form-select" required>
                                 <option value="">Pilih Provinsi</option>
-                                @foreach($provinces as $province)
+                                @foreach ($provinces as $province)
                                     <option value="{{ $province->prov_id }}">{{ $province->prov_name }}</option>
                                 @endforeach
                             </select>
@@ -123,8 +129,10 @@
 
                 <!-- Footer Modal -->
                 <div class="modal-footer justify-between">
-                    <button type="button" class="btn btn-secondary" id="prevBtn" onclick="prevStep()">Sebelumnya</button>
-                    <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">Selanjutnya</button>
+                    <button type="button" class="btn btn-secondary" id="prevBtn"
+                        onclick="prevStep()">Sebelumnya</button>
+                    <button type="button" class="btn btn-primary" id="nextBtn"
+                        onclick="nextStep()">Selanjutnya</button>
                     <button type="submit" class="btn btn-success hidden" id="submitBtn">Simpan Alamat</button>
                 </div>
             </form>
@@ -140,17 +148,25 @@
             </div>
             <form id="bukaTokoForm" method="POST" action="{{ route('updateRole') }}">
                 @csrf
-                <div class="modal-body">
-                    <p>
+                <div class="modal-body bg-white rounded-lg p-6">
+                    <p class="text-gray-800 text-base font-medium">
                         Dengan mengubah akun menjadi penjual, Anda menyetujui bahwa:
                     </p>
-                    <ul>
-                        <li>Anda hanya akan menjual produk makanan yang bebas dari bahan terlarang (Bahan P5).</li>
-                        <li>Data pembelian Anda sebagai user tidak akan bisa diakses lagi setelah menjadi admin (penjual).</li>
+                    <ul class="list-disc list-inside mt-4 text-gray-700 text-sm space-y-2">
+                        <li>- Produk yang dijual harus bebas dari bahan P5 (Pengawet, Pewarna, Pemanis, Penyedap, dan
+                            Penambah buatan).</li>
+                        <li>- Riwayat pembelian sebagai user tidak lagi dapat diakses setelah akun menjadi penjual.</li>
+                        <li>- Informasi produk harus akurat, termasuk bahan, berat, dan masa kadaluarsa.</li>
+                        <li>- Produk harus dikemas dengan aman dan dikirim tepat waktu.</li>
+                        <li>- Pelanggaran dapat berakibat pembekuan atau penutupan akun.</li>
                     </ul>
-                    <p>Apakah Anda setuju dengan ketentuan ini?</p>
+                    <p class="mt-4 text-gray-800 text-sm">
+                        Dengan melanjutkan proses ini, Anda menyetujui semua ketentuan di atas dan bersedia menerima
+                        sanksi jika ditemukan pelanggaran.
+                    </p>
                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">Setuju</button>
@@ -177,7 +193,7 @@
         document.getElementById('prevBtn').style.display = (step === 1) ? 'none' : 'inline-block';
         document.getElementById('nextBtn').style.display = (step === 3) ? 'none' : 'inline-block';
         document.getElementById('submitBtn').style.display = (step === 3) ? 'inline-block' : 'none';
-        
+
         // Mengubah tampilan step progress
         document.querySelectorAll('.modal-body .flex .w-8').forEach((circle, index) => {
             if (index + 1 <= step) {
@@ -204,65 +220,66 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         showStep(currentStep);
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-            // Perubahan pada Provinsi
-            document.getElementById('province').addEventListener('change', function () {
-                let provinceId = this.value;
-                let citySelect = document.getElementById('city');
-                let districtSelect = document.getElementById('district');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Perubahan pada Provinsi
+        document.getElementById('province').addEventListener('change', function() {
+            let provinceId = this.value;
+            let citySelect = document.getElementById('city');
+            let districtSelect = document.getElementById('district');
 
-                citySelect.disabled = true;
-                districtSelect.disabled = true;
-                districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+            citySelect.disabled = true;
+            districtSelect.disabled = true;
+            districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
 
-                fetch(`/get-cities/${provinceId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        citySelect.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
-                        data.forEach(city => {
-                            citySelect.innerHTML += `<option value="${city.city_id}">${city.city_name}</option>`;
-                        });
-                        citySelect.disabled = false;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching cities:', error);
+            fetch(`/get-cities/${provinceId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    citySelect.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
+                    data.forEach(city => {
+                        citySelect.innerHTML +=
+                            `<option value="${city.city_id}">${city.city_name}</option>`;
                     });
-            });
-
-            // Perubahan pada Kota
-            document.getElementById('city').addEventListener('change', function () {
-                let cityId = this.value;
-                let districtSelect = document.getElementById('district');
-
-                districtSelect.disabled = true;
-
-                fetch(`/get-districts/${cityId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
-                        data.forEach(district => {
-                            districtSelect.innerHTML += `<option value="${district.dis_id}">${district.dis_name}</option>`;
-                        });
-                        districtSelect.disabled = false;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching districts:', error);
-                    });
-            });
+                    citySelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error fetching cities:', error);
+                });
         });
 
+        // Perubahan pada Kota
+        document.getElementById('city').addEventListener('change', function() {
+            let cityId = this.value;
+            let districtSelect = document.getElementById('district');
+
+            districtSelect.disabled = true;
+
+            fetch(`/get-districts/${cityId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+                    data.forEach(district => {
+                        districtSelect.innerHTML +=
+                            `<option value="${district.dis_id}">${district.dis_name}</option>`;
+                    });
+                    districtSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error fetching districts:', error);
+                });
+        });
+    });
 </script>
