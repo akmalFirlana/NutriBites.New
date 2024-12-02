@@ -22,6 +22,7 @@
 </head>
 
 <body>
+    
     <nav x-data="{ open: false }" class="bg-white border-b border-gray-100 fixed-top">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -430,7 +431,7 @@
             NutriBites © 2024, All Rights Reserved
         </div>
     </footer>
-    <x-address-component />
+    < />
 
     <script>
         function startCountdown() {

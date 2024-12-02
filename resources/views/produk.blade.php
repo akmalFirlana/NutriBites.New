@@ -98,7 +98,7 @@
                                     <span
                                         class="fw-bold">{{ ucwords(strtolower($product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span>
                                 </p>
-                                <div class="btn fw-bold mx-3 border-success w-72 my-3">
+                                <div class="btn fw-bold mx-3 border-success w-72 my-3" onclick="window.location.href = '{{ route('store.show', ['user_id' => $product->user_id]) }}';">
                                     <a href="{{ route('store.show', ['user_id' => $product->user_id]) }}"
                                         class="text-decoration-none text-dark">
                                         Kunjungi Toko
@@ -452,6 +452,8 @@
                                     rusak</label><br>
                                 <label><input type="radio" name="reason" value="Produk ilegal"> Produk
                                     ilegal</label><br>
+                                    <label><input type="radio" name="reason" value="Produk ilegal"> Produk
+                                        Mengandung P5</label><br>
                                 <label><input type="radio" name="reason" value="Lainnya"> Lainnya</label>
                             </div>
                         </div>

@@ -55,8 +55,7 @@
                         <img class="logo-img" src="{{ asset('image/NutriBites.svg') }}" style="width: 120px;"
                             alt="Logok">
                         <p style="color: #606060; font-size: 14px; max-width: 200px" class="mt-4">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Molestiae modi cum ipsam ad.
+                            Pilihan Tepat Untuk Gaya Hidup Sehat 
                         </p>
 
                         <div class="mt-4 d-flex">
