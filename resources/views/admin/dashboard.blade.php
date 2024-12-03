@@ -67,7 +67,7 @@
 
 
                     <div class="container pt-2 pb-4 m-2">
-                        <p class="fs-5 fw-bold mx-3">pendapatan bulan ini</p>
+                        <p class="fs-5 fw-bold mx-3">Pendapatan bulan ini</p>
                         <canvas id="salesChart" style="height: 350px; width: 100%;"></canvas>
                     </div>
                     <div class="container mt-2 mx-2 mb-20">
@@ -85,7 +85,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($recentOrders as $order)
-                                    <tr>
+                                    <tr class="text-sm" >
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 @php

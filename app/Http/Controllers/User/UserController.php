@@ -36,8 +36,6 @@ class UserController extends Controller
     public function updateRole(Request $request)
     {
         $user = User::findOrFail($request->user_id);
-
-        // Periksa apakah user memiliki role 'user'
         if ($user->usertype === 'user') {
             // Ubah role menjadi admin
             $user->usertype = 'admin';

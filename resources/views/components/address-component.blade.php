@@ -176,8 +176,6 @@
     </div>
 </div>
 
-
-<!-- Script untuk Navigasi Antar Step -->
 <script>
     let currentStep = 1;
 

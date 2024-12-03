@@ -149,14 +149,13 @@
                                                             </button>
                                                             <ul id="dropdownMenu"
                                                                 class="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto hidden z-10">
-                                                                @foreach (['Minuman', 'Makanan', 'Kesehatan', 'Snack', 'Jus', 'Suplemen', 'Vitamin', 'Herbal', 'Minuman Serat', 'Minuman Herbal', 'Buah Kering'] as $kategori)
+                                                                @foreach (['Minuman', 'Makanan', 'Kesehatan', 'Snack', 'Jus', 'Suplemen', 'Vitamin', 'Herbal', 'Minuman Serat', 'minuman herbal', 'buah kering'] as $kategori)
                                                                     <li class="px-4 py-2 hover:bg-gray-100">
                                                                         <label class="inline-flex items-center">
                                                                             <input type="checkbox"
                                                                                 class="form-checkbox h-4 w-4 text-indigo-600"
                                                                                 name="category[]"
-                                                                                value="{{ $kategori }}"
-                                                                                {{ in_array($kategori, explode(',', $product->category)) ? 'checked' : '' }}>
+                                                                                value="{{ $kategori }}">
                                                                             <span class="ml-2">📦
                                                                                 {{ ucfirst($kategori) }}</span>
                                                                         </label>
@@ -168,21 +167,17 @@
 
                                                     <!-- JavaScript -->
                                                     <script>
-                                                        document.addEventListener('DOMContentLoaded', function() {
-                                                            const dropdownButton = document.getElementById('dropdownButton');
-                                                            const dropdownMenu = document.getElementById('dropdownMenu');
-
-                                                            dropdownButton.addEventListener('click', function() {
-                                                                // Toggle visibility of the dropdown
-                                                                dropdownMenu.classList.toggle('hidden');
-                                                            });
-
-                                                            // Close dropdown if clicked outside
-                                                            window.addEventListener('click', function(event) {
-                                                                if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                                                                    dropdownMenu.classList.add('hidden');
-                                                                }
-                                                            });
+                                                        const dropdownButton = document.getElementById('dropdownButton');
+                                                        const dropdownMenu = document.getElementById('dropdownMenu');
+                                
+                                                        dropdownButton.addEventListener('click', () => {
+                                                            dropdownMenu.classList.toggle('hidden');
+                                                        });
+                                
+                                                        document.addEventListener('click', (event) => {
+                                                            if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                                                                dropdownMenu.classList.add('hidden');
+                                                            }
                                                         });
                                                     </script>
 
