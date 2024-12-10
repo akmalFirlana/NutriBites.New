@@ -54,16 +54,31 @@ class PostTransactionController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        // Mendapatkan parameter pengurutan dari request
+        $sort = $request->get('sort', 'newest'); // Default ke 'newest'
+
+        // Query untuk transaksi
         $transactions = PostTransaction::with(['product', 'userAddress'])
             ->whereHas('product', function ($query) {
                 $query->where('user_id', auth()->id());
-            })
-            ->get();
+            });
 
+        // Terapkan pengurutan berdasarkan parameter
+        if ($sort === 'newest') {
+            $transactions = $transactions->orderBy('transaction_time', 'desc');
+        } elseif ($sort === 'oldest') {
+            $transactions = $transactions->orderBy('transaction_time', 'asc');
+        }
+
+        // Ambil data dengan paginasi
+        $transactions = $transactions->paginate(10);
+
+        // Kirim data ke view
         return view('admin.order', compact('transactions'));
     }
+
 
     public function confirm($id)
     {

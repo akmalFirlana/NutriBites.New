@@ -2,7 +2,6 @@
 <x-app-penjual>
     <section class="row">
         <h1 class="fw-bold fs-3 mt-2 mb-3 col-md-8">Kelola Produk</h1>
-        <!-- Button to Open the Add Product Modal -->
         <button type="button" class="btn btn-primary mb-3" onclick="window.location='{{ route('admin.upload') }}'">
             Tambah Produk
         </button>
@@ -30,12 +29,12 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-sm">
                     @foreach ($products as $product)
                         @if ($product->user_id == auth()->id())
                             <tr>
                                 <td>@php
-                                    $images = json_decode($product->images, true); // Mengubah JSON menjadi array
+                                    $images = json_decode($product->images, true); 
                                 @endphp
 
                                     @if (!empty($images) && isset($images[0]))
@@ -52,20 +51,16 @@
                                 <td>{{ number_format($product->price, 2) }}</td>
                                 <td>{{ $product->sold }}</td>
                                 <td>
-                                    <!-- Edit Button -->
                                     <button class="btn btn-warning" data-bs-toggle="modal"
                                         data-bs-target="#editProductModal{{ $product->id }}">
                                         <i class='bx bx-edit'></i>
                                     </button>
-                                    <!-- Delete Button -->
                                     <button class="btn btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#deleteProductModal{{ $product->id }}">
                                         <i class='bx bx-trash'></i>
                                     </button>
                                 </td>
                             </tr>
-                            <!-- Edit Product Modal -->
-                            <!-- Modal Edit Produk -->
                             <div class="modal fade" id="editProductModal{{ $product->id }}" tabindex="-1"
                                 aria-labelledby="editProductModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
@@ -144,10 +139,11 @@
                                                         <div class="relative mt-2">
                                                             <button
                                                                 class="w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md shadow-sm focus:outline-none"
-                                                                type="button" id="dropdownButton">
+                                                                type="button"
+                                                                id="dropdownButton{{ $product->id }}">
                                                                 Pilih kategori
                                                             </button>
-                                                            <ul id="dropdownMenu"
+                                                            <ul id="dropdownMenu{{ $product->id }}"
                                                                 class="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto hidden z-10">
                                                                 @foreach (['Minuman', 'Makanan', 'Kesehatan', 'Snack', 'Jus', 'Suplemen', 'Vitamin', 'Herbal', 'Minuman Serat', 'minuman herbal', 'buah kering'] as $kategori)
                                                                     <li class="px-4 py-2 hover:bg-gray-100">
@@ -165,21 +161,23 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- JavaScript -->
                                                     <script>
-                                                        const dropdownButton = document.getElementById('dropdownButton');
-                                                        const dropdownMenu = document.getElementById('dropdownMenu');
-                                
-                                                        dropdownButton.addEventListener('click', () => {
-                                                            dropdownMenu.classList.toggle('hidden');
+                                                        // Dropdown kategori khusus untuk setiap produk
+                                                        const dropdownButton{{ $product->id }} = document.getElementById('dropdownButton{{ $product->id }}');
+                                                        const dropdownMenu{{ $product->id }} = document.getElementById('dropdownMenu{{ $product->id }}');
+
+                                                        dropdownButton{{ $product->id }}.addEventListener('click', () => {
+                                                            dropdownMenu{{ $product->id }}.classList.toggle('hidden');
                                                         });
-                                
+
                                                         document.addEventListener('click', (event) => {
-                                                            if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                                                                dropdownMenu.classList.add('hidden');
+                                                            if (!dropdownButton{{ $product->id }}.contains(event.target) &&
+                                                                !dropdownMenu{{ $product->id }}.contains(event.target)) {
+                                                                dropdownMenu{{ $product->id }}.classList.add('hidden');
                                                             }
                                                         });
                                                     </script>
+
 
                                                     <input type="hidden" name="images[]"
                                                         value="{{ json_encode($product->images) }}">

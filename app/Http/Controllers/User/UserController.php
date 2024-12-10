@@ -34,20 +34,18 @@ class UserController extends Controller
     }
 
     public function updateRole(Request $request)
-    {
-        $user = User::findOrFail($request->user_id);
-        if ($user->usertype === 'user') {
-            // Ubah role menjadi admin
-            $user->usertype = 'admin';
+{
+    $user = User::findOrFail($request->user_id);
 
-            // Simpan perubahan
-            $user->save();
+    if ($user->usertype === 'user') {
+        $user->usertype = 'admin';
+        $user->save();
 
-            return view('admin.dashboard');
-        }
-
-        return redirect()->back()->with('error', 'Perubahan role tidak dapat dilakukan.');
+        return redirect()->route('admin.dashboard')->with('success', 'Role berhasil diubah menjadi admin.');
     }
+
+    return redirect()->back()->with('error', 'Perubahan role tidak dapat dilakukan.');
+}
 
 
 }

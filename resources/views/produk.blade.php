@@ -98,7 +98,8 @@
                                     <span
                                         class="fw-bold">{{ ucwords(strtolower($product->shippingAddress && $product->shippingAddress->kota ? $product->shippingAddress->kota->city_name : 'Kota tidak tersedia')) }}</span>
                                 </p>
-                                <div class="btn fw-bold mx-3 border-success w-72 my-3" onclick="window.location.href = '{{ route('store.show', ['user_id' => $product->user_id]) }}';">
+                                <div class="btn fw-bold mx-3 border-success w-72 my-3"
+                                    onclick="window.location.href = '{{ route('store.show', ['user_id' => $product->user_id]) }}';">
                                     <a href="{{ route('store.show', ['user_id' => $product->user_id]) }}"
                                         class="text-decoration-none text-dark">
                                         Kunjungi Toko
@@ -128,7 +129,8 @@
                         @if ($reportCount > 0)
                             <div class="alert alert-warning mt-4 d-flex">
                                 Produk ini sudah dilaporkan {{ $reportCount }} kali.
-                                <button class="btn btn-link p-0 ms-3" data-bs-toggle="modal" data-bs-target="#reportModal2">Lihat
+                                <button class="btn btn-link p-0 ms-3" data-bs-toggle="modal"
+                                    data-bs-target="#reportModal2">Lihat
                                     Detail</button>
                             </div>
                         @endif
@@ -301,7 +303,12 @@
                                     <hr>
                                 </div>
                             @empty
-                                <p>Belum ada ulasan untuk produk ini.</p>
+                                <div
+                                    class="text-center text-yellow-700 py-4 px-6  mt-3">
+                                    <p class="text-sm font-medium">
+                                        Belum ada ulasan
+                                    </p>
+                                </div>
                             @endforelse
 
                         </div>
@@ -328,7 +335,7 @@
                                     <img src="https://i.pravatar.cc/300?u={{ $discussion->user->id }}" alt="profile"
                                         class="rounded-circle me-2" style="width: 30px; height: 30px;">
                                     <strong class="text-green-900 me-1">{{ $discussion->user->name }}: </strong>
-                                    <span class="text-gray-800">{!! nl2br(e( $discussion->content)) !!}</span>
+                                    <span class="text-gray-800">{!! nl2br(e($discussion->content)) !!}</span>
                                 </p>
                                 <small class="text-gray-500">
                                     {{ $discussion->created_at->format('d M Y, H:i') }}</small>
@@ -430,7 +437,7 @@
     </div>
 
     {{-- ================================================================================================== --}}
-
+    {{-- Modal Report --}}
     <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
@@ -452,8 +459,8 @@
                                     rusak</label><br>
                                 <label><input type="radio" name="reason" value="Produk ilegal"> Produk
                                     ilegal</label><br>
-                                    <label><input type="radio" name="reason" value="Produk ilegal"> Produk
-                                        Mengandung P5</label><br>
+                                <label><input type="radio" name="reason" value="Produk ilegal"> Produk
+                                    Mengandung P5</label><br>
                                 <label><input type="radio" name="reason" value="Lainnya"> Lainnya</label>
                             </div>
                         </div>
@@ -474,7 +481,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
+    <!-- Modal Laporan -->
     <div class="modal fade" id="reportModal2" tabindex="-1" aria-labelledby="reportModal2Label"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -504,8 +511,8 @@
                                     <td>{{ $report->description }}</td>
                                     <td>
                                         @if ($report->image)
-                                            <a href="{{ asset('storage/' . $report->image) }}"
-                                                target="_blank" class="text-primary underline">Lihat</a>
+                                            <a href="{{ asset('storage/' . $report->image) }}" target="_blank"
+                                                class="text-primary underline">Lihat</a>
                                         @else
                                             Tidak Ada
                                         @endif

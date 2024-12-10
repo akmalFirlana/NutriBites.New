@@ -85,7 +85,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($recentOrders as $order)
-                                    <tr class="text-sm" >
+                                    <tr class="text-sm">
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 @php

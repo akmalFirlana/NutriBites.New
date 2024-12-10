@@ -3,7 +3,25 @@
     <main>
         <section class="row">
             <h1 class="fw-bold fs-3 mt-2 mb-3 col-md-8">Kelola Order</h1>
-
+            <div class="col-md-4 d-flex justify-content-end">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Urutkan Pesanan
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'newest']) }}">
+                                Terbaru
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'oldest']) }}">
+                                Terlama
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="relative bg-gray-50 overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -80,7 +98,6 @@
                             <!-- Konten modal akan diisi dengan JavaScript -->
                         </div>
                         <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-primary">Konfirmasi</button>
                         </div>
                     </form>

@@ -1,10 +1,10 @@
 <x-app-layout>
     <section class="row header">
         <!-- Filter Sidebar -->
-        <div class="cont ms-5 col-md-3">
+        <div class="cont ms-3 col-md-3">
             <h1 class="fw-bold fs-3 mb-3 ms-16 pt-24">Filter</h1>
             <form method="GET" action="{{ route('kategori') }}">
-                <div class="border bg-white shadow-sm px-4 py-4 rounded-lg w-[200px] ms-16">
+                <div class="border bg-white shadow-sm px-4 py-4 rounded-lg w-[230px] ms-12">
                     <!-- Dropdown Kategori -->
                     <div class="mb-5">
                         <h5 class="font-semibold text-gray-700 mb-3">Sortir Produk</h5>
@@ -12,7 +12,7 @@
                             <li class="mb-2">
                                 <button class="flex justify-between w-full text-left text-gray-700" type="button"
                                     onclick="toggleDropdown('kategori')">
-                                    Kategori
+                                    Pilih Kategori
                                     <span class="text-gray-400"><i class='bx bx-chevron-down'></i></span>
                                 </button>
                                 <div id="kategori" class="hidden mt-2 ml-4">
