@@ -10,78 +10,62 @@
                         <h5 class="font-semibold text-gray-700 mb-3">Sortir Produk</h5>
                         <ul class="list-none">
                             <li class="mb-2">
-                                <button class="flex justify-between w-full text-left text-gray-700" type="button"
-                                    onclick="toggleDropdown('kategori')">
+                                <button class="flex justify-between w-full text-left text-gray-700 hover:text-indigo-600 transition duration-300 ease-in-out" type="button" onclick="toggleDropdown('kategori')">
                                     Pilih Kategori
                                     <span class="text-gray-400"><i class='bx bx-chevron-down'></i></span>
                                 </button>
                                 <div id="kategori" class="hidden mt-2 ml-4">
-                                    <ul class="space-y-1">
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Minuman" id="minuman"
-                                                class="accent-indigo-500 w-5 h-5" />
+                                    <ul class="">
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Minuman" id="minuman" class="accent-indigo-500 w-5 h-5" />
                                             <label for="minuman" class="text-gray-700 cursor-pointer">Minuman</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Makanan" id="makanan"
-                                                class="accent-indigo-500 w-5 h-5" />
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Makanan" id="makanan" class="accent-indigo-500 w-5 h-5" />
                                             <label for="makanan" class="text-gray-700 cursor-pointer">Makanan</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Kesehatan" id="kesehatan"
-                                                class="accent-indigo-500 w-5 h-5" />
-                                            <label for="kesehatan"
-                                                class="text-gray-700 cursor-pointer">Kesehatan</label>
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Kesehatan" id="kesehatan" class="accent-indigo-500 w-5 h-5" />
+                                            <label for="kesehatan" class="text-gray-700 cursor-pointer">Kesehatan</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Snack" id="snack"
-                                                class="accent-indigo-500 w-5 h-5" />
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Snack" id="snack" class="accent-indigo-500 w-5 h-5" />
                                             <label for="snack" class="text-gray-700 cursor-pointer">Snack</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Jus" id="jus"
-                                                class="accent-indigo-500 w-5 h-5" />
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Jus" id="jus" class="accent-indigo-500 w-5 h-5" />
                                             <label for="jus" class="text-gray-700 cursor-pointer">Jus</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Suplemen" id="suplemen"
-                                                class="accent-indigo-500 w-5 h-5" />
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Suplemen" id="suplemen" class="accent-indigo-500 w-5 h-5" />
                                             <label for="suplemen" class="text-gray-700 cursor-pointer">Suplemen</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Vitamin" id="vitamin"
-                                                class="accent-indigo-500 w-5 h-5" />
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Vitamin" id="vitamin" class="accent-indigo-500 w-5 h-5" />
                                             <label for="vitamin" class="text-gray-700 cursor-pointer">Vitamin</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Herbal" id="herbal"
-                                                class="accent-indigo-500 w-5 h-5" />
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Herbal" id="herbal" class="accent-indigo-500 w-5 h-5" />
                                             <label for="herbal" class="text-gray-700 cursor-pointer">Herbal</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Minuman Serat"
-                                                id="minuman-serat" class="accent-indigo-500 w-5 h-5" />
-                                            <label for="minuman-serat" class="text-gray-700 cursor-pointer">Minuman
-                                                Serat</label>
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Minuman Serat" id="minuman-serat" class="accent-indigo-500 w-5 h-5" />
+                                            <label for="minuman-serat" class="text-gray-700 cursor-pointer">Minuman Serat</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Minuman Herbal"
-                                                id="minuman-herbal" class="accent-indigo-500 w-5 h-5" />
-                                            <label for="minuman-herbal" class="text-gray-700 cursor-pointer">Minuman
-                                                Herbal</label>
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Minuman Herbal" id="minuman-herbal" class="accent-indigo-500 w-5 h-5" />
+                                            <label for="minuman-herbal" class="text-gray-700 cursor-pointer">Minuman Herbal</label>
                                         </li>
-                                        <li class="flex items-center gap-3 hover:bg-gray-50 p-1 rounded-md transition">
-                                            <input type="checkbox" name="kategori[]" value="Buah Kering"
-                                                id="buah-kering" class="accent-indigo-500 w-5 h-5" />
-                                            <label for="buah-kering" class="text-gray-700 cursor-pointer">Buah
-                                                Kering</label>
+                                        <li class="flex items-center gap-3 p-2 hover:bg-indigo-100 rounded-md transition-all duration-200">
+                                            <input type="checkbox" name="kategori[]" value="Buah Kering" id="buah-kering" class="accent-indigo-500 w-5 h-5" />
+                                            <label for="buah-kering" class="text-gray-700 cursor-pointer">Buah Kering</label>
                                         </li>
                                     </ul>
-
                                 </div>
                             </li>
                         </ul>
                     </div>
+                    
 
                     <!-- Filter Harga -->
                     <div>

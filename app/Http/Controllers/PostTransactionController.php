@@ -138,11 +138,39 @@ class PostTransactionController extends Controller
         return response()->json(['message' => 'Pesanan tidak dapat dibatalkan.'], 400);
     }
 
-    public function pembelian()
+    public function pembelian(Request $request)
     {
-        $transactions = PostTransaction::with('product')->where('user_id', auth()->id())->get();
+        $query = PostTransaction::query()->with('product');
+
+        // Filter transaksi milik user
+        $query->where('user_id', auth()->id());
+
+        // Pencarian berdasarkan nama produk
+        if ($request->filled('product_name')) {
+            $query->whereHas('product', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->product_name . '%');
+            });
+        }
+
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Pengurutan berdasarkan waktu
+        $sortBy = $request->get('sort_by', 'latest');
+        if ($sortBy === 'latest') {
+            $query->orderBy('transaction_time', 'desc');
+        } elseif ($sortBy === 'oldest') {
+            $query->orderBy('transaction_time', 'asc');
+        }
+
+        // Ambil data dengan paginasi
+        $transactions = $query->paginate(10);
+
         return view('pesanan', compact('transactions'));
     }
+
 
     public function dashboard()
     {

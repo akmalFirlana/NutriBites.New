@@ -1,17 +1,64 @@
 <x-app-layout>
     <section class="bg-light mt-5">
-        <div class="wish text-center position-fixed w-100">
-            <i class='bx bx-history text-green-600' style='font-size:80px'></i>
-            <h1 class="text-center">Histori Pembelian</h1>
-        </div>
-
         <div class="container pb-5 pt-5">
-            <div class="row pt-40">
-                <div class="col-lg-12 mt-72">
-                    <div class="card border shadow-0">
-                        <div class="m-4">
-                            <h4 class="card-title mb-4">Produk</h4>
+            <div class="col-lg-12">
+                <div class="card border shadow-0">
+                    <div class="m-4">
+                        <h4 class="card-title mb-4">Produk</h4>
+                        <div class="containers my-4 mx-3">
+                            <form method="GET" action="{{ route('pesanan') }}"
+                                class="d-flex flex-wrap justify-content-between align-items-center ">
+                                <!-- Pencarian Nama Produk -->
+                                <div class="form-group"style="width: 300px">
+                                    <label for="product_name" class="form-label fw-bold">Cari Nama Produk</label>
+                                    <input type="text" id="product_name" name="product_name"
+                                        class="form-control rounded-lg border-gray-300 focus:ring-green-500 focus:border-green-500 d-block w-full"
+                                        placeholder="Nama Produk" value="{{ request('product_name') }}">
+                                </div>
 
+                                <!-- Filter Status -->
+                                <div class="form-group" style="width: 250px">
+                                    <label for="status" class="form-label fw-bold">Filter Status</label>
+                                    <select id="status" name="status"
+                                        class="form-select rounded-lg border-gray-300 focus:ring-green-500 focus:border-green-500">
+                                        <option value="">Semua Status</option>
+                                        <option value="completed"
+                                            {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
+                                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>
+                                            Menunggu Konfirmasi</option>
+                                        <option value="confirmed"
+                                            {{ request('status') == 'confirmed' ? 'selected' : '' }}>Dikonfirmasi
+                                        </option>
+                                        <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>
+                                            Sedang Dikirim</option>
+                                        <option value="cancelled"
+                                            {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                                    </select>
+                                </div>
+
+                                <!-- Urutkan Berdasarkan -->
+                                <div class="form-group" >
+                                    <label for="sort_by" class="form-label fw-bold">Urutkan Berdasarkan</label>
+                                    <select id="sort_by" name="sort_by"
+                                        class="form-select rounded-lg border-gray-300 focus:ring-green-500 focus:border-green-500">
+                                        <option value="latest" {{ request('sort_by') == 'latest' ? 'selected' : '' }}>
+                                            Terbaru</option>
+                                        <option value="oldest" {{ request('sort_by') == 'oldest' ? 'selected' : '' }}>
+                                            Terlama</option>
+                                    </select>
+                                </div>
+
+                                <!-- Tombol Cari -->
+                                <div class="form-group align-self-end"style="width: 200px">
+                                    <button type="submit" class="btn btn-success rounded-lg fw-bold px-4 w-100">
+                                        <i class="bx bx-search-alt-2 me-1"></i> Cari
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        @if ($transactions->isEmpty())
+                            <div class="alert alert-warning text-center">Tidak ada transaksi yang ditemukan.</div>
+                        @else
                             @foreach ($transactions as $transaction)
                                 <div class="card card-transaction shadow-md mb-3">
                                     <div class="transaction-header px-3 py-2">
@@ -33,11 +80,11 @@
 
                                             <span
                                                 class="inline-block px-3 py-1 rounded-md text-xs font-semibold text-white cursor-pointer
-                                                {{ strtolower($transaction->status) === 'completed' ? 'bg-green-500' : '' }}
-                                                {{ strtolower($transaction->status) === 'pending' ? 'bg-yellow-500' : '' }}
-                                                {{ strtolower($transaction->status) === 'confirmed' ? 'bg-blue-500' : '' }}
-                                                {{ strtolower($transaction->status) === 'cancelled' ? 'bg-red-500' : '' }}
-                                                {{ strtolower($transaction->status) === 'shipped' ? 'bg-green-500' : '' }}"
+                                            {{ strtolower($transaction->status) === 'completed' ? 'bg-green-500' : '' }}
+                                            {{ strtolower($transaction->status) === 'pending' ? 'bg-yellow-500' : '' }}
+                                            {{ strtolower($transaction->status) === 'confirmed' ? 'bg-blue-500' : '' }}
+                                            {{ strtolower($transaction->status) === 'cancelled' ? 'bg-red-500' : '' }}
+                                            {{ strtolower($transaction->status) === 'shipped' ? 'bg-green-500' : '' }}"
                                                 onclick="openModal({{ $transaction->id }}, '{{ $transaction->status }}')"
                                                 data-bs-toggle="modal" data-bs-target="#orderModal">
                                                 {{ $translations[strtolower($transaction->status)] ?? $transaction->status }}
@@ -138,10 +185,18 @@
                                 </div>
                             @endforeach
 
-                        </div>
+                            <!-- Pagination -->
+                            <div class="mt-4">
+                                {{ $transactions->links() }}
+                            </div>
+                        @endif
+
+
+
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 
@@ -149,23 +204,24 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-              <!-- Header -->
-              <div class="modal-header">
-                <h5 class="modal-title font-bold fs-5" id="orderDetailsLabel">Detail Pesanan</h5>
-                <button type="button" class="btn-close bg-white rounded-full" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-        
-              <!-- Body -->
-              <div class="modal-body">
-                <!-- Loader -->
-                <div id="modalContent" class="text-center text-gray-500">
-                  <p>Memuat data...</p>
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title font-bold fs-5" id="orderDetailsLabel">Detail Pesanan</h5>
+                    <button type="button" class="btn-close bg-white rounded-full" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-              </div>
+
+                <!-- Body -->
+                <div class="modal-body">
+                    <!-- Loader -->
+                    <div id="modalContent" class="text-center text-gray-500">
+                        <p>Memuat data...</p>
+                    </div>
+                </div>
             </div>
-          </div>
+        </div>
     </div>
-    
+
     <script>
         function populateModal(button) {
             // Ambil elemen modal konten

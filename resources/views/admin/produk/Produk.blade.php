@@ -1,8 +1,8 @@
 <!--========== CONTENTS ==========-->
 <x-app-penjual>
     <section class="row">
-        <h1 class="fw-bold fs-3 mt-2 mb-3 col-md-8">Kelola Produk</h1>
-        <button type="button" class="btn btn-primary mb-3" onclick="window.location='{{ route('admin.upload') }}'">
+        <h1 class="fw-bold fs-3 mt-2 mb-3 col-md-10">Kelola Produk</h1>
+        <button type="button" class="btn btn-primary mb-3 col-md-2" onclick="window.location='{{ route('admin.upload') }}'">
             Tambah Produk
         </button>
         @if ($errors->any())
@@ -82,7 +82,7 @@
                                                     <div class="col-md-6">
                                                         <label class="fw-bold">Nama Produk:</label>
                                                         <input type="text" name="name" class="form-control"
-                                                            style="width: 450px;" value="{{ $product->name }}"
+                                                            style="width: 350px;" value="{{ $product->name }}"
                                                             required>
                                                     </div>
                                                     <div class="col-md-6">
@@ -94,7 +94,7 @@
                                                     <div class="col-md-6 mt-3">
                                                         <label class="fw-bold">Harga Produk:</label>
                                                         <input type="number" name="price" class="form-control"
-                                                            style="width: 450px;" value="{{ $product->price }}"
+                                                            style="width: 350px;" value="{{ $product->price }}"
                                                             required>
                                                     </div>
 
@@ -162,7 +162,6 @@
                                                     </div>
 
                                                     <script>
-                                                        // Dropdown kategori khusus untuk setiap produk
                                                         const dropdownButton{{ $product->id }} = document.getElementById('dropdownButton{{ $product->id }}');
                                                         const dropdownMenu{{ $product->id }} = document.getElementById('dropdownMenu{{ $product->id }}');
 
@@ -198,7 +197,6 @@
                             </div>
 
                             <script>
-                                // Dropdown kategori untuk edit modal
                                 const dropdownButtonEdit = document.getElementById('dropdownButtonEdit');
                                 const dropdownMenuEdit = document.getElementById('dropdownMenuEdit');
                                 dropdownButtonEdit.addEventListener('click', () => dropdownMenuEdit.classList.toggle('hidden'));

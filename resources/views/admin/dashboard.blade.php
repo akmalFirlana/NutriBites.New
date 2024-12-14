@@ -135,14 +135,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Data dari backend
         const dataPoints = @json($dataPoints);
-
-        // Konversi data untuk Chart.js
         const labels = dataPoints.map(point => new Date(point.x).toLocaleDateString('id-ID'));
         const data = dataPoints.map(point => point.y);
-
-        // Konfigurasi Chart.js
         const config = {
             type: 'line',
             data: {
@@ -185,7 +180,6 @@
             }
         };
 
-        // Render Chart.js
         const ctx = document.getElementById('salesChart').getContext('2d');
         new Chart(ctx, config);
     </script>
