@@ -84,26 +84,76 @@
                                     <p class="mb-3 font-extrabold fs-5">Pengiriman dan Pembayaran</p>
                                     <div class="shadow-md rounded-md border-top">
                                         <div
-                                            class="d-flex justify-content-between align-items-start mt-3 p-4  pb-3 pt-2 rounded-md">
+                                            class="d-flex justify-content-between align-items-start mt-3 p-4 pb-3 pt-2 rounded-md">
                                             <div>
-                                                @foreach ($addresses as $address)
+                                                @if ($addresses->isNotEmpty())
+                                                    @php
+                                                        // Ambil alamat utama atau alamat pertama dalam daftar
+                                                        $primaryAddress = $addresses->first();
+                                                    @endphp
                                                     <p class="text-semibold mb-0">
                                                         <i class='bx bxs-map text-success'></i>
                                                         <span
-                                                            class="bg-gray-300 fw-bolder text-sm mx-1 rounded-1 text-white p-1 ">Utama</span>
-                                                        <span class="fw-bold">{{ $address->label ?? 'Alamat' }} -
-                                                        </span>{{ $address->recipient_name }}
-                                                        ({{ $address->phone_number }})
+                                                            class="bg-gray-300 fw-bolder text-sm mx-1 rounded-1 text-white p-1">Utama</span>
+                                                        <span class="fw-bold">{{ $primaryAddress->label ?? 'Alamat' }}
+                                                            -
+                                                        </span>{{ $primaryAddress->recipient_name }}
+                                                        ({{ $primaryAddress->phone_number }})
                                                     </p>
-                                                    <p class="mt-2">{{ $address->full_address }}
-                                                        {{ ucwords(strtolower($address->kecamatan->dis_name ?? 'Kecamatan tidak ditemukan')) }},
-                                                        {{ ucwords(strtolower($address->kota->city_name ?? 'Kota tidak ditemukan')) }},
-                                                        {{ ucwords(strtolower($address->provinsi->prov_name ?? 'Provinsi tidak ditemukan')) }}
+                                                    <p class="mt-2">{{ $primaryAddress->full_address }}
+                                                        {{ ucwords(strtolower($primaryAddress->kecamatan->dis_name ?? 'Kecamatan tidak ditemukan')) }},
+                                                        {{ ucwords(strtolower($primaryAddress->kota->city_name ?? 'Kota tidak ditemukan')) }},
+                                                        {{ ucwords(strtolower($primaryAddress->provinsi->prov_name ?? 'Provinsi tidak ditemukan')) }}
                                                     </p>
-                                                @endforeach
+                                                @else
+                                                    <p class="text-muted">Tidak ada alamat yang ditemukan. Tambahkan
+                                                        alamat Anda.</p>
+                                                @endif
                                             </div>
-                                            <button class="btn text-lg font-semibold hover:text-gray-700" data-bs-toggle="modal" data-bs-target="#addressModal"><box-icon
-                                                    name='chevron-right'></box-icon></button>
+
+                                            @if ($addresses->count() > 1)
+                                                <button class="btn text-lg font-semibold hover:text-gray-700"
+                                                    data-bs-toggle="modal" data-bs-target="#alamatModal">
+                                                    <box-icon name='chevron-right'></box-icon>
+                                                </button>
+                                            @endif
+                                        </div>
+
+                                        <!-- Modal untuk memilih alamat -->
+                                        <div class="modal fade" id="alamatModal" tabindex="-1"
+                                            aria-labelledby="alamatModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="alamatModalLabel">Pilih Alamat</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @foreach ($addresses as $address)
+                                                            <div
+                                                                class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                                                                <div>
+                                                                    <p class="mb-1">
+                                                                        <strong>{{ $address->label ?? 'Alamat' }}:</strong>
+                                                                        {{ $address->recipient_name }}
+                                                                        ({{ $address->phone_number }})
+                                                                    </p>
+                                                                    <p class="small">
+                                                                        {{ $address->full_address }},
+                                                                        {{ ucwords(strtolower($address->kecamatan->dis_name ?? 'Kecamatan tidak ditemukan')) }},
+                                                                        {{ ucwords(strtolower($address->kota->city_name ?? 'Kota tidak ditemukan')) }},
+                                                                        {{ ucwords(strtolower($address->provinsi->prov_name ?? 'Provinsi tidak ditemukan')) }}
+                                                                    </p>
+                                                                </div>
+                                                                <button class="btn btn-primary btn-sm pilih-alamat"
+                                                                    data-id="{{ $address->id }}"
+                                                                    data-bs-dismiss="modal">Pilih</button>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="divider border m-0"></div>
                                         <div class="pengiriman row  p-4 pt-3">
@@ -197,7 +247,7 @@
                                     <p class="mb-2 text-sm">Asuransi Pengiriman:</p>
                                     <p class="mb-2 text-sm">Rp {{ number_format(3700, 0, ',', '.') }}</p>
                                 </div>
-                                <hr/>
+                                <hr />
 
                                 <h1 class="fs-6 mb-2 mt-1">Biaya Transaksi</h1>
                                 <div class="d-flex justify-content-between text-muted">
@@ -341,6 +391,50 @@
             document.getElementById('discount').innerText = 'Rp ' + discount.toLocaleString('id-ID');
             document.getElementById('total').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const addressContainer = document.querySelector(
+            '.d-flex.align-items-start > div'); // Container alamat utama
+
+            // Event listener untuk tombol "Pilih"
+            document.querySelectorAll('.pilih-alamat').forEach(button => {
+                button.addEventListener('click', function() {
+                    const addressId = this.dataset.id;
+
+                    fetch(`/update-primary-address/${addressId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({
+                                address_id: addressId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Update tampilan alamat utama
+                                addressContainer.innerHTML = `
+                        <p class="text-semibold mb-0">
+                            <i class='bx bxs-map text-success'></i>
+                            <span class="bg-gray-300 fw-bolder text-sm mx-1 rounded-1 text-white p-1">Utama</span>
+                            <span class="fw-bold">${data.address.label || 'Alamat'} - </span>${data.address.recipient_name}
+                            (${data.address.phone_number})
+                        </p>
+                        <p class="mt-2">${data.address.full_address},
+                            ${data.address.kecamatan},
+                            ${data.address.kota},
+                            ${data.address.provinsi}
+                        </p>`;
+                            } else {
+                                alert('Gagal memperbarui alamat utama');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
+        });
 
         function buyNow() {
             fetch('/get-midtrans-token', {
@@ -358,6 +452,9 @@
                     if (data.token) {
                         snap.pay(data.token, {
                             onSuccess: function(result) {
+                                toastr.success('Pembayaran berhasil! Sedang memproses pesanan Anda.',
+                                    'Sukses');
+
                                 // Menyembunyikan modal jika ada
                                 document.getElementById("paymentModal").classList.add("hidden");
 
@@ -376,21 +473,26 @@
                                 form.submit();
                             },
                             onPending: function(result) {
-                                alert("Menunggu pembayaran Anda!");
+                                toastr.warning('Menunggu pembayaran Anda!', 'Pending');
                             },
                             onError: function(result) {
-                                alert("Pembayaran gagal!");
+                                toastr.error('Pembayaran gagal! Silakan coba lagi.', 'Gagal');
                             },
                             onClose: function() {
-                                alert("Anda menutup pembayaran tanpa menyelesaikannya.");
+                                toastr.info('Anda menutup pembayaran tanpa menyelesaikannya.', 'Informasi');
                             }
                         });
                     } else {
+                        toastr.error('Token tidak ditemukan. Silakan coba lagi.', 'Gagal');
                         console.error('Token tidak ditemukan');
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    toastr.error('Terjadi kesalahan saat memproses pembayaran.', 'Error');
+                    console.error('Error:', error);
+                });
         }
+
 
         document.getElementById("courier").addEventListener("change", function() {
             calculateShipping();

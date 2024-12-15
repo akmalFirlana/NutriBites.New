@@ -19,6 +19,11 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <!-- Scripts -->
+    <!-- Tambahkan di <head> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <!-- Tambahkan di bagian bawah <body> -->
+
 </head>
 
 <body class="font-sans antialiased">
@@ -55,7 +60,7 @@
                         <img class="logo-img" src="{{ asset('image/NutriBites.svg') }}" style="width: 120px;"
                             alt="Logok">
                         <p style="color: #606060; font-size: 14px; max-width: 200px" class="mt-4">
-                            Pilihan Tepat Untuk Gaya Hidup Sehat 
+                            Pilihan Tepat Untuk Gaya Hidup Sehat
                         </p>
 
                         <div class="mt-4 d-flex">
@@ -178,6 +183,8 @@
             NutriBites © 2024, All Rights Reserved
         </div>
     </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const loader = document.getElementById('loader');
@@ -209,38 +216,41 @@
 
 
         function addToCart(productId) {
-            $.ajax({
-                url: `/cart/add/${productId}`,
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    quantity: 1
-                },
-                success: function(response) {
-                    alert(response.message);
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText);
-                }
-            });
+    $.ajax({
+        url: `/cart/add/${productId}`,
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}',
+            quantity: 1
+        },
+        success: function(response) {
+            toastr.success(response.message, 'Sukses');
+        },
+        error: function(xhr) {
+            toastr.error('Terjadi kesalahan. Silakan coba lagi.', 'Gagal');
+            console.log(xhr.responseText);
         }
+    });
+}
 
-        function removeFromCart(cartId) {
-            $.ajax({
-                url: `/cart/remove/${cartId}`,
-                type: 'DELETE',
-                data: {
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    alert(response.message);
-                    location.reload();
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText);
-                }
-            });
+function removeFromCart(cartId) {
+    $.ajax({
+        url: `/cart/remove/${cartId}`,
+        type: 'DELETE',
+        data: {
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            toastr.success(response.message, 'Sukses');
+            location.reload(); 
+        },
+        error: function(xhr) {
+            toastr.error('Terjadi kesalahan. Silakan coba lagi.', 'Gagal');
+            console.log(xhr.responseText);
         }
+    });
+}
+
 
 
         function addToWishlist(productId) {
@@ -252,9 +262,10 @@
                     quantity: 1
                 },
                 success: function(response) {
-                    alert(response.message);
+                    toastr.success(response.message, 'Sukses');
                 },
                 error: function(xhr) {
+                    toastr.error('Terjadi kesalahan. Silakan coba lagi.', 'Gagal');
                     console.log(xhr.responseText);
                 }
             });
@@ -268,14 +279,16 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    alert(response.message);
+                    toastr.success(response.message, 'Sukses');
                     location.reload(); // refresh halaman setelah menghapus
                 },
                 error: function(xhr) {
+                    toastr.error('Terjadi kesalahan. Silakan coba lagi.', 'Gagal');
                     console.log(xhr.responseText);
                 }
             });
         }
+
 
         function changeImage(element) {
             // Mengubah gambar utama
@@ -288,6 +301,25 @@
             // Menambahkan class "active" ke thumbnail yang diklik
             element.classList.add('active');
         }
+    </script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "600",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
     </script>
 
 </body>

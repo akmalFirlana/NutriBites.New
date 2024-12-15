@@ -26,7 +26,7 @@ class WishlistController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Produk berhasil ditambahkan ke Wishlist']);
+        return response()->json(['message' => 'Produk ditambahkan ke Wishlist']);
     }
 
     public function removeFromWishlist($wishlistId)
@@ -38,7 +38,7 @@ class WishlistController extends Controller
 
         if ($deleted) {
             // Jika berhasil dihapus
-            return response()->json(['message' => 'Produk berhasil dihapus dari Wishlist']);
+            return response()->json(['message' => 'Produk dihapus dari Wishlist']);
         } else {
             // Jika tidak berhasil menghapus
             return response()->json(['message' => 'Produk tidak ditemukan atau tidak dapat dihapus'], 404);
